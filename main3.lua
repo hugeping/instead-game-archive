@@ -94,7 +94,7 @@ global 'radio_ack' (false)
 room {
 	-"рубка|Резвый|корабль";
 	title = "рубка";
-	nam = 'main';
+	nam = 'ship1';
 	dsc = [[В рубке "Резвого" тесно. Сквозь узкие окна в кабину
 	проникают косые лучи звезды 51 Peg, освещая приборную
 	панель. Прямо по курсу -- ворота перехода.^^
@@ -225,7 +225,14 @@ cutscene {
 	вспыхивает в синем пламени. Нужно остановить вращение, но
 	сначала придётся потушить пожар.]];
 	};
+	next_to = 'burnout';
 }
+room {
+	-"рубка|Резвый|корабль";
+	title = "рубка";
+	nam = 'burnout';
+}
+
 function game:after_Taste()
 	p [[Что за странные идеи?]]
 end
@@ -251,4 +258,5 @@ function init()
 	mp.autohelp = false
 	mp.autohelp_limit = 8
 	mp.compl_thresh = 1
+	walk 'ship1'
 end

@@ -44,6 +44,23 @@ function mp:pre_input(str)
 	return str
 end
 
+Path = Class {
+	['before_Walk,Enter'] = function(s)
+		if mp:check_inside(std.ref(s.walk_to)) then
+			return
+		end
+		walk(s.walk_to)
+	end;
+	before_Default = function(s)
+		if s.desc then
+			p(s.desc)
+			return
+		end
+		p ([[Ты можешь пойти в ]], std.ref(s.walk_to):noun('вн'), '.');
+	end;
+	default_Event = 'Walk';
+}:attr'scenery,enterable';
+
 Careful = Class {
 	before_Default = function(s, ev)
 		if ev == "Exam" or ev == "Look" or ev == "Search" or
@@ -195,8 +212,10 @@ Careful {
 					radio_ack = true;
 				elseif here() ^ 'burnout' then
 					p [[Автоматика и так уже шлёт
-	"SOS", а также передаёт все показания приборов -- это поможет
-	комиссии разобраться в причинах аварии, если твой корабль не вернётся.]]
+	"SOS", а также передаёт все показания приборов. Возможно, это поможет
+	комиссии разобраться в причинах аварии. "Возможно" -- так как
+	ещё ни один инцидент в гиперпространстве не заканчивался возвращением
+	корабля.]]
 				else
 					p [[Ты уже
 получил разрешение на вылет.]]
@@ -307,16 +326,34 @@ room {
 			p [[В рубке "Резвого" тесно. Сквозь окна ты
 	видишь сияние гиперпространства.]]
 		end
+		p [[^^Ты можешь выйти из рубки.]]
 	end;
+	out_to = 'room';
 	obj = {
 		Distance {
 			-"гиперпространство|сияние";
 			description =
-				[[Переход ещё не закончен.]];
+				[[Переход ещё не завершён. Эта мысль
+мешает тебе наслаждаться великолепным сиянием.]];
 		};
 		'panel';
 		'windows';
 	};
+}
+
+room {
+	-'коридор';
+	title = 'в коридоре';
+	nam = 'room';
+	dsc = [[Отсюда ты можешь попасть в рубку и к двигателям.]];
+	obj = {
+		Path {
+			nam = '#livingroom';
+			-"рубка";
+			walk_to = 'burnout';
+			desc = [[Ты можешь пойти в рубку.]];
+		};
+	}
 }
 
 function game:after_Taste()

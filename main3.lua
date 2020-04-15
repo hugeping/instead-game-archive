@@ -38,7 +38,8 @@ function mp:pre_input(str)
 	if #a <= 1 or #a > 3 then
 		return str
 	end
-	if a[1] == 'в' or a[1] == 'на' or a[1] == 'во' or a[1] == "к" or a[1] == 'ко' then
+	if a[1] == 'в' or a[1] == 'на' or a[1] == 'во' or
+		a[1] == "к" or a[1] == 'ко' then
 		return "идти "..str
 	end
 	return str
@@ -352,20 +353,78 @@ room {
 }
 
 room {
-	-'коридор';
-	title = 'в коридоре';
+	-"трюм";
+	title = 'трюм';
+	nam = 'storage';
+	u_to = 'room';
+	dsc = [[Отсюда ты можешь подняться наверх.]];
+}
+
+room {
+	-"коридор";
+	title = 'коридор';
 	nam = 'room';
 	dsc = [[Отсюда ты можешь попасть в рубку и к двигателям.]];
+	d_to = "#trapdoor";
 	obj = {
+		obj {
+			-"шкаф";
+			description = function(s)
+				p [[В этом шкафу должен храниться
+скафандр.]];
+				if s:has 'open' then
+					p [[Но его здесь нет.]]
+				end
+				return false
+			end;
+		}:attr 'static,openable,container';
+		door {
+			-"люк";
+			nam = "#trapdoor";
+			description = function(s)
+				p [[Люк ведёт вниз.]]
+			end;
+			door_to = 'storage';
+		}:attr 'static,openable';
 		Path {
-			nam = '#livingroom';
 			-"рубка";
 			walk_to = 'burnout';
 			desc = [[Ты можешь пойти в рубку.]];
 		};
+		Path {
+			-"двигатели|машинный отсек";
+			walk_to = 'engine';
+			desc = [[Ты можешь пойти к двигателям.]];
+		};
 	}
 }
 
+room {
+	-"машинный отсек,отсек";
+	title = "Машинный отсек";
+	nam = 'engine';
+	flame = true;
+	dsc = function(s)
+		if s.flame then
+			p [[В машинном отсеке пылает огонь!]];
+		end
+		p [[^^Ты можешь выйти из машинного отсека.]]
+	end;
+	out_to = 'room';
+	obj = {
+		obj {
+			nam = '#flame';
+			-"огонь|пламя";
+			before_Default = [[Пожар в машинном
+отсеке!]];
+		}:attr 'scenery';
+		Path {
+			-"коридор";
+			walk_to = 'room';
+			desc = [[Ты можешь выйти в коридор.]];
+		};
+	}
+}
 function game:after_Taste()
 	p [[Что за странные идеи?]]
 end

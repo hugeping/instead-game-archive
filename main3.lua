@@ -82,7 +82,9 @@ Distance = Class {
 }:attr 'scenery'
 
 Furniture = Class {
-	['before_Push,Pull,Transfer,Take'] = "Пусть лучше стоит там, где {#if_hint/#first,plural,стоят,стоит}.";
+	['before_Push,Pull,Transfer,Take'] = [[Пусть лучше
+	{#if_hint/#first,plural,стоят,стоит} там, где
+	{#if_hint/#first,plural,стоят,стоит}.]];
 }:attr 'static'
 
 Prop = Class {
@@ -392,6 +394,14 @@ room {
 	nam = 'storage';
 	u_to = 'room';
 	dsc = [[Отсюда ты можешь подняться наверх.]];
+	obj = {
+		Furniture {
+			-"контейнеры,ящики";
+			description = [[Это контейнеры с оборудованием.]];
+			before_Open = [[Контейнеры опечатаны. Не стоит
+их открывать.]];
+		}:attr'openable';
+	};
 }
 
 room {
@@ -400,6 +410,8 @@ room {
 	nam = 'room';
 	dsc = [[Отсюда ты можешь попасть в рубку и к двигателям.]];
 	d_to = "#trapdoor";
+	before_Sleep = [[Не время спать.]];
+	before_Smell = [[Пахнет гарью.]];
 	obj = {
 		obj {
 			-"шкаф";
@@ -411,7 +423,21 @@ room {
 				end
 				return false
 			end;
+			obj = {
+				obj {
+					-"огнетушитель,баллон";
+					nam = "огнетушитель";
+					description = [[Баллон ярко-красного
+цвета. Разработан специально для использования на космическом
+флоте.]];
+				}
+			};
 		}:attr 'static,openable,container';
+		Furniture {
+			-"кровать";
+			description = [[Стандартная кровать. Такая
+стоит почти во всех небольших судах, типа "Резвого".]];
+		}:attr 'enterable,supporter';
 		door {
 			-"люк";
 			nam = "#trapdoor";
@@ -487,6 +513,31 @@ pl.description = function(s)
 end
 pl.scope = std.list { 'beard' }
 
+VerbExtendWord {
+	"#Climb",
+	"подняться,поднимись";
+}
+
+function mp:before_Exting(w)
+	if not have 'огнетушитель' then
+		p [[Тебе нечем тушить.]]
+		return
+	end
+	return false
+end
+function mp:after_Exting(w)
+	if not w then
+		p [[Тут нечего тушить.]]
+	else
+		p ([[Тушить ]], w:noun 'вн', "?")
+	end
+end
+
+Verb {
+	"туши/ть,[по|за]туши/ть";
+	": Exting";
+	"{noun}/вн,scene: Exting";
+}
 function init()
 	mp.togglehelp = true
 	mp.autohelp = false

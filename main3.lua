@@ -217,7 +217,13 @@ Careful {
 	максимальной тяги.]];
 				end
 			end;
-			['before_Pull,Take'] = function(s)
+			before_Transfer = function(s, w)
+				if w == pl then
+					return mp:xaction("Pull", s)
+				end
+				return false
+			end;
+			before_Pull = function(s)
 				if here() ^ 'ship1' then
 					return false
 				elseif here() ^ 'burnout' then
@@ -236,7 +242,7 @@ Careful {
 					p [[Рычаг тяги на нейтральной позиции.]]
 				end
 			end;
-		}:attr'fixed';
+		}:attr'static';
 		obj {
 				-"радио";
 			description = [[Радио встроено
@@ -259,7 +265,7 @@ Careful {
 получил разрешение на вылет.]]
 				end
 			end;
-		}:attr 'switchable,fixed';
+		}:attr 'switchable,static';
 	};
 }:attr'supporter';
 

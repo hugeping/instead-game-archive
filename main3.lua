@@ -10,7 +10,7 @@ fmt.quotes = true
 require 'parser/mp-ru'
 
 game.dsc = [[{$fmt b|АРХИВ}^^Интерактивная новелла-миниатюра для
-выполнения на ПЭВМ.^^Для
+выполнения на средствах вычислительной техники.^^Для
 помощи, наберите "помощь" и нажмите "ввод".]];
 
 -- чтоб можно было писать "на кухню" вместо "идти на кухню"
@@ -120,6 +120,9 @@ Careful {
 		if here() ^ 'burnout' then
 			p [[Сквозь толстые окна ты видишь
 	сияние гиперпространства.]];
+			if not _'engine'.flame then
+				_'hyper2':description()
+			end
 		elseif here() ^ 'ship1' then
 			p [[Сквозь толстые окна ты видишь
 фиолетовую планету. Это -- Димидий.]];
@@ -134,7 +137,7 @@ obj {
 	init_dsc = [[К углу одного из окон прикреплена
 фотография.]];
 	description = [[Это фотография
-твоей дочери Лизы, когда её было всего 9 лет.]];
+твоей дочери Лизы, когда её было всего 9 лет. Сейчас ей 17.]];
 	found_in = { 'ship1', 'burnout' };
 };
 
@@ -154,21 +157,22 @@ Careful {
 			p [[Все системы корабля в
 норме. Можно толкнуть рычаг тяги.]];
 		elseif here() ^ 'burnout' then
-			if here().flames then
+			if _'engine'.flame then
 				p [[Пожар в машинном отсеке!]];
 			end
 			if s.till > 20 then
 				p [[Неполадки во 2-м
-	двигателе!]];
+	двигателе.]];
 			elseif s.till > 15 then
-				p [[1-й и 2-й двигатель вышли
-	из строя! Сбой системы стабилизации!]];
+				p [[1-й и 2-й двигатель отказали. Сбой системы стабилизации.]];
 			else
 				p [[Все двигатели вышли из
-	строя!]]
+	строя.]]
 				s.stop = true
 			end
-			p [[Это очень опасно!]]
+			if _'engine'.flame then
+				p [[Это очень опасно!]]
+			end
 			_'throttle':description()
 			if s.till then
 				p ([[^^До конца перехода ]], s.till,
@@ -359,6 +363,9 @@ cutscene {
 	next_to = 'burnout';
 	exit = function(s)
 		DaemonStart 'panel'
+		if _'photo':has 'moved' and not have 'photo' then
+			move('photo', 'burnout')
+		end
 	end;
 }
 
@@ -366,29 +373,70 @@ room {
 	-"рубка|Резвый|корабль";
 	title = "рубка";
 	nam = 'burnout';
-	flames = true;
+	transfer = 0;
+	daemon = function(s)
+		if here() ~= s then
+			return
+		end
+		local txt = {
+			"В кабину проникает свет от огней.";
+			"Кабина заполняется белым светом.";
+			"Кабину заполнил ослепительно-белый свет.";
+		};
+		s.transfer = s.transfer + 1
+		pn(fmt.em(txt[s.transfer]))
+		if s.transfer > 3 then
+			s:daemonStop()
+			walk 'transfer2'
+		end
+	end;
 	Listen = function(s)
-		p [[Рубка заполнена сигналом тревоги.]]
+		if _'engine'.flame then
+			p [[Рубка заполнена сигналом тревоги.]]
+		else
+			return false
+		end
 	end;
 	dsc = function(s)
-		if s.flames then
+		if _'engine'.flame then
 			p [[Рубка "Резвого" заполнена сигналом
 	тревоги. Нужно осмотреть приборы, чтобы выяснить что
 	происходит.]];
 		else
 			p [[В рубке "Резвого" тесно. Сквозь окна ты
-	видишь сияние гиперпространства.]]
+	видишь сияние гиперпространства. Приборная панель неярко
+помигивает в тусклом свете.]]
+			if not _'engine'.flame and _'panel'.stop and
+			not isDaemon('burnout') then
+				p [[^^За окнами ты замечаешь нечто странное...]]
+			end
 		end
 		p [[^^Ты можешь выйти из рубки.]]
 	end;
 	out_to = 'room';
 	obj = {
 		Distance {
-			-"гиперпространство|сияние";
-			description =
-				[[Переход ещё не завершён. Эта мысль
+			nam = 'hyper2';
+			-"гиперпространство,странн*|огни/мн,мр|сияние";
+			description = function(s)
+				if not _'engine'.flame and _'panel'.stop then
+					p [[Ты видишь три сверкающих огня,
+которые танцуя приближаются к твоему кораблю. Или это ты
+движешься к ним?]]
+					enable '#trinity'
+					DaemonStart("burnout");
+				else
+					p [[Переход ещё не завершён. Эта мысль
 мешает тебе наслаждаться великолепным сиянием.]];
+				end
+			end;
 		};
+		Distance {
+			nam = '#trinity';
+			-"свет";
+			description = [[Ослепительно белый свет
+заполняет кабину.]];
+		}:disable();
 		'panel';
 		'windows';
 	};
@@ -401,6 +449,30 @@ room {
 	u_to = 'room';
 	dsc = [[Отсюда ты можешь подняться наверх.]];
 	obj = {
+		obj {
+			-"шкаф";
+			locked = true;
+			description = function(s)
+				p [[Это шкаф для хранения скафандра.]]
+				return false
+			end;
+			obj = {
+				obj {
+					-"скафандр";
+					nam = "suit";
+					description = [[Скафандр
+выглядит массивным, но на самом деле он довольно лёгкий.]];
+					before_Disrobe = function(s)
+						if here().flame then
+							p [[И
+задохнуться от пожара?]]
+							return
+						end
+						return false
+					end;
+				}:attr'clothing';
+			};
+		}:attr 'static,openable,container';
 		Furniture {
 			-"контейнеры,ящики";
 			description = [[Это контейнеры с оборудованием.]];
@@ -417,28 +489,14 @@ room {
 	dsc = [[Отсюда ты можешь попасть в рубку и к двигателям.]];
 	d_to = "#trapdoor";
 	before_Sleep = [[Не время спать.]];
-	before_Smell = [[Пахнет гарью.]];
+	before_Smell = function(s)
+		if _'engine'.flame then
+			p [[Пахнет гарью.]];
+		else
+			return false
+		end
+	end;
 	obj = {
-		obj {
-			-"шкаф";
-			description = function(s)
-				p [[В этом шкафу должен храниться
-скафандр.]];
-				if s:has 'open' then
-					p [[Но его здесь нет.]]
-				end
-				return false
-			end;
-			obj = {
-				obj {
-					-"огнетушитель,баллон";
-					nam = "огнетушитель";
-					description = [[Баллон ярко-красного
-цвета. Разработан специально для использования на космическом
-флоте.]];
-				}
-			};
-		}:attr 'static,openable,container';
 		Furniture {
 			-"кровать";
 			description = [[Стандартная кровать. Такая
@@ -452,6 +510,22 @@ room {
 			end;
 			door_to = 'storage';
 		}:attr 'static,openable';
+		Prop { -"стена|стены/мн,но,жр" };
+		obj {
+			-"огнетушитель,баллон";
+			full = true;
+			init_dsc = [[На стене закреплён огнетушитель.]];
+			nam = "огнетушитель";
+			description = function(s)
+				p [[Баллон ярко-красного
+цвета. Разработан специально для использования на космическом
+флоте.]];
+				if not s.full then
+					p
+					[[Огнетушитель пуст.]]
+				end
+			end;
+		};
 		Path {
 			-"рубка";
 			walk_to = 'burnout';
@@ -470,20 +544,95 @@ room {
 	title = "Машинный отсек";
 	nam = 'engine';
 	flame = true;
+	before_Smell = function(s)
+		if s.flame then
+			p [[Пахнет гарью.]];
+		else
+			return false
+		end
+	end;
+	onenter = function(s)
+		if s.flame and _'suit':hasnt 'worn' then
+			p [[В машинном отсеке пожар! Ты не можешь
+находиться там из-за едкого дыма.]]
+			return false
+		end
+	end;
 	dsc = function(s)
 		if s.flame then
-			p [[В машинном отсеке пылает огонь!]];
+			p [[В машинном отсеке пылает огонь! Всё в дыму!]];
+		else
+			p [[Ты находишься в машинном
+отсеке. Обгоревший контрольный блок полностью разрушен.]]
 		end
 		p [[^^Ты можешь выйти из машинного отсека.]]
 	end;
 	out_to = 'room';
+	after_Exting = function(s, w)
+		if not s.flame then
+			p [[Пожар уже потушен.]]
+			return
+		end
+		if not w or w ^ '#flame' or w == s or w ^ '#control' then
+			_'огнетушитель'.full = false
+			s.flame = false
+			p [[Ты яростно борешься с пламенем. Наконец, пожар потушен!]]
+		else
+			return false
+		end
+	end;
 	obj = {
 		obj {
 			nam = '#flame';
-			-"огонь|пламя";
+			-"огонь,пожар|пламя|дым";
+			before_Exting = function()
+				return false
+			end;
 			before_Default = [[Пожар в машинном
 отсеке!]];
 		}:attr 'scenery';
+		obj {
+			nam="#control";
+			-"контрольный блок,блок";
+			description = function(s)
+				if here().flame then
+					p [[Контрольный блок скрыт в пламени!]];
+				else
+					p [[Контрольный блок -- система
+управления двигателями корабля. Он сильно обгорел, но не это
+привлекает твоё внимание. В центре блока зияет дыра!]];
+					enable '#дыра'
+					if _'осколки':has 'concealed' then
+						_'осколки':attr
+						'~concealed';
+						p [[^^Ты замечаешь осколки.]]
+					end
+				end
+			end;
+			obj = {
+				obj {
+					nam = '#дыра';
+					-"дыра|отверстие";
+					description = [[Похоже, это
+был взрыв...]];
+				}:attr 'scenery':disable();
+			};
+		}:attr 'static,concealed';
+		obj {
+			nam = 'осколки';
+			-"осколки/но|куски/но|кусочки/но";
+			after_Smell = [[Селитра?]];
+			after_Touch = [[Края оплавлены. Не похоже на дюраль.]];
+			description = function(s)
+				if have(s) then
+					p [[Оплавленные
+осколки. Тяжёлые. Странно, не похоже на дюраль... ]];
+				else
+					p [[Осколки от
+взрыва. Небольшие чёрные кусочки металла.]]
+				end
+			end;
+		}:attr 'concealed';
 		Path {
 			-"коридор";
 			walk_to = 'room';
@@ -491,12 +640,38 @@ room {
 		};
 	}
 }
+
+cutscene {
+	nam = "transfer2";
+	title = "...";
+	text = {
+		[[Ослепительный свет заполнил всё вокруг. Ты потерялся
+	в нём, растворился -- словно тебя никогда и не было...]]
+	};
+}
+
 function game:after_Taste()
 	p [[Что за странные идеи?]]
 end
 
 function game:after_Smell()
 	p [[Ничего интересного.]]
+end
+
+function game:before_Smell()
+	if _'suit':has'worn' then
+		p [[В скафандре ты не чувствуешь запаха.]]
+	else
+		return false
+	end
+end
+
+function game:Touch()
+	if _'suit':has'worn' then
+		p [[В скафандре это делать неудобно.]]
+	else
+		return false
+	end
 end
 
 obj {

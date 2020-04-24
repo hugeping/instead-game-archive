@@ -450,7 +450,83 @@ room {
 	title = 'трюм';
 	nam = 'storage';
 	u_to = 'room';
-	dsc = [[Отсюда ты можешь подняться наверх.]];
+	dsc = [[Отсюда ты можешь подняться наверх или выйти в шлюз.]];
+	out_to = 'gate';
+	obj = {
+		Path {
+			-"шлюз";
+			walk_to = 'gate';
+			desc = [[Ты можешь выйти в шлюз.]];
+		};
+		Furniture {
+			-"контейнеры,ящики";
+			description = [[Это контейнеры с оборудованием.]];
+			before_Open = [[Контейнеры опечатаны. Не стоит
+их открывать.]];
+		}:attr'openable';
+	};
+}
+
+door {
+	-"дверь,шлюзовая дверь";
+	nam = 'outdoor';
+	['before_Close,Open,Lock,Unlock'] = [[Дверь
+открывается и закрывается с помощью рычага.]];
+	door_to = function(s)
+		if here() ^ 'gate' then
+			return 'planet'
+		else
+			return 'gate'
+		end
+	end;
+	description = function()
+		p [[Массивная шлюзовая
+дверь.]];
+		return false
+	end;
+	obj = {
+		obj {
+			-"красный рычаг,рычаг/но";
+			nam = '#lever';
+			description = [[Ярко-красный массивный
+рычаг.]];
+			dsc = [[Справа от двери -- красный рычаг.]];
+			before_Pull = function(s)
+				if not _'burnout'.planet then
+					p [[Открыть шлюзовую дверь во
+время перехода? Это самоубийство!]]
+					return
+				end
+				if _'outdoor':has'open' then
+					_'outdoor':attr'~open'
+					p
+					[[С шипящим звуком шлюзовая дверь закрылась.]]
+				else
+					_'outdoor':attr'open'
+					p
+					[[С шипящим звуком шлюзовая дверь открылась.]]
+				end
+			end;
+		}:attr 'static';
+	}
+}:attr 'locked,openable,static,transparent';
+
+room {
+	-"шлюз";
+	nam = 'gate';
+	title = "шлюз";
+	dsc = [[Ты находишься в шлюзовом отсеке.^^Ты можешь вернуться в
+трюм или выйти наружу.]];
+	out_to = "outdoor";
+	onexit = function(s, to)
+		if to ^ 'room' then
+			if _'outdoor':has'open' then
+				p [[Сначала нужно закрыть шлюзовую
+дверь.]]
+				return false
+			end
+		end
+	end;
 	obj = {
 		obj {
 			-"шкаф";
@@ -476,15 +552,14 @@ room {
 				}:attr'clothing';
 			};
 		}:attr 'static,openable,container';
-		Furniture {
-			-"контейнеры,ящики";
-			description = [[Это контейнеры с оборудованием.]];
-			before_Open = [[Контейнеры опечатаны. Не стоит
-их открывать.]];
-		}:attr'openable';
+		'outdoor',
+		Path {
+			-"трюм";
+			walk_to = 'room';
+			desc = [[Ты можешь вернуться в трюм.]];
+		};
 	};
 }
-
 room {
 	-"коридор";
 	title = 'коридор';
@@ -649,7 +724,8 @@ cutscene {
 	title = "...";
 	text = {
 		[[Ослепительный свет заполнил всё вокруг. Ты потерялся
-	в нём, растворился -- словно тебя никогда и не было...]];
+	в нём, растворился -- словно тебя никогда и не было... Это
+	конец? Лиза...]];
 		[[Тишина...]];
 		[[Капли на стекле. Крупные. Медленно стекают по косым
 	окнам, заливают обшивку корабля. Шум дождя -- почему ты его не

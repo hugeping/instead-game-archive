@@ -112,14 +112,20 @@ obj {
 }:attr 'scenery';
 
 global 'radio_ack' (false)
+global 'rain' (true)
 
 Careful {
 	nam = 'windows';
 	-"окна|иллюминаторы";
 	description = function(s)
 		if here().planet then
-			p [[Всё что ты видишь из рубки, это поле
+			if rain then
+				p [[Всё что ты видишь из рубки, это поле
 	пшеничного цвета и дождливое небо.]]
+			else
+				p [[Всё что ты видишь из рубки, это поле
+	пшеничного цвета и бирюзовое небо.]]
+			end
 		elseif here() ^ 'burnout' then
 			p [[Сквозь толстые окна ты видишь
 	сияние гиперпространства.]];
@@ -402,8 +408,13 @@ room {
 	end;
 	dsc = function(s)
 		if s.planet then
-			p [[В рубке "Резвого" светло. Приборная панель
+			if rain then
+				p [[В рубке "Резвого" светло. Приборная панель
 бледно отражается в покрытых дождевыми каплями окнах.]];
+			else
+				p [[В рубке "Резвого" светло. Сквозь
+окна видно золотисто-жёлтое поле под ясным небом.]];
+			end
 		elseif _'engine'.flame then
 			p [[Рубка "Резвого" заполнена сигналом
 	тревоги. Нужно осмотреть приборы, чтобы выяснить что
@@ -454,7 +465,13 @@ room {
 	-"трюм";
 	title = 'трюм';
 	nam = 'storage';
-	u_to = 'room';
+	u_to = function(s)
+		if ill > 0 then
+			p [[У тебя нет сил, чтобы подняться наверх.]]
+			return
+		end
+		return  'room';
+	end;
 	dsc = [[Отсюда ты можешь подняться наверх или выйти в шлюз.]];
 	out_to = 'gate';
 	obj = {
@@ -562,6 +579,12 @@ room {
 							p [[Не без
 опасения ты снимаешь скафандр. Вдыхаешь воздух полной
 грудью. Кажется, всё в порядке!]];
+							if
+								_'planet':once
+							'ill' then
+								DaemonStart
+								'planet'
+							end
 						else
 							return false
 						end
@@ -739,8 +762,25 @@ room {
 Distance {
 	nam = "sky2";
 	-"небо|дождь|дымка";
-	description = [[Небо затянуто дождливой
-	дымкой. Время от времени, сквозь дымку пробиваются всполохи гиперпространства.]];
+	description = function(s)
+		if rain then
+			p [[Небо затянуто дождливой
+	дымкой.]]
+		else
+			p [[Небо ясное, залито голубой бирюзой.]]
+		end
+		p [[Время от времени, небо озаряется всполохами.]];
+	end;
+	before_Listen = function(s)
+		if rain then
+			p [[Ты слышишь шум дождя.]];
+			return
+		elseif s:multi_alias() == 2 then
+			p [[Но дождь закончился!]]
+			return
+		end
+		p [[Ты не слышишь ничего необычного.]]
+	end;
 	obj = {
 		Distance {
 			-"всполохи|гиперпространство";
@@ -751,15 +791,27 @@ Distance {
 
 Distance {
 	nam = 'planet_scene';
-	-"планета|ландшафт|поле|дымка";
-	description = [[Края поля золотисто-пшеничного цвета
+	-"планета|ландшафт|поле|дымка|горизонт";
+	description = function()
+		if rain then
+			p [[Края поля золотисто-пшеничного цвета
 	скрываются в дождливой дымке.]];
+		else
+			p [[Золотисто-пшеничное поле простирается до горизонта.]];
+		end
+	end;
 	obj = {
 		'sky2';
 		obj {
 			-"капли";
-			description = [[Некоторое время ты отрешённо
+			description = function(s)
+				if rain then
+					p [[Некоторое время ты отрешённо
 	следишь за каплями, скатывающимися по стеклу.]];
+				else
+					p [[Но сейчас не идёт дождь.]]
+				end
+			end;
 		}:attr'scenery';
 	};
 }
@@ -799,7 +851,8 @@ obj {
 	obj = {
 		obj {
 			-"борозда";
-			description = [[Не очень глубокая. Каким-то образом, корабль выбросило прямо на поле...]];
+			description = [[Не очень глубокая. Каким-то
+	образом, корабль выбросило прямо на поле...]];
 		}:attr'scenery';
 	}
 }:attr 'scenery,enterable';
@@ -808,36 +861,97 @@ obj {
 	nam = 'wheat';
 	-"зёрна/мн|зерно";
 	description = [[Жёлтые крупные зёрна, похожие на пшеничные.]];
-	['after_Smell'] = [[Тебе нравится запах мокрого зерна.]];
+	['after_Smell'] = function(s)
+		if rain then
+			p [[Тебе нравится запах мокрого зерна.]];
+		else
+			p [[Тебе нравится запах зерна.]];
+		end
+	end;
+	after_Eat = function(s)
+		if ill > 0 then
+			ill = 0
+			DaemonStop 'planet'
+			p [[Ты съедаешь зёрна. Через некоторое время
+	тебе становится лучше!]]
+		end
+		return false
+	end;
 }:attr 'edible'
 
 obj {
 	nam = 'field';
 	-"планета|поле";
-	description = [[Края поля золотисто-пшеничного цвета
-	скрываются в дождливой дымке. Ты видишь как колосья, похожие
+	description = function(s)
+		if rain then
+			p [[Края поля золотисто-пшеничного цвета
+	скрываются в дождливой дымке.]]
+		else
+			p [[Поле выглядит бескрайним.]]
+		end
+		p [[Ты видишь как колосья, похожие
 	на пшеницу, колышутся под несильным ветром.]];
+		if not rain then
+			p [[На севере ты
+	замечаешь высокий шпиль, устремлённый в небо.]];
+		end
+	end;
 	obj = {
 		obj {
 			-"колосья,колоски/мр,мн";
 			description = [[Ты видишь как колосья
 	колышутся под несильным ветром.]];
-			["before_Tear,Take,Pull"] = function(s)
+			["before_Eat,Tear,Take,Pull"] = function(s)
 				p [[Ты сорвал несколько колосоков и
 	растёр их в ладонях, собрав зёрна.]];
 				take 'wheat'
 			end;
 		};
 	};
-}:attr 'scenery'
+	before_LetIn = function(s)
+		if here() ^ 'planet' then
+			p "Но ты и так находишься в поле."
+			return
+		end
+	end;
+}:attr 'scenery,enterable'
+
+global 'ill' (0)
 
 room {
 	nam = 'planet';
 	title = "У корабля";
 	in_to = 'outdoor';
-	dsc = [[Ты стоишь у "Резвого", уткнувшегося носом в землю
-	посреди золотисто-жёлтого поля. Идёт несильный дождь.^^Ты можешь зайти
-	внутрь.]];
+	after_Listen = function(s)
+		if rain then
+			p [[Ты слышишь как капли барабанят по обшивке
+	корабля.]]
+		end
+	end;
+	daemon = function(s)
+		ill = ill + 1
+		local txt = {
+			"Ты чувствуешь слабость.";
+			"Ты чувствуешь слабость во всем теле.";
+			"Странная слабость усиливается.";
+			"Ты чувствуешь страшную усталость.";
+		};
+		local i = ill
+		if i > #txt then i = #txt end
+		p (fmt.em(txt[i]))
+	end;
+	onenter = function(s)
+		if _'suit':hasnt 'worn' and  s:once 'ill' then
+			DaemonStart 'planet'
+		end
+	end;
+	dsc = function(s)
+		p [[Ты стоишь у "Резвого", уткнувшегося носом в землю
+	посреди золотисто-жёлтого поля.]]
+		if rain then
+			p [[Идёт дождь.]];
+		end
+	end;
 	obj = {
 		'sky2';
 		'outdoor';
@@ -857,6 +971,14 @@ end
 game['before_Taste,Eat'] = function()
 	if _'suit':has'worn' then
 		p [[В скафандре это невозможно.]]
+	else
+		return false
+	end
+end
+
+function game:before_Listen()
+	if _'suit':has'worn' then
+		p [[В скафандре ты плохо слышишь внешний мир.]]
 	else
 		return false
 	end
@@ -887,9 +1009,17 @@ obj {
 }:attr 'static';
 
 pl.description = function(s)
+	if ill > 0 then
+		p [[Ты смотришь на свои руки и видишь странное. Они
+	становятся прозрачными. Пропускают свет. Ты... Исчезаешь?]];
+		return
+	end
 	p [[Ты -- геолог-разведчик объектов дальнего
 космоса. Пробивающаяся седина в бороде, усталый взгляд и морщины на
 лице выдают в тебе мужчину средних лет.]]
+	if _'suit':has'worn' then
+		p [[Сейчас ты в скафандре.]]
+	end
 	if here() ^ 'ship1' then
 		p [[
 Пол года ты работал по контракту на
@@ -909,6 +1039,11 @@ VerbExtendWord {
 	"[|по]чесать/,[|по]чеши/";
 }
 
+VerbExtendWord {
+	"#Exit",
+	"вернуться"
+}
+
 function mp:before_Exting(w)
 	if not have 'огнетушитель' then
 		p [[Тебе нечем тушить.]]
@@ -916,6 +1051,7 @@ function mp:before_Exting(w)
 	end
 	return false
 end
+
 function mp:after_Exting(w)
 	if not w then
 		p [[Тут нечего тушить.]]
@@ -929,6 +1065,7 @@ Verb {
 	": Exting";
 	"{noun}/вн,scene: Exting";
 }
+
 function init()
 	mp.togglehelp = true
 	mp.autohelp = false

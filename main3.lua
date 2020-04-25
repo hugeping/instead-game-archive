@@ -515,7 +515,7 @@ door {
 		}:attr 'static';
 	}
 }:attr 'locked,openable,static,transparent';
-
+global 'onair' (false)
 room {
 	-"шлюз";
 	nam = 'gate';
@@ -525,6 +525,7 @@ room {
 	in_to = "storage";
 	out_to = "outdoor";
 	onexit = function(s, to)
+		onair = not (to ^ 'storage')
 		if to ^ 'storage' and false then
 			if _'outdoor':has'open' then
 				p [[Сначала нужно закрыть шлюзовую
@@ -554,6 +555,16 @@ room {
 							return
 						end
 						return false
+					end;
+					after_Disrobe = function(s)
+						if onair and s:once
+						'skaf' then
+							p [[Не без
+опасения ты снимаешь скафандр. Вдыхаешь воздух полной
+грудью. Кажется, всё в порядке!]];
+						else
+							return false
+						end
 					end;
 				}:attr'clothing';
 			};
@@ -727,7 +738,7 @@ room {
 
 Distance {
 	nam = "sky2";
-	-"небо";
+	-"небо|дождь|дымка";
 	description = [[Небо затянуто дождливой
 	дымкой. Время от времени, сквозь дымку пробиваются всполохи гиперпространства.]];
 	obj = {
@@ -794,15 +805,28 @@ obj {
 }:attr 'scenery,enterable';
 
 obj {
+	nam = 'wheat';
+	-"зёрна/мн|зерно";
+	description = [[Жёлтые крупные зёрна, похожие на пшеничные.]];
+	['after_Smell'] = [[Тебе нравится запах мокрого зерна.]];
+}:attr 'edible'
+
+obj {
 	nam = 'field';
 	-"планета|поле";
 	description = [[Края поля золотисто-пшеничного цвета
-	скрываются в дождливой дымке. Ты видишь, как колосья, похожие
+	скрываются в дождливой дымке. Ты видишь как колосья, похожие
 	на пшеницу, колышутся под несильным ветром.]];
 	obj = {
 		obj {
-			-"колосья/мр,мн";
-			["before_Tear,Take"] = [[Ты сорвал колосок.]];
+			-"колосья,колоски/мр,мн";
+			description = [[Ты видишь как колосья
+	колышутся под несильным ветром.]];
+			["before_Tear,Take,Pull"] = function(s)
+				p [[Ты сорвал несколько колосоков и
+	растёр их в ладонях, собрав зёрна.]];
+				take 'wheat'
+			end;
 		};
 	};
 }:attr 'scenery'
@@ -811,7 +835,8 @@ room {
 	nam = 'planet';
 	title = "У корабля";
 	in_to = 'outdoor';
-	dsc = [[Ты стоишь в поле возле "Резвого", зарывшегося носом в землю. ^^Ты можешь зайти
+	dsc = [[Ты стоишь у "Резвого", уткнувшегося носом в землю
+	посреди золотисто-жёлтого поля. Идёт несильный дождь.^^Ты можешь зайти
 	внутрь.]];
 	obj = {
 		'sky2';
@@ -827,6 +852,14 @@ end
 
 function game:after_Smell()
 	p [[Ничего интересного.]]
+end
+
+game['before_Taste,Eat'] = function()
+	if _'suit':has'worn' then
+		p [[В скафандре это невозможно.]]
+	else
+		return false
+	end
 end
 
 function game:before_Smell()

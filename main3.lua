@@ -1074,11 +1074,43 @@ room {
 }
 
 room {
+	nam = 'sea';
+	title = "У моря";
+	dsc = [[Ты стоишь на берегу моря. Здесь же, неподалёку прямо на берегу
+	растет странное дерево.]];
+	obj = {
+		door {
+			nam = '#tree';
+			-"дерево,ветв*";
+			description = [[Одинокое дерево кажется здесь совсем
+	лишним.]];
+			door_to = 'tree';
+		}:attr 'scenery,open';
+	};
+}
+
+room {
 	title = "Дерево";
 	nam = 'tree';
+	trans = false;
 	ff = false;
+	exit = function(s)
+		if s.trans then
+			p ([[Ты выбираешь направление на ]],s.trans:noun(),
+				".")
+			p [[Сделав всего несколько шагов ты вдруг
+	замечаешь, что оказался совсем в другом месте...]];
+			if s:once 'trans' then
+				p [[Твой
+	вестибулярный аппарат сходит с ума, ты спотыкаешься и
+	падаешь. Наконец, головокружение проходит и ты с удивлением
+	осматриваешься вокруг.]]
+			end
+		end
+	end;
 	enter = function(s, f)
 		s.ff = f;
+		s.trans = false
 	end;
 	out_to = function(s)
 		return s.ff
@@ -1093,7 +1125,12 @@ room {
 		p [[Зарыться в землю?]];
 	end;
 	cant_go = function(s, t)
-		p(t)
+		s.trans = _('@'..t)
+		if t == 'n_to' then
+			walk 'planet'
+			return
+		end
+		walk 'sea'
 	end;
 	e_to = function(s)
 		if s.ff ^ 'planet' then

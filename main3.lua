@@ -376,7 +376,13 @@ cutscene {
 		end
 	end;
 }
-
+function start_ill()
+	--[[
+	if _'planet':once 'ill' and _'suit':hasnt 'worn' then
+		DaemonStart 'planet'
+	end
+	]]--
+end
 room {
 	-"рубка|Резвый|корабль";
 	title = "рубка";
@@ -526,7 +532,9 @@ door {
 				else
 					_'outdoor':attr'open'
 					p
-					[[С шипящим звуком шлюзовая дверь открылась.]]
+					[[С шипящим звуком шлюзовая
+дверь открылась.]]
+					start_ill()
 				end
 			end;
 		}:attr 'static';
@@ -574,17 +582,15 @@ room {
 						return false
 					end;
 					after_Disrobe = function(s)
-						if onair and s:once
-						'skaf' then
+						if onair and s:once 'skaf' then
 							p [[Не без
 опасения ты снимаешь скафандр. Вдыхаешь воздух полной
 грудью. Кажется, всё в порядке!]];
-							if
-								_'planet':once
-							'ill' then
-								DaemonStart
-								'planet'
-							end
+							start_ill()
+						elseif here() ^ 'gate'
+							and _'outdoor':has 'open' then
+							start_ill()
+							return false
 						else
 							return false
 						end
@@ -786,6 +792,11 @@ Distance {
 			-"всполохи|гиперпространство";
 			description = [[Планета в гиперпространстве? Невероятно!]];
 		};
+		obj {
+			-"солнце";
+			before_Default = [[Странно, но ты не видишь
+	солнца, хотя сейчас день.]];
+		}:attr 'scenery';
 	}
 };
 
@@ -860,7 +871,8 @@ obj {
 obj {
 	nam = 'wheat';
 	-"зёрна/мн|зерно";
-	description = [[Жёлтые крупные зёрна, похожие на пшеничные.]];
+	description = [[Жёлтые крупные зёрна, похожие на
+	пшеничные. Кажется, что в них сосредоточена энергия.]];
 	['after_Smell'] = function(s)
 		if rain then
 			p [[Тебе нравится запах мокрого зерна.]];
@@ -870,10 +882,14 @@ obj {
 	end;
 	after_Eat = function(s)
 		if ill > 0 then
-			ill = 0
 			DaemonStop 'planet'
-			p [[Ты съедаешь зёрна. Через некоторое время
-	тебе становится лучше!]]
+			if ill > 1 then
+				p [[Ты съедаешь зёрна. Через некоторое время
+	ты чувствуешь, как странная слабость отступает.]]
+				ill = 0
+				return
+			end
+			ill = 0;
 		end
 		return false
 	end;
@@ -881,7 +897,8 @@ obj {
 
 obj {
 	nam = 'field';
-	-"планета|поле";
+	title = "В поле";
+	-"поле";
 	description = function(s)
 		if rain then
 			p [[Края поля золотисто-пшеничного цвета
@@ -891,14 +908,11 @@ obj {
 		end
 		p [[Ты видишь как колосья, похожие
 	на пшеницу, колышутся под несильным ветром.]];
-		if not rain then
-			p [[На севере ты
-	замечаешь высокий шпиль, устремлённый в небо.]];
-		end
+		return false
 	end;
 	obj = {
 		obj {
-			-"колосья,колоски/мр,мн";
+			-"колосья,колоски/мр,мн|пшеница";
 			description = [[Ты видишь как колосья
 	колышутся под несильным ветром.]];
 			["before_Eat,Tear,Take,Pull"] = function(s)
@@ -906,15 +920,21 @@ obj {
 	растёр их в ладонях, собрав зёрна.]];
 				take 'wheat'
 			end;
-		};
+		}:attr 'concealed';
 	};
-	before_LetIn = function(s)
-		if here() ^ 'planet' then
-			p "Но ты и так находишься в поле."
+	before_LetIn = function(s, w)
+		if w == pl and here() ^ 'planet' then
+			p "Ты зашел в заросли желтых колосьев."
+			move(pl, s)
 			return
 		end
+		return false
 	end;
-}:attr 'scenery,enterable'
+--	scope = { 'ship' };
+	after_LetIn = function(s, w)
+		p ([[Ты бросаешь ]], w:noun 'вн', [[ в поле.]])
+	end;
+}:attr 'scenery,enterable,container,open'
 
 global 'ill' (0)
 
@@ -926,24 +946,27 @@ room {
 		if rain then
 			p [[Ты слышишь как капли барабанят по обшивке
 	корабля.]]
+			return
 		end
+		return false
 	end;
 	daemon = function(s)
-		ill = ill + 1
 		local txt = {
-			"Ты чувствуешь слабость.";
+			"Внезапно, ты чувствуешь слабость.";
 			"Ты чувствуешь слабость во всем теле.";
 			"Странная слабость усиливается.";
 			"Ты чувствуешь страшную усталость.";
 		};
-		local i = ill
+		ill = ill + 1
+		local i = ill - 1
 		if i > #txt then i = #txt end
+		if i <= 0 then
+			return
+		end
 		p (fmt.em(txt[i]))
 	end;
 	onenter = function(s)
-		if _'suit':hasnt 'worn' and  s:once 'ill' then
-			DaemonStart 'planet'
-		end
+		start_ill()
 	end;
 	dsc = function(s)
 		p [[Ты стоишь у "Резвого", уткнувшегося носом в землю
@@ -951,12 +974,154 @@ room {
 		if rain then
 			p [[Идёт дождь.]];
 		end
+		p [[Неподалёку на западе ты видишь дерево.]];
+		p [[На севере ты
+	замечаешь высокий шпиль, устремлённый в небо.]];
 	end;
+	n_to = 'tower';
+	w_to = '#tree';
 	obj = {
 		'sky2';
 		'outdoor';
 		'ship';
 		'field';
+		'tower';
+		door {
+			nam = '#tree';
+			-"дерево,ветв*";
+			description = [[Одинокое дерево кажется здесь совсем
+	лишним.]];
+			door_to = 'tree';
+		}:attr 'scenery,open';
+	}
+}
+
+Distance {
+	-"шпиль/мр,ед,С|башня,вершина";
+	nam = 'tower';
+	["before_Enter,Walk"] = function()
+		if ill > 0 then
+			p [[Ты не дойдешь в таком состоянии.]]
+			return
+		end
+		walk 'шпиль';
+	end;
+	description = function(s)
+		if rain then
+			p [[Вершина шпиля теряется в дымке дождя.]]
+		else
+			p [[Шпиль очень высокий. Словно тонкая чёрная игла он
+	пронзает небо.]];
+		end
+	end;
+};
+
+room {
+	nam = "шпиль";
+	-"равнина";
+	title = "у шпиля";
+	before_Listen = [[Ты слышишь, как поёт ветер.]];
+	dsc = function(s)
+		p [[Ты находишься у подножия высокой башни. Её
+чёрный шпиль устремлен в небо. Вокруг простирается зелёная равнина. На
+	востоке от башни растёт одинокое дерево.]];
+		p [[^^Ты можешь вернуться на юг.]];
+	end;
+	exit = function(s, t)
+		if t ^ 'planet' then
+			p [[Ты покинул странную башню и отправился на
+юг, к своему кораблю.]];
+		end
+	end;
+	enter = function(s, f)
+		if f ^ 'planet' then
+			p [[Ты направился на север. Прошло по меньшей времени
+пол часа, прежде, чем ты оказался у подножия странного сооружения.]];
+			if rain then
+				p [[Пока ты шёл, небо очистилось и дождь
+закончился.]];
+				rain = false
+			end
+		end
+	end;
+	s_to = "planet";
+	in_to = '#tower';
+	e_to = '#tree';
+	obj = {
+		'sky2';
+		obj {
+			nam = '#tower';
+			-"башня|шпиль|подножие";
+			description = [[Поверхность башни матовая,
+	чёрного цвета, без единого шва. Похоже, что это металл.]];
+			before_Touch = [[Ты чувствуешь вибрацию.]];
+			before_Attack = [[Силы слишком неравные.]];
+			before_Enter = function(s)
+				p [[Ты обошёл подножие башни, но так
+	и не заметил никакого входа.]]
+			end;
+		}:attr 'scenery,enterable';
+		door {
+			nam = '#tree';
+			-"дерево,ветки*,листья*";
+			description = function()
+				p [[Дерево выглядит старым. Его
+	огромные узловатые ветви почти лишены листьев.]];
+			end;
+			door_to = 'tree';
+		}:attr 'scenery,open';
+	};
+}
+
+room {
+	title = "Дерево";
+	nam = 'tree';
+	ff = false;
+	enter = function(s, f)
+		s.ff = f;
+	end;
+	out_to = function(s)
+		return s.ff
+	end;
+	w_to = function(s)
+		if s.ff ^ 'шпиль' then
+			return 'шпиль';
+		end
+		return false
+	end;
+	d_to = function(s)
+		p [[Зарыться в землю?]];
+	end;
+	cant_go = function(s, t)
+		p(t)
+	end;
+	e_to = function(s)
+		if s.ff ^ 'planet' then
+			return 'planet';
+		end
+		return false
+	end;
+	dsc = function(s)
+		p [[Ты стоишь у старого дерева. Его сухие узловатые ветви
+	почти лишены листьев.]]
+		if s.ff ^ 'шпиль' then
+			p [[^^Шпиль башни находится на западе.]];
+		elseif s.ff ^ 'planet' then
+			p [[^^Твой корабль находится на востоке.]];
+		end
+		p [[В остальных направлениях - равнина.]];
+	end;
+	u_to = '#tree';
+	obj = {
+		obj {
+			nam = '#tree';
+			-"дерево,лист*,ветв*,ветк*";
+			before_Touch = [[Кора дерева шершавая. Словно морщины.]];
+			description = [[На дереве почти нет листвы, но
+	оно живо.]];
+			['before_Climb,Enter'] = [[Ты не горишь
+	желанием сломать себе шею.]];
+		}:attr 'scenery,enterable,supporter';
 	};
 }
 
@@ -1042,6 +1207,11 @@ VerbExtendWord {
 VerbExtendWord {
 	"#Exit",
 	"вернуться"
+}
+
+Verb {
+	"покин/уть",
+	"{noun}/вн,scene : Exit",
 }
 
 function mp:before_Exting(w)

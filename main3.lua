@@ -1317,9 +1317,11 @@ room {
 	-"комната";
 	title = "Странная комната";
 	nam = "intower";
+	out_to = "#pass";
 	dsc = [[Ты находишься внутри просторной комнаты цилиндрической
 формы. В полу комнаты ты видишь круглую огороженную шахту, сквозь центр которой
-проходит рельс. Рядом растёт дерево.]];
+проходит рельс. В стене есть проход, сквозь который ты видишь зелёное
+поле и одинокое дерево на нём.]];
 	compass_look = function(s, t)
 		if t == 'd_to' then
 			mp:xaction("Exam", _'#hole')
@@ -1359,22 +1361,17 @@ room {
 		return false
 	end;
 	obj = {
-		obj {
-			nam = '#tree';
-			-"дерево,лист*,ветв*,ветк*";
-			before_Touch = [[Кора дерева шершавая. Словно морщины.]];
-			description = [[Похоже, что это то же
-	самое дерево... Как странно.]];
-			['before_Climb,Enter,Walk'] = function(s)
-				if pl:where() ~= here() then
-					return false
-				end
-				walk 'шпиль'
-			end;
-		}:attr 'scenery,enterable,supporter';
+		door {
+			nam = '#pass';
+			-"проход,дерев*,поле*";
+			door_to = 'шпиль';
+			description = [[Ты понимаешь, что оказался
+внутри башни.]];
+		}:attr 'scenery,open';
 		obj {
 			-"платформа";
 			nam = 'platform';
+			inside_dsc = "Ты стоишь на платформе,";
 			description = [[Платформа перемещается по
 рельсу, уходящему вертикально вверх и вниз.]];
 			after_LetIn = function(s, w)

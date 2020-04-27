@@ -1226,17 +1226,22 @@ room {
 		if s.ff ^ 'planet' then -- 'w'
 			walk 'sea'
 			return
-		end
-		if s.ff ^ 'шпиль' then
-			walk 'sea' -- TODO
-			return
-		end
-		if s.ff ^ 'sea' then
-			walk 'rock'
-			return
-		end
-		if s.ff ^ 'rock' then
+		elseif s.ff ^ 'sea' then
 			walk 'planet'
+			return
+		elseif s.ff ^ 'шпиль' then
+			if t == 'e_to' then
+				walk 'rock'
+			else
+				walk 'intower'
+			end
+			return
+		elseif s.ff ^ 'rock' then
+			if t == 'n_to' then
+				walk 'intower'
+			else
+				walk 'шпиль'
+			end
 			return
 		end
 	end;
@@ -1276,6 +1281,122 @@ room {
 			description = [[Ты не видишь ничего
 	примечательного, кроме пустынной равнины.]];
 		}:attr 'scenery';
+	};
+}
+room {
+	-"башня";
+	nam = "top";
+	before_Walk = function(s, to)
+		if not pl:inside'platform' then
+			return false
+		end
+		if to ^ '@d_to' then
+			move('platform', 'intower')
+			return
+		end
+		return false
+	end;
+}
+
+room {
+	-"комната";
+	title = "Странная комната";
+	nam = "intower";
+	dsc = [[Ты находишься внутри просторной комнаты цилиндрической
+формы. В полу комнаты ты видишь круглую огороженную шахту, сквозь центр которой
+проходит рельс. Рядом растёт дерево.]];
+	compass_look = function(s, t)
+		if t == 'd_to' then
+			mp:xaction("Exam", _'#hole')
+			return
+		end
+		if t == 'u_to' then
+			mp:xaction("Exam", _'#rail')
+			return
+		end
+		return false
+	end;
+	before_Walk = function(s, to)
+		if not pl:inside'platform' then
+			return false
+		end
+		if to ^ '@u_to' then
+			move('platform', 'top')
+			return
+		elseif to ^ '@d_to' then
+		end
+		return false
+	end;
+	obj = {
+		obj {
+			nam = '#tree';
+			-"дерево,лист*,ветв*,ветк*";
+			before_Touch = [[Кора дерева шершавая. Словно морщины.]];
+			description = [[Похоже, что это то же
+	самое дерево... Как странно.]];
+			['before_Climb,Enter,Walk'] = function(s)
+				if pl:where() ~= here() then
+					return false
+				end
+				walk 'шпиль'
+			end;
+		}:attr 'scenery,enterable,supporter';
+		obj {
+			-"платформа";
+			nam = 'platform';
+			description = [[Платформа перемещается по
+рельсу, уходящему вертикально вверх и вниз.]];
+			after_LetIn = function(s, w)
+				if w == pl then
+					p [[Ты заходишь на
+платформу и осматриваешься. Теперь ты можешь {$fmt em|ехать вверх или вниз}.]]
+					return
+				end
+				return false
+			end;
+		}:attr 'supporter,open,enterable,static':disable();
+		obj {
+			-"рычаг";
+			description = [[Рычаг установлен рядом с
+шахтой.]];
+			before_Push = function(s)
+				p [[Ничего не происходит.]]
+			end;
+			before_Pull = function(s)
+				if not seen 'platform' then
+					p [[Ты дёргаешь за рычаг и
+сразу же слышишь нарастающий шум откуда-то сверху. Через
+несколько минут в комнату по рельсу спускается платформа.]]
+					enable'platform'
+					move('platform', here())
+				else
+					p [[Ничего не происходит.]]
+				end
+			end;
+		}:attr'static';
+		obj {
+			-"шахта,дыра,загражд*|отверстие";
+			nam = '#hole';
+			description = [[Шахта огорожена невысоким заграждением. Ты подходишь к краю и
+смотришь вниз, но видишь только бесконечную череду перегородок.]];
+			before_LetIn = function(s, w)
+				if w == pl then
+					p [[Шахта глубокая!]]
+					return
+				end
+				return false
+			end;
+			after_LetIn = function(s, w)
+				p ([[Ты выбрасываешь ]], w:noun(), " в шахту.")
+				move(w, 'under')
+			end;
+		}:attr 'scenery,container,open';
+		obj {
+			-"рельс";
+			nam = '#rail';
+			description = [[Зубчатый рельс ведёт
+из шахты наверх. Ты задираешь голову и видишь бесконечную череду переборок.]];
+		}:attr'static,concealed';
 	};
 }
 

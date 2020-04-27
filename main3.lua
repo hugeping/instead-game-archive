@@ -1435,7 +1435,7 @@ room {
 			end;
 		}:attr 'scenery,container,open,enterable';
 		obj {
-			-"рельс";
+			-"рельс/мр";
 			nam = '#rail';
 			description = [[Зубчатый рельс ведёт
 из шахты наверх. Ты задираешь голову и видишь бесконечную череду переборок.]];
@@ -1451,7 +1451,7 @@ function game:after_Smell()
 	p [[Ничего интересного.]]
 end
 
-game['before_Taste,Eat'] = function()
+game['before_Taste,Eat,Talk'] = function()
 	if _'suit':has'worn' then
 		p [[В скафандре это невозможно.]]
 	else

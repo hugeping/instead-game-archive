@@ -1297,6 +1297,20 @@ room {
 		return false
 	end;
 }
+room {
+	-"башня";
+	nam = "under";
+	before_Walk = function(s, to)
+		if not pl:inside'platform' then
+			return false
+		end
+		if to ^ '@u_to' then
+			move('platform', 'intower')
+			return
+		end
+		return false
+	end;
+}
 
 room {
 	-"комната";
@@ -1324,6 +1338,8 @@ room {
 			move('platform', 'top')
 			return
 		elseif to ^ '@d_to' then
+			move('platform', 'under')
+			return
 		end
 		return false
 	end;
@@ -1390,7 +1406,7 @@ room {
 				p ([[Ты выбрасываешь ]], w:noun(), " в шахту.")
 				move(w, 'under')
 			end;
-		}:attr 'scenery,container,open';
+		}:attr 'scenery,container,open,enterable';
 		obj {
 			-"рельс";
 			nam = '#rail';

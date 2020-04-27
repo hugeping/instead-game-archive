@@ -1365,11 +1365,22 @@ room {
 			after_LetIn = function(s, w)
 				if w == pl then
 					p [[Ты заходишь на
-платформу и осматриваешься. Теперь ты можешь {$fmt em|ехать вверх или вниз}.]]
+платформу и осматриваешься. Управление предельно простое, здесь всего
+две кнопки. Теперь ты можешь {$fmt em|ехать вверх или вниз}.]]
 					return
 				end
 				return false
 			end;
+			obj = {
+				obj {
+					-"кнопки";
+					description = [[Ты можешь
+{$fmt em|ехать вверх или вниз}.]];
+					['before_Push,Touch'] =
+						[[Просто {$fmt em|вверх}
+или {$fmt em|вниз}?]];
+				}:attr 'static,concealed';
+			};
 		}:attr 'supporter,open,enterable,static':disable();
 		obj {
 			-"рычаг";

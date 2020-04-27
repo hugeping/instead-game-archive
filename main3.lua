@@ -1031,6 +1031,11 @@ room {
 		if t ^ 'planet' then
 			p [[Ты покинул странную башню и отправился на
 юг, к своему кораблю.]];
+			if rain then
+				p [[Пока ты шёл, небо очистилось и дождь
+закончился.]];
+				rain = false
+			end
 		end
 	end;
 	enter = function(s, f)
@@ -1078,9 +1083,11 @@ room {
 	nam = 'sea';
 	title = "У моря";
 	before_Listen = [[Шум моря ласкает твой слух.]];
-	before_Smell = [[От запаха моря кружится голова.]];
-	dsc = [[Ты стоишь на берегу моря. Здесь же, неподалёку, прямо на берегу
+	before_Smell = [[От запаха соли и водорослей кружится голова.]];
+	dsc = [[Ты стоишь на берегу моря. На юге от тебя, прямо на берегу
 	растет странное дерево.]];
+	s_to = '#tree';
+	out_to = '#tree';
 	obj = {
 		door {
 			nam = '#tree';
@@ -1102,6 +1109,50 @@ room {
 		'sky2';
 	};
 }
+
+room {
+	-"скала,вид*,край*";
+	nam = 'rock';
+	title = "У скалистого обрыва";
+	before_Listen = [[Ты слышишь свист ветра в скалах.]];
+	dsc = [[Ты стоишь на вершине скалы у самого её края. Перед тобой
+внизу открывается величественный вид. Далеко-далеко, за горизонтом виднеется чёрный
+шпиль. На севере от
+	тебя находится странное дерево.]];
+	n_to = '#tree';
+	out_to = '#tree';
+	compass_look = function(s, t)
+		if t == 'd_to' then
+			mp:xaction("Exam", _'#view')
+			return
+		end
+		return false
+	end;
+	d_to = function(s)
+		p [[Ты не можешь спуститься со скалистого обрыва.]];
+	end;
+	obj = {
+		door {
+			nam = '#tree';
+			-"дерево,ветв*";
+			description = [[Одинокое дерево кажется здесь совсем
+	лишним.]];
+			door_to = 'tree';
+		}:attr 'scenery,open';
+		Distance {
+			-"вид|скалы,обломк*";
+			nam = "#view";
+			description = [[Внизу ты видишь долину
+усеянную обломками скал.]];
+		};
+		Distance {
+			-"шпиль|башня";
+			description = [[Высокий тонкий шпиль едва
+заметен отсюда.]];
+		};
+		'sky2';
+	};
+}:attr 'supporter';
 
 room {
 	title = "Дерево";
@@ -1129,9 +1180,21 @@ room {
 	out_to = function(s)
 		return s.ff
 	end;
+	n_to = function(s)
+		if s.ff ^ 'sea' then
+			return 'sea';
+		end
+		return false
+	end;
 	w_to = function(s)
 		if s.ff ^ 'шпиль' then
 			return 'шпиль';
+		end
+		return false
+	end;
+	s_to = function(s)
+		if s.ff ^ 'rock' then
+			return 'rock';
 		end
 		return false
 	end;
@@ -1140,11 +1203,22 @@ room {
 	end;
 	cant_go = function(s, t)
 		s.trans = _('@'..t)
-		if t == 'n_to' then
+		if s.ff ^ 'planet' then -- 'w'
+			walk 'sea'
+			return
+		end
+		if s.ff ^ 'шпиль' then
+			walk 'sea' -- TODO
+			return
+		end
+		if s.ff ^ 'sea' then
+			walk 'rock'
+			return
+		end
+		if s.ff ^ 'rock' then
 			walk 'planet'
 			return
 		end
-		walk 'sea'
 	end;
 	e_to = function(s)
 		if s.ff ^ 'planet' then
@@ -1159,6 +1233,10 @@ room {
 			p [[^^Шпиль башни находится на западе.]];
 		elseif s.ff ^ 'planet' then
 			p [[^^Твой корабль находится на востоке.]];
+		elseif s.ff ^ 'sea' then
+			p [[^^Море находится на севере.]];
+		elseif s.ff ^ 'rock' then
+			p [[^^Обрыв находится на юге.]];
 		end
 		p [[В остальных направлениях - равнина.]];
 	end;
@@ -1173,6 +1251,11 @@ room {
 			['before_Climb,Enter'] = [[Ты не горишь
 	желанием сломать себе шею.]];
 		}:attr 'scenery,enterable,supporter';
+		obj {
+			-"равнина";
+			description = [[Ты не видишь ничего
+	примечательного, кроме пустынной равнины.]];
+		}:attr 'scenery';
 	};
 }
 

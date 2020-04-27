@@ -431,7 +431,7 @@ room {
 помигивает в тусклом свете.]]
 			if not _'engine'.flame and _'panel'.stop and
 			not isDaemon('burnout') then
-				p [[^^За окнами ты замечаешь нечто странное...]]
+				p [[^^{$fmt em|За окнами ты замечаешь нечто странное...}]]
 			end
 		end
 		p [[^^Ты можешь выйти из рубки.]]
@@ -1284,19 +1284,22 @@ room {
 	};
 }
 room {
-	-"башня";
-	title = "Вершина башни";
+	title = "Смотровая";
 	nam = "top";
 	before_Walk = function(s, to)
 		if not pl:inside'platform' then
 			return false
 		end
 		if to ^ '@d_to' then
+			p [[Ты нажимаешь на кнопку и платформа,
+с неожиданно высоким ускорением, начинает свой спуск.]]
 			move('platform', 'intower')
 			return
 		end
 		return false
 	end;
+	dsc = [[Ты находишься в небольшой круглой комнате, залитой
+	дневным светом.]];
 }
 room {
 	-"башня";
@@ -1315,7 +1318,7 @@ room {
 
 room {
 	-"комната";
-	title = "Странная комната";
+	title = "Комната";
 	nam = "intower";
 	out_to = "#pass";
 	dsc = [[Ты находишься внутри просторной комнаты цилиндрической
@@ -1371,7 +1374,7 @@ room {
 		obj {
 			-"платформа";
 			nam = 'platform';
-			inside_dsc = "Ты стоишь на платформе,";
+			inside_dsc = "Ты стоишь на платформе.";
 			description = [[Платформа перемещается по
 рельсу, уходящему вертикально вверх и вниз.]];
 			after_LetIn = function(s, w)
@@ -1402,7 +1405,8 @@ room {
 				p [[Ничего не происходит.]]
 			end;
 			before_Pull = function(s)
-				if not seen 'platform' then
+				if not seen 'platform' or disabled
+				'platform' then
 					p [[Ты дёргаешь за рычаг и
 сразу же слышишь нарастающий шум откуда-то сверху. Через
 несколько минут в комнату по рельсу спускается платформа.]]

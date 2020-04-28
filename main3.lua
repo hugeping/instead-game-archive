@@ -1386,6 +1386,7 @@ room {
 	obj = {
 		Furniture {
 			-"кресло";
+			nam = "#chair";
 			title = "в кресле";
 			description = [[Кресло выглядит
 старым. Сделано из дерева.]];
@@ -1402,24 +1403,30 @@ room {
 рухлядь. Пузатый монитор мерцает в темноте зелёным. Большая клавиатура
 является частью компьютера.]];
 					["before_Search,LookAt"] = function(s)
-						walk "computer"
+						if pl:where()==_'#chair' then
+							walk
+							'computer'
+						else
+							return false
+						end;
 					end;
 					before_SwitchOff = [[Ты не
 видишь никакого выключателя. Да и проводов не видно...]];
 					obj = {
 					Furniture {
+						nam = '#keyboard';
 						-"клавиатура|клавиши/мн,жр";
 						description =
 							[[На
 клавиатуре высокие квадратные клавиши.]];
-						['before_Push,Touch'] =
+						['before_Push,Touch,Take'] =
 							function(s)
 								if pl:where()~=_'#chair' then
 									p
 									[[В
 кресле будет удобнее.]]
 								else
-									return false
+									walk 'computer'
 								end;
 							end
 						};
@@ -1440,9 +1447,25 @@ room {
 }
 
 room {
+	title = false;
 	nam = "computer";
+	OnError = function(s)
+		p [[Синтаксическая ошибка. Для помощи введите: {$fmt b|помощь}.]];
+	end;
 	out_to = "under";
+	default_Verb = "";
+	dsc = [[ПРОЕКТ "АРХИВ" v2.1^^Для помощи введите: {$fmt b|помощь}.]];
+	Help = [[Помощь:^^
+{$fmt b|выход} -- выйти^
+{$fmt b|поиск <идентификатор>} -- поиск по картотеке^
+{$fmt b|скан} -- начать сканирование.]];
+	Exit = function(s)
+		move(pl, 'under')
+	end;
 }
+
+Verb ({"помощь", "Help" }, _'computer')
+Verb ({"выход", "Exit" }, _'computer')
 
 room {
 	-"комната";

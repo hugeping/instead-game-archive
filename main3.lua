@@ -1393,11 +1393,13 @@ room {
 			inside_dsc = [[Ты сидишь в кресле.]];
 		}:attr 'concealed,supporter,enterable';
 		Furniture {
+			nam = "table";
 			-"стол,поверхност*";
 			description = [[Матовая поверхность стола отражает
 свечение монитора.]];
 			obj = {
 				Furniture {
+					nam = "comp";
 					-"компьютер";
 					description = [[Это какая-то
 рухлядь. Пузатый монитор мерцает в темноте зелёным. Большая клавиатура
@@ -1454,18 +1456,26 @@ room {
 	end;
 	out_to = "under";
 	default_Verb = "";
-	dsc = [[ПРОЕКТ "АРХИВ" v2.1^^Для помощи введите: {$fmt b|помощь}.]];
-	Help = [[Помощь:^^
-{$fmt b|выход} -- выйти^
-{$fmt b|поиск <идентификатор>} -- поиск по картотеке^
-{$fmt b|скан} -- начать сканирование.]];
+	dsc = [[ДОБРО ПОЖАЛОВАТЬ В "АРХИВ"^^Выбран язык: {$fmt em|Русский}^^Для помощи введите: {$fmt b|помощь}.]];
+	Help = [[^^
+{$fmt c|СИСТЕМА "АРХИВ" v1.1}^^
+{$fmt b|выход} {$fmt tab,50%}-- выйти^
+{$fmt b|поиск <идентификатор>} {$fmt tab,50%}-- поиск по картотеке^
+{$fmt b|скан} {$fmt tab,50%}-- начать сканирование артефакта.]];
+	Scan = function(s)
+		for k, v in ipairs(objs 'table') do
+			p (v)
+		end
+	end;
 	Exit = function(s)
 		move(pl, 'under')
+		move(pl, '#chair')
 	end;
 }
 
-Verb ({"помощь", "Help" }, _'computer')
-Verb ({"выход", "Exit" }, _'computer')
+Verb ({"пом/ощь", "Help" }, _'computer')
+Verb ({"вых/од,выйти", "Exit" }, _'computer')
+Verb ({"скан/ировать", "Scan" }, _'computer')
 
 room {
 	-"комната";

@@ -1313,6 +1313,7 @@ room {
 	nam = "top";
 	before_Walk = function(s, to)
 		if not pl:inside'platform' then
+			move(pl, 'platform')
 			return false
 		end
 		if to ^ '@d_to' then
@@ -1375,7 +1376,7 @@ room {
 	before_Listen  = [[Ты слышишь едва уловимое гудение.]];
 	before_Walk = function(s, to)
 		if not pl:inside'platform' then
-			return false
+			move(pl, 'platform')
 		end
 		if to ^ '@u_to' then
 			move('platform', 'intower')
@@ -1395,8 +1396,11 @@ room {
 		Furniture {
 			nam = "table";
 			-"стол,поверхност*";
-			description = [[Матовая поверхность стола отражает
+			description = function(s)
+				p [[Матовая поверхность стола отражает
 свечение монитора.]];
+				return false
+			end;
 			obj = {
 				Furniture {
 					nam = "comp";
@@ -1447,7 +1451,14 @@ room {
 		}:attr 'concealed,supporter';
 	};
 }
-
+local ids = {
+	['comp'] = 17;
+	['photo'] = 2;
+	['огнетушитель'] = 3;
+	['suit'] = 3;
+	['осколки'] = 3;
+	['wheat'] = 3;
+}
 room {
 	title = false;
 	nam = "computer";
@@ -1463,8 +1474,9 @@ room {
 {$fmt b|поиск <идентификатор>} {$fmt tab,50%}-- поиск по картотеке^
 {$fmt b|скан} {$fmt tab,50%}-- начать сканирование артефакта.]];
 	Scan = function(s)
+		pn [[{$fmt b|Предметы на столе:}]]
 		for k, v in ipairs(objs 'table') do
-			p (v)
+			p (v:noun(), ' - ', ids[v.nam] or 'unknown')
 		end
 	end;
 	Exit = function(s)
@@ -1499,7 +1511,7 @@ room {
 	end;
 	before_Walk = function(s, to)
 		if not pl:inside'platform' then
-			return false
+			move(pl, 'platform')
 		end
 		if to ^ '@u_to' then
 			p [[Ты нажимаешь на кнопку и платформа,

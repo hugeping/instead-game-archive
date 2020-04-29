@@ -3,7 +3,7 @@
 --$Author:Пётр Косых
 
 require "fmt"
-
+--[[
 require "timer"
 timer:set(350)
 function game:timer()
@@ -14,11 +14,11 @@ function game:timer()
 	end
 	return true, false
 end
+]]--
 fmt.dash = true
 fmt.quotes = true
 
 require 'parser/mp-ru'
-mp.prompt = fmt.b("> ")
 
 game.dsc = [[{$fmt b|АРХИВ}^^Интерактивная новелла-миниатюра для
 выполнения на средствах вычислительной техники.^^Для
@@ -173,7 +173,7 @@ Careful {
 		end
 	end;
 	description = function(s)
-		if here() ^ 'ship1' then
+		if here() ^ 'ship1' or bomb_cancel then
 			p [[Все системы корабля в
 норме. Можно толкнуть рычаг тяги.]];
 		elseif here() ^ 'burnout' then
@@ -213,7 +213,7 @@ Careful {
 			['before_SwitchOn,SwitchOff'] = [[Рычаг тяги можно
 	тянуть или толкать.]];
 			description = function(s)
-				if here() ^ 'ship1' then
+				if here() ^ 'ship1' or bomb_cancel then
 					p [[Массивный
 рычаг тяги стоит на нейтральной позиции.]];
 				elseif here() ^ 'burnout' then
@@ -436,6 +436,9 @@ room {
 			else
 				p [[В рубке "Резвого" светло. Сквозь
 окна видно золотисто-жёлтое поле под ясным небом.]];
+				if bomb_cancel then
+					p [[Показатели приборов -- в норме.]]
+				end
 			end
 		elseif _'engine'.flame then
 			p [[Рубка "Резвого" заполнена сигналом
@@ -701,6 +704,9 @@ room {
 	dsc = function(s)
 		if s.flame then
 			p [[В машинном отсеке пылает огонь! Всё в дыму!]];
+		elseif bomb_cancel then
+			p [[Ты находишься в машинном
+отсеке. Контрольный блок мерцает индикаторами.]]
 		else
 			p [[Ты находишься в машинном
 отсеке. Обгоревший контрольный блок полностью разрушен.]]
@@ -716,7 +722,9 @@ room {
 		if not w or w ^ '#flame' or w == s or w ^ '#control' then
 			_'огнетушитель'.full = false
 			s.flame = false
-			p [[Ты яростно борешься с пламенем. Наконец, пожар потушен!]]
+			p [[Ты яростно борешься с пламенем. Наконец,
+пожар потушен!]]
+			remove '#flame'
 		else
 			return false
 		end
@@ -733,10 +741,14 @@ room {
 		}:attr 'scenery';
 		obj {
 			nam="#control";
-			-"контрольный блок,блок";
+			-"контрольный блок,блок,индикатор*";
 			description = function(s)
 				if here().flame then
-					p [[Контрольный блок скрыт в пламени!]];
+					p [[Контрольный блок скрыт в
+пламени!]];
+				elseif bomb_cancel then
+					p [[Контрольный блок
+функционирует!]]
 				else
 					p [[Контрольный блок -- система
 управления двигателями корабля. Он сильно обгорел, но не это
@@ -1317,7 +1329,7 @@ Distance {
 		};
 	}
 }
-
+global 'bomb_cancel' (false)
 cutscene {
 	nam = 'bomb_call';
 	title = "звонок";
@@ -1360,6 +1372,7 @@ cutscene {
 	больше нет осколков бомбы!]];
 		end
 		remove 'осколки'
+		bomb_cancel = true
 	end;
 }
 
@@ -1390,11 +1403,10 @@ room {
 	title = "Смотровая комната";
 	nam = "top";
 	before_Walk = function(s, to)
-		if not pl:inside'platform' then
-			move(pl, 'platform')
-			return false
-		end
 		if to ^ '@d_to' then
+			if not pl:inside'platform' then
+				move(pl, 'platform')
+			end
 			p [[Ты нажимаешь на кнопку и платформа,
 с неожиданно высоким ускорением, начинает свой спуск.]]
 			move('platform', 'intower')
@@ -1491,10 +1503,10 @@ room {
 	nam = "under";
 	before_Listen  = [[Ты слышишь едва уловимое гудение.]];
 	before_Walk = function(s, to)
-		if not pl:inside'platform' then
-			move(pl, 'platform')
-		end
 		if to ^ '@u_to' then
+			if not pl:inside'platform' then
+				move(pl, 'platform')
+			end
 			move('platform', 'intower')
 			return
 		end
@@ -1695,7 +1707,8 @@ room {
 		return false
 	end;
 	before_Walk = function(s, to)
-		if not pl:inside'platform' then
+		if not pl:inside'platform' and (to ^ '@u_to' or to ^
+		'@d_to') then
 			move(pl, 'platform')
 		end
 		if to ^ '@u_to' then

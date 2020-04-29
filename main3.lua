@@ -1455,6 +1455,32 @@ room {
 			walk_to = 'balk';
 			desc = [[Ты можешь выйти на смотровую площадку.]];
 		};
+		obj {
+			-"платформа";
+			nam = 'platform';
+			inside_dsc = "Ты стоишь на платформе.";
+			description = [[Платформа перемещается по
+рельсу, уходящему вертикально вверх и вниз.]];
+			after_LetIn = function(s, w)
+				if w == pl then
+					p [[Ты заходишь на
+платформу и осматриваешься. Управление предельно простое, здесь всего
+две кнопки. Теперь ты можешь {$fmt em|ехать вверх или вниз}.]]
+					return
+				end
+				return false
+			end;
+			obj = {
+				obj {
+					-"кнопки";
+					description = [[Ты можешь
+{$fmt em|ехать вверх или вниз}.]];
+					['before_Push,Touch'] =
+						[[Просто {$fmt em|вверх}
+или {$fmt em|вниз}?]];
+				}:attr 'static,concealed';
+			};
+		}:attr 'supporter,open,enterable,static';
 	};
 }
 room {
@@ -1750,32 +1776,6 @@ room {
 внутри башни.]];
 		}:attr 'scenery,open';
 		obj {
-			-"платформа";
-			nam = 'platform';
-			inside_dsc = "Ты стоишь на платформе.";
-			description = [[Платформа перемещается по
-рельсу, уходящему вертикально вверх и вниз.]];
-			after_LetIn = function(s, w)
-				if w == pl then
-					p [[Ты заходишь на
-платформу и осматриваешься. Управление предельно простое, здесь всего
-две кнопки. Теперь ты можешь {$fmt em|ехать вверх или вниз}.]]
-					return
-				end
-				return false
-			end;
-			obj = {
-				obj {
-					-"кнопки";
-					description = [[Ты можешь
-{$fmt em|ехать вверх или вниз}.]];
-					['before_Push,Touch'] =
-						[[Просто {$fmt em|вверх}
-или {$fmt em|вниз}?]];
-				}:attr 'static,concealed';
-			};
-		}:attr 'supporter,open,enterable,static':disable();
-		obj {
 			-"рычаг";
 			description = [[Рычаг установлен рядом с
 шахтой.]];
@@ -1783,12 +1783,10 @@ room {
 				p [[Ничего не происходит.]]
 			end;
 			before_Pull = function(s)
-				if not seen 'platform' or disabled
-				'platform' then
+				if not seen 'platform' then
 					p [[Ты дёргаешь за рычаг и
 сразу же слышишь нарастающий шум откуда-то сверху. Через
 несколько минут в комнату по рельсу спускается платформа.]]
-					enable'platform'
 					move('platform', here())
 				else
 					p [[Ничего не происходит.]]

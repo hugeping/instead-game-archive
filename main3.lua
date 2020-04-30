@@ -8,13 +8,19 @@ require "link"
 if not instead.tiny then
 require "autotheme"
 require "timer"
+require "sprite"
+require "theme"
 timer:set(350)
+local h = instead.font_scaled_size(theme.get 'win.fnt.size')
+local blank = sprite.new(1, h * 1.2)
+local cur_on = false
 function game:timer()
-	if mp.cursor == '' or mp.autohelp then
-		mp.cursor = fmt.b '|'
+	if cur_on or mp.autohelp then
+		mp.cursor = fmt.b '|' .. fmt.top(fmt.img(blank))
 	else
-		mp.cursor = ''
+		mp.cursor = fmt.top(fmt.img(blank));
 	end
+	cur_on = not cur_on
 	return true, false
 end
 end

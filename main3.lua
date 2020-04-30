@@ -5,6 +5,10 @@
 require "fmt"
 require "link"
 
+if not instead.tiny then
+	require "autotheme"
+end
+
 fmt.dash = true
 fmt.quotes = true
 

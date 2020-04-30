@@ -5,11 +5,15 @@
 require "fmt"
 require "link"
 
+function set_mus(f)
+end
+
 if not instead.tiny then
 require "autotheme"
 require "timer"
 require "sprite"
 require "theme"
+require "snd"
 timer:set(350)
 local h = instead.font_scaled_size(theme.get 'win.fnt.size')
 local blank = sprite.new(1, h * 1.2)
@@ -22,6 +26,9 @@ function game:timer()
 	end
 	cur_on = not cur_on
 	return true, false
+end
+function set_mus(f)
+	snd.music('mus/'..f..'.ogg')
 end
 end
 
@@ -259,6 +266,7 @@ Careful {
 							return
 						end
 						walk 'happyend'
+						set_mus 'jump-memories'
 						return
 					end
 					if not s.ff then

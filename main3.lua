@@ -10,6 +10,10 @@ fmt.quotes = true
 
 require 'parser/mp-ru'
 
+function set_pic(f)
+	game.pic = 'gfx/'..f..'.jpg'
+end
+
 game.dsc = [[{$fmt b|АРХИВ}^^Интерактивная новелла-миниатюра для
 выполнения на средствах вычислительной техники.^^Для
 помощи, наберите "помощь" и нажмите "ввод".]];
@@ -409,6 +413,9 @@ room {
 cutscene {
 	nam = "transfer";
 	title = "Переход";
+	enter = function()
+		set_pic "hyper"
+	end;
 	text = {
 		[[Перед тем, как положить руку на массивный рычаг,
 	ты бросил взгляд на фото своей дочери.^
@@ -2174,5 +2181,7 @@ function init()
 	mp.autohelp = false
 	mp.autohelp_limit = 8
 	mp.compl_thresh = 1
+	set_pic "gate"
+
 	walk 'ship1'
 end

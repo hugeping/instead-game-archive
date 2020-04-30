@@ -3,18 +3,8 @@
 --$Author:Пётр Косых
 
 require "fmt"
---[[
-require "timer"
-timer:set(350)
-function game:timer()
-	if mp.cursor == '' then
-		mp.cursor = fmt.b("|");
-	else
-		mp.cursor = ''
-	end
-	return true, false
-end
-]]--
+require "link"
+
 fmt.dash = true
 fmt.quotes = true
 
@@ -330,15 +320,18 @@ cutscene {
 cutscene {
 	noparser = true;
 	nam = 'titles';
-	title = "КОНЕЦ";
-	dsc = [[
-{$fmt c|АРХИВ}^
-{$fmt em|Пётр Косых, Май 2020}^^
+	title = false;
+	dsc = fmt.c[[
+{$fmt b|АРХИВ}^^
+{$fmt em|Пётр Косых^Май 2020}^^
 Спасибо вам за прохождение этой небольшой игры!^
-Если вам понравилось, вы можете найти похожие игры на:^
-http://instead-games.ru
-https://instead.itch.io
-https://metaparser.syscall.ru
+Если вам понравилось, вы можете найти похожие игры на:^^
+{$link|http://instead-games.ru}^
+{$link|https://instead.itch.io}^
+{$link|https://metaparser.syscall.ru}^^
+А если, хотите написать свою историю, добро пожаловать на:^
+{$link|https://instead3.syscall.ru}^^
+{$fmt b|КОНЕЦ}
 ]];
 }
 

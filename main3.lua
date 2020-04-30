@@ -355,13 +355,14 @@ cutscene {
 	title = false;
 	dsc = fmt.c[[
 {$fmt b|АРХИВ}^^
-{$fmt em|Пётр Косых^Май 2020}^^
+{$fmt em|Пётр Косых^Май 2020}^
+{$fmt em|Музыка: Jump Memories / Keys of Moon}^^
 Спасибо вам за прохождение этой небольшой игры!^
 Если вам понравилось, вы можете найти похожие игры на:^^
 {$link|http://instead-games.ru}^
 {$link|https://instead.itch.io}^
 {$link|https://metaparser.syscall.ru}^^
-А если, хотите написать свою историю, добро пожаловать на:^
+А если хотите написать свою историю,^добро пожаловать на:^
 {$link|https://instead3.syscall.ru}^^
 {$fmt b|КОНЕЦ}
 ]];

@@ -6,7 +6,17 @@ require "fmt"
 require "link"
 
 if not instead.tiny then
-	require "autotheme"
+require "autotheme"
+require "timer"
+timer:set(350)
+function game:timer()
+	if mp.cursor == '' or mp.autohelp then
+		mp.cursor = fmt.b '|'
+	else
+		mp.cursor = ''
+	end
+	return true, false
+end
 end
 
 fmt.dash = true

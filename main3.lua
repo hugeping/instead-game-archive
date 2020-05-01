@@ -331,6 +331,7 @@ Careful {
 cutscene {
 	nam = 'happyend';
 	enter = function(s)
+		set_pic 'hyper'
 		if have 'photo' then
 			pn [[Ты достаёшь фотографию дочери и закрепляешь её в углу окна. Затем, кладёшь руку на рычаг тяги.]];
 		else

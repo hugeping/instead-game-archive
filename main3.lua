@@ -360,8 +360,9 @@ cutscene {
 	end;
 	dsc = fmt.c[[
 {$fmt b|АРХИВ}^^
-{$fmt em|Пётр Косых^Май 2020}^
-{$fmt em|Музыка: Jump Memories / Keys of Moon}^^
+{$fmt em|Пётр Косых / Май 2020}^
+{$fmt em|Музыка: Jump Memories / Keys of Moon}^
+{$fmt em|Тестироване: Александр Никитин, Oleg Bosh}^^
 Спасибо вам за прохождение этой небольшой игры!^
 Если вам понравилось, вы можете найти похожие игры на:^^
 {$link|http://instead-games.ru}^

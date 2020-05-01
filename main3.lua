@@ -1810,7 +1810,7 @@ room {
 								[[Ты не замечаешь никакой кнопки.]];
 							description =
 								function()
-									check_sit [[[[Наверное,
+									check_sit [[Наверное,
 он вреден для глаз.]];
 									end
 						}:attr'switchable,on';

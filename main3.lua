@@ -1,5 +1,5 @@
 --$Name: Архив
---$Version: 0.1
+--$Version: 0.2
 --$Author:Пётр Косых
 
 require "fmt"

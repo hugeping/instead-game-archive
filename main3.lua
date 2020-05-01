@@ -15,12 +15,13 @@ require "sprite"
 require "theme"
 require "snd"
 timer:set(350)
-local h = instead.font_scaled_size(theme.get 'win.fnt.size')
-local blank = sprite.new(1, h * 1.2)
+local h = instead.font_scaled_size(theme.get 'inv.fnt.size')
+local w, h = sprite.fnt(theme.get 'inv.fnt.name', theme.get 'inv.fnt.size'):size("|")
+local blank = sprite.new(w, h)
 local cur_on = false
 function game:timer()
 	if cur_on or mp.autohelp then
-		mp.cursor = fmt.b '|' .. fmt.top(fmt.img(blank))
+		mp.cursor = fmt.b '|'
 	else
 		mp.cursor = fmt.top(fmt.img(blank));
 	end
@@ -1649,8 +1650,11 @@ room {
 			else
 				walk 'bomb_call'
 			end
-		else
+		elseif w == '17' or w == '8703627531' or w == '9236123121' or w == '7691' then
 			return false
+		else
+			p [[В трубке раздался женский голос: "Объект с таким идентификатором не найден в картотеке."]]
+			return
 		end
 	end;
 	out_to = 'balk';

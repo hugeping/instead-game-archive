@@ -1590,6 +1590,7 @@ cutscene {
 	больше нет осколков бомбы!]];
 		end
 		remove 'осколки'
+		_"огнетушитель".full = true
 		bomb_cancel = true
 	end;
 }

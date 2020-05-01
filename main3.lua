@@ -1744,13 +1744,55 @@ function check_sit(w)
 		walk 'computer'
 	end
 end
-
+obj {
+	nam = '$char';
+	act = function(s,w)
+		return w
+	end;
+}
 room {
 	-"комната";
 	title = "Компьютерная комната";
-	dsc = [[Ты находишься в полутёмной комнате. Единственный
-источник света здесь -- включённый компьютер. Компьютер стоит на столе. Рядом со столом стоит кресло.]];
+	enter = function(s)
+		if not disabled 'crash' then
+			p [[{$char|^^}{$fmt em|Спустившись в комнату, ты с ужасом обнаружил,
+что странный компьютер снова стоит на проклятом столе!}]];
+			disable 'crash'
+			enable '#chair'
+			enable 'table'
+		end
+	end;
+	dsc = function()
+		p [[Ты находишься в полутёмной комнате.]]
+		if disabled 'crash' then
+			p [[Единственный
+источник света здесь -- включённый компьютер. Компьютер стоит на
+столе. Рядом со столом стоит кресло.]];
+		else
+			p [[В комнате валяются обломки мебели и компьютера.]]
+		end
+	end;
 	nam = "under";
+	before_Attack = function(s, w)
+		if pl:inside '#chair' then
+			p [[Может, сначала хотя бы с кресла встать?]];
+			return
+		end
+		if not disabled 'crash' then
+			p [[Ты уже сделал это.]]
+			return
+		end
+		p [[В порыве внезапной ярости ты начинаешь крушить всё
+вокруг.]]
+		if have 'огнетушитель' then
+			p [[Тут очень пригодился огнетушитель, который
+ты зачем-то таскал всё это время с собой.]]
+		end
+		p [[Через минуту -- всё было кончено.]]
+		disable '#chair'
+		disable 'table'
+		enable 'crash'
+	end;
 	before_Listen  = [[Ты слышишь едва уловимое гудение.]];
 	before_Walk = function(s, to)
 		if to ^ '@u_to' then
@@ -1824,6 +1866,10 @@ room {
 				}:attr'switchable,on'
 			};
 		}:attr 'concealed,supporter';
+		Prop {
+			nam = "crash";
+			-"обломки|хлам";
+		}:disable();
 	};
 }
 local ids = {
@@ -2197,6 +2243,18 @@ function mp:before_Ring(w)
 	if not w then
 		p [[Попробуй {$fmt em|набрать <номер>}. Например,
 	{$fmt em|набрать 12345}.]];
+		return
+	end
+	return false
+end
+
+function game:before_Attack(w)
+	if _'suit':has'worn' then
+		p [[Скафандр защищает тебя.]]
+		return
+	end
+	if w == pl then
+		p [[Сдаешься? Так просто?]]
 		return
 	end
 	return false

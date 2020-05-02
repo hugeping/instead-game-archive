@@ -15,8 +15,8 @@ require "sprite"
 require "theme"
 require "snd"
 timer:set(350)
-local h = instead.font_scaled_size(theme.get 'inv.fnt.size')
-local w, h = sprite.fnt(theme.get 'inv.fnt.name', theme.get 'inv.fnt.size'):size("|")
+local w, h = sprite.fnt(theme.get 'inv.fnt.name',
+	tonumber(theme.get 'inv.fnt.size')):size("|")
 local blank = sprite.new(w, h)
 local cur_on = false
 function game:timer()

@@ -42,6 +42,11 @@ function set_pic(f)
 	game.pic = 'gfx/'..f..'.jpg'
 end
 
+function get_pic(f)
+	local r = game.pic:gsub("^gfx/", ""):gsub("%.jpg$", "")
+	return r
+end
+
 game.dsc = [[{$fmt b|АРХИВ}^^Интерактивная новелла-миниатюра для
 выполнения на средствах вычислительной техники.^^Для
 помощи, наберите "помощь" и нажмите "ввод".]];
@@ -1753,6 +1758,7 @@ obj {
 room {
 	-"комната";
 	title = "Компьютерная комната";
+	old_pic = false;
 	enter = function(s)
 		if not disabled 'crash' then
 			p [[{$char|^^}{$fmt em|Спустившись в комнату, ты с ужасом обнаружил,
@@ -1761,6 +1767,11 @@ room {
 			enable '#chair'
 			enable 'table'
 		end
+		s.old_pic = get_pic()
+		set_pic 'comp'
+	end;
+	exit = function(s)
+		set_pic(s.old_pic)
 	end;
 	dsc = function()
 		p [[Ты находишься в полутёмной комнате.]]
@@ -2037,8 +2048,8 @@ room {
 		elseif to ^ '@d_to' then
 			p [[Ты нажимаешь на кнопку и платформа,
 с неожиданно высоким ускорением, начинает свой спуск.]]
+
 			if s:once 'down' then
-				set_pic 'comp'
 				p [[^^В шахте темно, и ты не видишь
 что находится на этажах, которые ты пролетаешь так быстро. Ты видишь
 лишь тысячи разноцветных огоньков. Словно светлячки, они проносятся

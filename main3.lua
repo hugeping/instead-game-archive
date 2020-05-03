@@ -1793,6 +1793,15 @@ room {
 			p [[Ты уже сделал это.]]
 			return
 		end
+		local list = {}
+		for _, v in ipairs(objs 'table') do
+			if not v ^ 'comp' then
+				table.insert(list, v)
+			end
+		end
+		for _, v in ipairs(list) do
+			move(v, here())
+		end
 		p [[В порыве внезапной ярости ты начинаешь крушить всё
 вокруг.]]
 		if have 'огнетушитель' then
@@ -1826,6 +1835,13 @@ room {
 				return false
 			end;
 			inside_dsc = [[Ты сидишь в кресле.]];
+			after_LetIn = function(s, w)
+				if w == pl then
+					p [[Ты садишься в кресло.]]
+					return
+				end
+				return false
+			end;
 		}:attr 'concealed,supporter,enterable';
 		Furniture {
 			nam = "table";

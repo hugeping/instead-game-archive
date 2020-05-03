@@ -367,7 +367,7 @@ cutscene {
 {$fmt b|АРХИВ}^^
 {$fmt em|Пётр Косых / Май 2020}^
 {$fmt em|Музыка: Jump Memories / Keys of Moon}^
-{$fmt em|Тестироване: Александр Никитин, Oleg Bosh}^^
+{$fmt em|Тестироване: Khaelenmore Thaal, Oleg Bosh}^^
 Спасибо вам за прохождение этой небольшой игры!^
 Если вам понравилось, вы можете найти похожие игры на:^^
 {$link|http://instead-games.ru}^

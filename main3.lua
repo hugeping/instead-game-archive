@@ -2141,6 +2141,9 @@ em|Русский}^^Для помощи введите: {$fmt b|помощь}.]]
 {$fmt b|скан} {$fmt tab,50%}-- начать сканирование артефакта.]];
 	Scan = function(s)
 		snd_play 'sfx_scan'
+		if not instead.tiny then
+			fading.set { 'null', delay = 30, max = 60, now = true }
+		end
 		pn [[{$fmt b|Предметы на столе:}]]
 		for k, v in ipairs(objs 'table') do
 			pn (v:noun(), '{$fmt tab,30%|}',' -- ',

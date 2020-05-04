@@ -54,6 +54,10 @@ function f.effects.crossfade(s, src, dst)
 	dst:draw(sprite.scr(), 0, 0, alpha);
 end
 
+function f.effects.null(s, src, dst)
+	src:copy(sprite.scr());
+end
+
 function f.effects.move_left(s, src, dst)
 --	sprite.scr():fill('black')
 	local x = theme.scr.w() * s.step / s.max

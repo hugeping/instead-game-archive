@@ -98,26 +98,6 @@ obj {
 		snd.stop(s.sounds[name][2])
 		s.sounds[name] = nil
 	end;
-	life = function(s)
-		local new_state = false
---[[
-		snd.play('snd/sfx_ship_malfunction_ambience_loop.ogg', 1, 0)
-			new_state = 'malfunc'
-		elseif _'transfer'.siren then
-			new_state = 'siren'
-		end
-		if new_state == s.state then
-			return
-		end
-		s.state = new_state
-		elseif new_state == 'malfunc' then
-			snd.play('snd/sfx_ship_malfunction_ambience_loop.ogg', 1, 0)
-		elseif new_state == 'siren' then
-			snd.play('snd/sfx_ship_malfunction_ambience_loop.ogg', 1, 0)
-			snd.play('snd/sfx_siren_loop.ogg', 2, 0)
-		end
-]]--
-	end;
 }
 function snd_start()
 	instead.stop_sound() -- halt all
@@ -2521,4 +2501,7 @@ function init()
 end
 function start()
 	snd_start()
+	if not instead.tiny then
+		fading.set { 'crossfade', now = true }
+	end
 end

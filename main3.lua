@@ -25,6 +25,7 @@ local w, h = sprite.fnt(theme.get 'inv.fnt.name',
 	tonumber(theme.get 'inv.fnt.size')):size("|")
 local blank = sprite.new(w, h)
 local cur_on = false
+require "fading"
 function game:timer()
 	if cur_on or mp.autohelp then
 		mp.cursor = fmt.b '|'
@@ -460,6 +461,9 @@ cutscene {
 	nam = 'titles';
 	title = false,
 	enter = function(s)
+		if not instead.tiny then
+			fading.set { 'fadewhite', delay = 60, max = 64 }
+		end
 		set_pic 'crash'
 		mus_play 'jump-memories'
 	end;

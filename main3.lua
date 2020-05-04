@@ -456,7 +456,8 @@ cutscene {
 	enter = function()
 		set_pic "hyper"
 	end;
-	text = {
+	text = function(s, i)
+		local txt = {
 		[[Перед тем, как положить руку на массивный рычаг,
 	ты бросил взгляд на фото своей дочери.^
 -- С Богом...]];
@@ -468,7 +469,9 @@ cutscene {
 		[[Корабль сотрясает вибрация. Что-то не так? Вибрация
 	нарастает. Удар. Ещё удар. Приборная панель расцветает
 	россыпью огней.]];
-	};
+		};
+		return txt[i]
+	end;
 	next_to = 'burnout';
 	exit = function(s)
 		DaemonStart 'panel'

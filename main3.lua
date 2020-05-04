@@ -11,6 +11,8 @@ function mus_stop(f)
 end
 function snd_play(f)
 end
+function snd_stop()
+end
 function snd_start()
 end
 

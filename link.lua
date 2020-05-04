@@ -10,7 +10,7 @@ end
 obj {
 	nam = '$link';
 	act = function(s, w)
-		if instead.clipboard() ~= w then
+		if not instead.clipboard or instead.clipboard() ~= w then
 			std.p ('{@link ', w, '|', w, '}')
 		else
 			std.p(fmt.u (w) ..' [в буфере обмена]')
@@ -21,6 +21,8 @@ obj {
 obj {
 	nam = '@link';
 	act = function(s, w)
-		instead.clipboard(w)
+		if instead.clipboard then
+			instead.clipboard(w)
+		end
 	end;
 }

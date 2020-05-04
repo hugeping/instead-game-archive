@@ -80,7 +80,7 @@ obj {
 		if not free then
 			free = #chan + 1
 		end
-		print("play ", name, free)
+--		print("play ", name, free)
 		s.sounds[name] = { name, free, loop }
 		snd.play('snd/'..name..'.ogg', free, loop)
 	end;
@@ -93,7 +93,7 @@ obj {
 		if not s.sounds[name] then
 			return
 		end
-		print("stop ", name, s.sounds[name][2])
+--		print("stop ", name, s.sounds[name][2])
 		snd.stop(s.sounds[name][2])
 		s.sounds[name] = nil
 	end;
@@ -781,7 +781,6 @@ door {
 					end
 					snd_play 'sfx_door_opens'
 					if bomb_cancel and here() ^ 'gate' then
-						print "xxx"
 						mus_play 'the_end'
 					end
 				else

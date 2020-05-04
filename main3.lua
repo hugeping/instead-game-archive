@@ -359,20 +359,20 @@ cutscene {
 cutscene {
 	noparser = true;
 	nam = 'titles';
-	title = false;
+	title = false,
 	enter = function(s)
 		set_pic 'crash'
 	end;
-	dsc = fmt.c[[
-{$fmt b|АРХИВ}^^
+	dsc = fmt.c[[{$fmt b|АРХИВ}^
 {$fmt em|Пётр Косых / Май 2020}^
-{$fmt em|Музыка: Jump Memories / Keys of Moon}^
+{$fmt em|Музыка, звук: Александр Соборов}^
+{$fmt em|Jump Memories / Keys of Moon}^
 {$fmt em|Тестироване: Khaelenmore Thaal, Oleg Bosh}^^
 Спасибо вам за прохождение этой небольшой игры!^
 Если вам понравилось, вы можете найти похожие игры на:^^
 {$link|http://instead-games.ru}^
-{$link|https://instead.itch.io}^
-{$link|https://metaparser.syscall.ru}^^
+{$link|https://metaparser.syscall.ru}^
+{$link|https://instead.itch.io}^^
 А если хотите написать свою историю,^добро пожаловать на:^
 {$link|https://instead3.syscall.ru}^^
 {$fmt b|КОНЕЦ}

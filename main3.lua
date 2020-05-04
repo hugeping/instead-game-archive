@@ -5,7 +5,13 @@
 require "fmt"
 require "link"
 
-function set_mus(f)
+function mus_play(f)
+end
+function mus_stop(f)
+end
+function snd_play(f)
+end
+function snd_start()
 end
 
 if not instead.tiny then
@@ -28,8 +34,94 @@ function game:timer()
 	cur_on = not cur_on
 	return true, false
 end
-function set_mus(f)
+function mus_play(f)
 	snd.music('mus/'..f..'.ogg')
+end
+function mus_stop(f)
+	snd.stop_music()
+end
+
+function snd_stop(f)
+	if not f then
+		instead.stop_sound() -- halt all
+	else
+		_'sound':stop(f)
+	end
+end
+
+function snd_play(f, loop)
+	if loop then
+		_'sound':play(f, 0)
+	else
+		snd.play ('snd/'..f..'.ogg', -1, 1)
+	end
+end
+
+obj {
+	nam = 'sound';
+	sounds = {
+	};
+	play = function(s, name, loop)
+		if s.sounds[name] then
+			return
+		end
+		local chan = {}
+		for k, v in pairs(s.sounds) do
+			table.insert(chan, v[2])
+		end
+		table.sort(chan)
+		local free
+		for k, v in ipairs(chan) do
+			if k ~= v then
+				free = k
+				break
+			end
+		end
+		if not free then
+			free = #chan + 1
+		end
+		print("play ", name, free)
+		s.sounds[name] = { name, free, loop }
+		snd.play('snd/'..name..'.ogg', free, loop)
+	end;
+	start = function(s)
+		for k, v in pairs(s.sounds) do
+			snd.play('snd/'..v[1]..'.ogg', v[2], v[3])
+		end
+	end;
+	stop = function(s, name)
+		if not s.sounds[name] then
+			return
+		end
+		print("stop ", name, s.sounds[name][2])
+		snd.stop(s.sounds[name][2])
+		s.sounds[name] = nil
+	end;
+	life = function(s)
+		local new_state = false
+--[[
+		snd.play('snd/sfx_ship_malfunction_ambience_loop.ogg', 1, 0)
+			new_state = 'malfunc'
+		elseif _'transfer'.siren then
+			new_state = 'siren'
+		end
+		if new_state == s.state then
+			return
+		end
+		s.state = new_state
+		elseif new_state == 'malfunc' then
+			snd.play('snd/sfx_ship_malfunction_ambience_loop.ogg', 1, 0)
+		elseif new_state == 'siren' then
+			snd.play('snd/sfx_ship_malfunction_ambience_loop.ogg', 1, 0)
+			snd.play('snd/sfx_siren_loop.ogg', 2, 0)
+		end
+]]--
+	end;
+}
+function snd_start()
+	instead.stop_sound() -- halt all
+	_'sound':start()
+	snd.music_fading(1000)
 end
 end
 
@@ -272,7 +364,6 @@ Careful {
 							return
 						end
 						walk 'happyend'
-						set_mus 'jump-memories'
 						return
 					end
 					if not s.ff then
@@ -293,7 +384,7 @@ Careful {
 				if here() ^ 'ship1' then
 					return false
 				elseif here() ^ 'burnout' then
-					if s.ff then
+					if s.ff and not bomb_cancel then
 						if not _'panel'.stop then
 							p
 	[[Выход из гиперпространства возможен только при достижении кораблём опередлённой скорости.
@@ -313,6 +404,8 @@ Careful {
 в панель управления.]];
 			before_SwitchOn = function(s)
 				if s:once() then
+					mus_stop()
+					snd_play 'sfx_radio'
 					p [[-- PEG51,
 борт FL510, запрашиваю разрешение на вылет.^
 -- ...FL510, вылет разрешаю. Ворота свободны. Счастливого пути!^
@@ -344,7 +437,8 @@ cutscene {
 			pn [[Ты кладёшь руку на рычаг тяги.]]
 		end
 	end;
-	text = {
+	text = function(s, n)
+		local t = {
 		[[Двигаешь ручку от себя до упора.]];
 		[[Всполохи гиперпространства за окном оживают...^
 На приборной панели начинается (продолжается?) обратный отсчет.]];
@@ -352,7 +446,12 @@ cutscene {
 		[[10, 9, 8, 7...]],
 		[[3, 2, 1...]];
 		[[Я СКОРО БУДУ!]];
-	};
+		};
+--		if n == 6 then
+--			snd_play 'sfx_explosion_3'
+--		end
+		return t[n]
+	end;
 	next_to = 'titles';
 }
 
@@ -362,6 +461,7 @@ cutscene {
 	title = false,
 	enter = function(s)
 		set_pic 'crash'
+		mus_play 'jump-memories'
 	end;
 	dsc = fmt.c[[{$fmt b|АРХИВ}^
 {$fmt em|Пётр Косых / Май 2020}^
@@ -470,6 +570,16 @@ cutscene {
 	нарастает. Удар. Ещё удар. Приборная панель расцветает
 	россыпью огней.]];
 		};
+		if i == 2 then
+			snd_play('sfx_ship_malfunction_ambience_loop', true)
+			snd_play 'sfx_explosion_1'
+			snd_stop('sfx_ship_ambience_loop')
+			snd_stop('sfx_ready_blip_loop')
+		elseif i == 3 then
+			mus_play 'bgm_emergency'
+			snd_play('sfx_siren_loop', true)
+			snd_play 'sfx_explosion_2'
+		end
 		return txt[i]
 	end;
 	next_to = 'burnout';
@@ -493,7 +603,22 @@ room {
 	nam = 'burnout';
 	planet = false;
 	transfer = 0;
+	exit = function(s)
+		if _'engine'.flame then
+			snd_stop 'sfx_siren_loop'
+			snd_play ('sfx_siren_dampened_loop', true)
+		else
+			snd_stop 'sfx_ship_ambience_loop'
+		end
+	end;
 	enter = function(s)
+		if _'engine'.flame then
+			snd_stop 'sfx_siren_dampened_loop'
+			snd_play ('sfx_siren_loop', true)
+		elseif not s.planet then
+			snd_stop 'sfx_ship_malfunction_ambience_loop'
+			snd_play ('sfx_ship_ambience_loop', true)
+		end
 		if bomb_cancel then
 			if s:once 'wow' then
 				p [[Войдя в рубку ты заметил странное. Сквозь окна вместо пейзажа ты видишь гиперпространство!]];
@@ -569,6 +694,7 @@ room {
 					enable '#trinity'
 					DaemonStart("burnout");
 					set_pic 'trinity'
+					snd_play ('sfx_blinding_lights', true)
 				else
 					p [[Переход ещё не завершён. Эта мысль
 мешает тебе наслаждаться великолепным сиянием.]];
@@ -650,11 +776,23 @@ door {
 					_'outdoor':attr'~open'
 					p
 					[[С шипящим звуком шлюзовая дверь закрылась.]]
+					if not onair then
+						snd_stop 'sfx_rain_loop'
+					end
+					snd_play 'sfx_door_opens'
+					if bomb_cancel and here() ^ 'gate' then
+						print "xxx"
+						mus_play 'the_end'
+					end
 				else
 					_'outdoor':attr'open'
 					p
 					[[С шипящим звуком шлюзовая
 дверь открылась.]]
+					if rain then
+						snd_play ('sfx_rain_loop', true)
+					end
+					snd_play 'sfx_door_opens'
 					start_ill()
 				end
 			end;
@@ -670,14 +808,15 @@ room {
 трюм или выйти наружу.]];
 	in_to = "storage";
 	out_to = "outdoor";
-	onexit = function(s, to)
+	enter = function(s, from)
+		if rain and _'outdoor':has'open' then
+			snd_play ('sfx_rain_loop', true)
+		end
+	end;
+	exit = function(s, to)
 		onair = not (to ^ 'storage')
-		if to ^ 'storage' and false then
-			if _'outdoor':has'open' then
-				p [[Сначала нужно закрыть шлюзовую
-дверь.]]
-				return false
-			end
+		if not onair then
+			snd_stop ('sfx_rain_loop')
 		end
 	end;
 	obj = {
@@ -827,6 +966,8 @@ room {
 			p [[Ты яростно борешься с пламенем. Наконец,
 пожар потушен!]]
 			remove '#flame'
+			mus_stop()
+			snd_stop 'sfx_siren_dampened_loop'
 		else
 			return false
 		end
@@ -960,6 +1101,9 @@ cutscene {
 	nam = "transfer2";
 	title = "...";
 	enter = function(s)
+		snd_play 'sfx_explosion_3'
+		snd_stop 'sfx_blinding_lights'
+		snd_stop 'sfx_ship_malfunction_ambience_loop'
 		set_pic 'flash'
 	end;
 	text = {
@@ -978,6 +1122,7 @@ cutscene {
 	обшивка не пропустит такой слабый звук, как удар капель. Как жаль...]];
 		move('planet_scene', 'burnout')
 		set_pic 'crash'
+		mus_play 'bgm_plains'
 	end;
 }
 
@@ -1173,6 +1318,7 @@ room {
 				p [[Пока ты шёл, небо очистилось и дождь
 закончился.]];
 				rain = false
+				snd_stop 'sfx_rain_loop'
 			end
 		end
 	end;
@@ -1184,6 +1330,7 @@ room {
 				p [[Пока ты шёл, небо очистилось и дождь
 закончился.]];
 				rain = false
+				snd_stop 'sfx_rain_loop'
 			end
 		end
 	end;
@@ -1234,6 +1381,11 @@ room {
 	растет странное дерево.]];
 	s_to = '#tree';
 	out_to = '#tree';
+	enter = function()
+		snd_stop 'sfx_rain_loop'
+		mus_stop()
+		snd_play ('sfx_ocean_waves_loop', true)
+	end;
 	obj = {
 		door {
 			nam = '#tree';
@@ -1482,6 +1634,11 @@ room {
 			walk 'sea'
 			return
 		elseif s.ff ^ 'sea' then
+			if rain then
+				snd_play ('sfx_rain_loop', true)
+			end
+			mus_play 'bgm_plains'
+			snd_stop 'sfx_ocean_waves_loop'
 			walk 'planet'
 			return
 		elseif s.ff ^ 'шпиль' then
@@ -1561,7 +1718,11 @@ global 'bomb_cancel' (false)
 cutscene {
 	nam = 'bomb_call';
 	title = "звонок";
-	text = {
+	enter = function(s)
+		mus_stop()
+	end;
+	text = function(s, n)
+		local t = {
 		[[Где-то в закоулках подсознания у тебя возникла
 	идея. Боясь спугнуть странную, но захватывающую мысль, ты
 	схватил трубку и набрал номер.]];
@@ -1588,7 +1749,13 @@ cutscene {
 	ты увидишь фотографию девочки. Это Лиза -- дочь пилота. Ты
 	понял? Не забывай.]];
 		[[-- Вон! Вон из моей башки!]];
-	};
+		};
+		if n == 2 then
+			snd_stop()
+			snd_play 'sfx_phone_call_2'
+		end
+		return t[n]
+	end;
 	exit = function(s)
 		p [[Ты кладёшь трубку. Интересно, послушается ли тебя
 	Хуан?^^Что же хранит в себе башня? Записанные события давно
@@ -1602,13 +1769,18 @@ cutscene {
 		remove 'осколки'
 		_"огнетушитель".full = true
 		bomb_cancel = true
+		mus_play 'bgm_plains'
 	end;
 }
 
 cutscene {
 	nam = 'photo_call';
 	title = "звонок";
-	text = {
+	enter = function(s)
+		mus_stop()
+	end;
+	text = function(s, n)
+		local t = {
 		[[Ты взял трубку и набрал номер. Отчаяние и надежда на
 	чудо сменяли друг друга, пока...]];
 		[[-- Пап, это ты?]];
@@ -1622,9 +1794,16 @@ cutscene {
                 [[-- Ты уже звонил нам по обычной связи, но я
 	передам. Ну всё, мы идём гулять. Пока!]];
                 [[-- Да, до встречи!]];
-	};
+		};
+		if n == 2 then
+			snd_stop()
+			snd_play 'sfx_phone_call_2'
+		end
+		return t[n]
+	end;
 	exit = function(s)
 		p [[Взволнованный, ты кладёшь трубку. Это была Лиза! 10 лет назад!]];
+		mus_play 'bgm_plains'
 	end;
 }
 
@@ -1651,17 +1830,21 @@ room {
 				p [[У тебя не хватает духу ещё раз
 	звонить дочери в прошлое. У неё всё хорошо, и это главное.]];
 			else
+				snd_play 'sfx_phone_call_loop'
 				walk 'photo_call'
 			end
 		elseif w == '9333451239' then -- осколки
 			if visited 'bomb_call' then
 				p [[Не стоит беспокоить бедного Хуана.]];
 			else
+				snd_play 'sfx_phone_call_loop'
 				walk 'bomb_call'
 			end
 		elseif w == '17' or w == '8703627531' or w == '9236123121' or w == '7691' then
+			snd_play 'sfx_phone_call_loop'
 			return false
 		else
+			snd_play 'sfx_phone_wrong_number'
 			p [[В трубке раздался женский голос: "Объект с таким идентификатором не найден в картотеке."]]
 			return
 		end
@@ -1762,7 +1945,13 @@ room {
 	-"комната";
 	title = "Компьютерная комната";
 	old_pic = false;
-	enter = function(s)
+	enter = function(s, f)
+		if f ^ 'intower' then
+			snd_play ('sfx_computer_ambience_loop', true)
+			mus_stop()
+			s.old_pic = get_pic()
+			set_pic 'comp'
+		end
 		if not disabled 'crash' then
 			p [[{$char|^^}{$fmt em|Спустившись в комнату, ты с ужасом обнаружил,
 что странный компьютер снова стоит на проклятом столе!}]];
@@ -1770,11 +1959,13 @@ room {
 			enable '#chair'
 			enable 'table'
 		end
-		s.old_pic = get_pic()
-		set_pic 'comp'
 	end;
-	exit = function(s)
-		set_pic(s.old_pic)
+	exit = function(s, to)
+		if to ^ 'intower' then
+			set_pic(s.old_pic)
+			snd_stop 'sfx_computer_ambience_loop'
+			mus_play 'bgm_plains'
+		end
 	end;
 	dsc = function()
 		p [[Ты находишься в полутёмной комнате.]]
@@ -1946,6 +2137,7 @@ em|Русский}^^Для помощи введите: {$fmt b|помощь}.]]
 {$fmt b|искать <идентификатор>} {$fmt tab,50%}-- поиск по картотеке^
 {$fmt b|скан} {$fmt tab,50%}-- начать сканирование артефакта.]];
 	Scan = function(s)
+		snd_play 'sfx_scan'
 		pn [[{$fmt b|Предметы на столе:}]]
 		for k, v in ipairs(objs 'table') do
 			pn (v:noun(), '{$fmt tab,30%|}',' -- ',
@@ -2316,6 +2508,11 @@ function init()
 	mp.autohelp_limit = 8
 	mp.compl_thresh = 1
 	set_pic "gate"
-
+	mus_play 'bgm_going_home'
+	snd_play('sfx_ship_ambience_loop', true)
+	snd_play('sfx_ready_blip_loop', true)
 	walk 'ship1'
+end
+function start()
+	snd_start()
 end

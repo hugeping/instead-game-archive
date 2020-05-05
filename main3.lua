@@ -2507,11 +2507,11 @@ function mp:before_Ring(w)
 end
 
 function game:before_Attack(w)
-	if _'suit':has'worn' then
-		p [[Скафандр защищает тебя.]]
-		return
-	end
 	if w == pl then
+		if _'suit':has'worn' then
+			p [[Скафандр защищает тебя.]]
+			return
+		end
 		p [[Сдаешься? Так просто?]]
 		return
 	end
@@ -2529,7 +2529,7 @@ Verb {
 }
 
 Verb {
-	"[|за|по|кри]чать,крикн/уть,[|за]орать";
+	"[|за|по]кричать,крикн/уть,[|за]орать";
 	": Shout";
 }
 

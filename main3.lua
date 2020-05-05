@@ -1372,11 +1372,13 @@ room {
 	s_to = '#tree';
 	out_to = '#tree';
 	exit = function(s)
-		set_pic(s.old_pic)
+--		set_pic(s.old_pic)
 	end;
-	enter = function(s)
-		s.old_pic = get_pic()
-		set_pic 'sky'
+	enter = function(s, f)
+		if get_pic() ~= 'sky' then
+			s.old_pic = get_pic()
+			set_pic 'sky'
+		end
 		snd_stop 'sfx_rain_loop'
 		mus_stop()
 		snd_play ('sfx_ocean_waves_loop', true)
@@ -1634,6 +1636,7 @@ room {
 			end
 			mus_play 'bgm_plains'
 			snd_stop 'sfx_ocean_waves_loop'
+			set_pic(_'sea'.old_pic)
 			walk 'planet'
 			return
 		elseif s.ff ^ 'шпиль' then

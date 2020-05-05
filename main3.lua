@@ -1,6 +1,6 @@
---$Name: Архив
---$Version: 0.4
---$Author:Пётр Косых
+--$Name: Архив$
+--$Version: 0.4$
+--$Author:Пётр Косых$
 
 require "fmt"
 require "link"

@@ -1308,6 +1308,8 @@ room {
 				rain = false
 				snd_stop 'sfx_rain_loop'
 			end
+		elseif t ^ 'tree' then
+			set_pic 'sky'
 		end
 	end;
 	enter = function(s, f)
@@ -1321,7 +1323,7 @@ room {
 				snd_stop 'sfx_rain_loop'
 			end
 		end
-		set_pic 'sky'
+		set_pic 'neartower'
 	end;
 	s_to = "planet";
 	in_to = '#tower';

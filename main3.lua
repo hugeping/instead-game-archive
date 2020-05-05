@@ -995,9 +995,19 @@ room {
 				obj {
 					nam = '#дыра';
 					-"дыра|отверстие";
-					description = [[Похоже,
+					description = function()
+						p [[Похоже,
 здесь произошёл взрыв...]];
-				}:attr 'scenery':disable();
+						return false;
+					end;
+					before_LetIn = function(s, w)
+						if w == pl then
+							p [[Слишком узко для тебя.]]
+							return
+						end
+						return false
+					end;
+				}:attr 'scenery,container,open,enterable':disable();
 			};
 		}:attr 'static,concealed';
 		obj {

@@ -1804,6 +1804,7 @@ room {
 			end
 			p [[Ты нажимаешь на кнопку и платформа,
 с неожиданно высоким ускорением, начинает свой спуск.]]
+			snd_play 'sfx_platform'
 			move('platform', 'intower')
 			return
 		end
@@ -2000,6 +2001,7 @@ room {
 			if not pl:inside'platform' then
 				move(pl, 'platform')
 			end
+			snd_play 'sfx_platform'
 			move('platform', 'intower')
 			return
 		end
@@ -2244,6 +2246,7 @@ room {
 минуты, платформа замедляет свой ход и вот -- ты оказываешься на вершине
 башни.]];
 			end
+			snd_play 'sfx_platform'
 			move('platform', 'top')
 			return
 		elseif to ^ '@d_to' then
@@ -2258,6 +2261,7 @@ room {
 полутёмной комнате.]]
 			end
 			move('platform', 'under')
+			snd_play 'sfx_platform'
 			return
 		end
 		return false
@@ -2282,6 +2286,7 @@ room {
 					p [[Ты дёргаешь за рычаг и
 сразу же слышишь нарастающий шум откуда-то сверху. Через
 несколько минут в комнату по рельсу спускается платформа.]]
+					snd_play 'sfx_platform'
 					move('platform', here())
 				else
 					p [[Ничего не происходит.]]

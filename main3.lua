@@ -2514,3 +2514,10 @@ function start()
 --		fading.set { 'crossfade', now = true }
 	end
 end
+if not instead.tiny then
+function mp:onedit(...)
+	if here() ^ 'computer' then
+		snd.play('snd/sfx_keyboard_key_press.ogg', 4, 1)
+	end
+end
+end

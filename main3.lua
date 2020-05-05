@@ -1321,6 +1321,7 @@ room {
 				snd_stop 'sfx_rain_loop'
 			end
 		end
+		set_pic 'sky'
 	end;
 	s_to = "planet";
 	in_to = '#tower';
@@ -1361,6 +1362,7 @@ room {
 	-"берег";
 	nam = 'sea';
 	title = "У моря";
+	old_pic = false;
 	before_Listen = [[Шум моря ласкает твой слух.]];
 	before_Smell = [[От запаха соли и водорослей кружится
 голова.]];
@@ -1369,7 +1371,12 @@ room {
 	растет странное дерево.]];
 	s_to = '#tree';
 	out_to = '#tree';
-	enter = function()
+	exit = function(s)
+		set_pic(s.old_pic)
+	end;
+	enter = function(s)
+		s.old_pic = get_pic()
+		set_pic 'sky'
 		snd_stop 'sfx_rain_loop'
 		mus_stop()
 		snd_play ('sfx_ocean_waves_loop', true)

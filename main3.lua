@@ -1803,6 +1803,7 @@ cutscene {
 }
 
 room {
+	-"комната";
 	title = "Смотровая комната";
 	nam = "top";
 	before_Walk = function(s, to)

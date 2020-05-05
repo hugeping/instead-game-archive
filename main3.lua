@@ -1301,6 +1301,7 @@ room {
 		if t ^ 'planet' then
 			p [[Ты покинул странную башню и отправился на
 юг, к своему кораблю.]];
+			set_pic 'crash'
 			if rain then
 				p [[Пока ты шёл, небо очистилось и дождь
 закончился.]];
@@ -1932,12 +1933,10 @@ obj {
 room {
 	-"комната";
 	title = "Компьютерная комната";
-	old_pic = false;
 	enter = function(s, f)
 		if f ^ 'intower' then
 			snd_play ('sfx_computer_ambience_loop', true)
 			mus_stop()
-			s.old_pic = get_pic()
 			set_pic 'comp'
 		end
 		if not disabled 'crash' then
@@ -1950,7 +1949,6 @@ room {
 	end;
 	exit = function(s, to)
 		if to ^ 'intower' then
-			set_pic(s.old_pic)
 			snd_stop 'sfx_computer_ambience_loop'
 			mus_play 'bgm_plains'
 		end
@@ -2212,6 +2210,18 @@ room {
 	title = "В башне";
 	nam = "intower";
 	out_to = "#pass";
+	old_pic = false;
+	enter = function(s, f)
+		if f ^ 'tree' then
+			s.old_pic = get_pic()
+		end
+		set_pic 'intower'
+	end;
+	exit = function(s, t)
+		if t ^ 'шпиль' then
+		--	set_pic(s.old_pic)
+		end
+	end;
 	dsc = [[Ты находишься внутри просторной комнаты цилиндрической
 формы. В полу комнаты ты видишь круглую огороженную шахту, сквозь центр которой
 проходит рельс. В стене есть проход, сквозь который ты видишь зелёное
@@ -2228,6 +2238,9 @@ room {
 		return false
 	end;
 	before_Walk = function(s, to)
+		if not seen 'platform' then
+			return false
+		end
 		if not pl:inside'platform' and (to ^ '@u_to' or to ^
 		'@d_to') then
 			move(pl, 'platform')

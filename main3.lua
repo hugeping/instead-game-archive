@@ -2217,14 +2217,18 @@ em|Русский}^^Для помощи введите: {$fmt b|помощь}.]]
 			end
 		end
 	end;
-	Exit = function(s)
+	enter = function()
+		_'@compass':disable()
+	end;
+	ExitComp = function(s)
 		move(pl, 'under')
 		move(pl, '#chair')
+		_'@compass':enable()
 	end;
 }
 
 Verb ({"пом/ощь", "Help" }, _'computer')
-Verb ({"вых/од,выйти,встать", "Exit" }, _'computer')
+Verb ({"вых/од,выйти,встать", "ExitComp" }, _'computer')
 Verb ({"скан/ировать", "Scan" }, _'computer')
 Verb ({"поиск,иск/ать", "* :Search" }, _'computer')
 Verb ({"осм/отреть", "Look" }, _'computer')

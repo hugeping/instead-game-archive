@@ -4,7 +4,11 @@
 
 require "fmt"
 require "link"
-
+if instead.tiny then
+	function iface:tab()
+		return '    '
+	end
+end
 function mus_play(f)
 end
 function mus_stop(f)

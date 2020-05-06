@@ -1249,12 +1249,12 @@ room {
 		if rain then
 			p [[Идёт дождь.]];
 		end
-		p [[Неподалёку на западе ты видишь дерево.]];
+		p [[Неподалёку на востоке ты видишь дерево.]];
 		p [[На севере ты
 	замечаешь высокий шпиль, устремлённый в небо.]];
 	end;
 	n_to = 'tower';
-	w_to = '#tree';
+	e_to = '#tree';
 	obj = {
 		'sky2';
 		'outdoor';
@@ -1300,7 +1300,7 @@ room {
 	dsc = function(s)
 		p [[Ты находишься у подножия высокой башни. Её
 чёрный шпиль устремлен в небо. Вокруг простирается зелёная равнина. На
-	востоке от башни растёт одинокое дерево.]];
+	западе от башни растёт одинокое дерево.]];
 		if not disabled 'human' then
 			p (fmt.em [[Ты видишь рядом с деревом
 	человеческую фигурку в плаще!]])
@@ -1337,7 +1337,7 @@ room {
 	end;
 	s_to = "planet";
 	in_to = '#tower';
-	e_to = '#tree';
+	w_to = '#tree';
 	obj = {
 		'sky2';
 		Distance {
@@ -1622,7 +1622,7 @@ room {
 		end
 		return false
 	end;
-	w_to = function(s)
+	e_to = function(s)
 		if s.ff ^ 'шпиль' then
 			return 'шпиль';
 		end
@@ -1652,7 +1652,7 @@ room {
 			walk 'planet'
 			return
 		elseif s.ff ^ 'шпиль' then
-			if t == 'e_to' then
+			if t == 'w_to' then
 				walk 'rock'
 			else
 				walk 'intower'
@@ -1667,7 +1667,7 @@ room {
 			return
 		end
 	end;
-	e_to = function(s)
+	w_to = function(s)
 		if s.ff ^ 'planet' then
 			return 'planet';
 		end
@@ -1677,9 +1677,9 @@ room {
 		p [[Ты стоишь у старого дерева. Его сухие узловатые ветви
 	почти лишены листьев.]]
 		if s.ff ^ 'шпиль' then
-			p [[^^Шпиль башни находится на западе.]];
+			p [[^^Шпиль башни находится на востоке.]];
 		elseif s.ff ^ 'planet' then
-			p [[^^Твой корабль находится на востоке.]];
+			p [[^^Твой корабль находится на западе.]];
 		elseif s.ff ^ 'sea' then
 			p [[^^Море находится на севере.]];
 		elseif s.ff ^ 'rock' then

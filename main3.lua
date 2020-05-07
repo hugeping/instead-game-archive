@@ -1,5 +1,5 @@
 --$Name: Архив$
---$Version: 0.6$
+--$Version: 0.7$
 --$Author:Пётр Косых$
 
 require "fmt"
@@ -230,6 +230,7 @@ obj {
 
 global 'radio_ack' (false)
 global 'rain' (true)
+global 'know_bomb' (false)
 
 Careful {
 	nam = 'windows';
@@ -1788,6 +1789,34 @@ cutscene {
 }
 
 cutscene {
+	nam = 'bomb_call2';
+	title = "звонок";
+	enter = function(s)
+		mus_stop()
+	end;
+	text = function(s, n)
+		local t = {
+		[[Точно не понимая что именно происходит, ты набираешь номер...]];
+		[[-- Они не должны были так делать! Они не должны были
+	так со мной поступать! -- резкий, незнакомый голос в трубке напугал тебя.]];
+		[[-- Алло...]];
+		[[-- Черт! Этого ещё не хватало! Кто это?]];
+		[[-- Я...]];
+		[[-- Пошёл вон из моей головы, убирайся! Слышишь?]];
+		};
+		if n == 2 then
+			snd_stop()
+			snd_play 'sfx_phone_call_2'
+		end
+		return t[n]
+	end;
+	exit = function(s)
+		p [[Ты поспешно кладёшь трубку.]];
+		mus_play 'bgm_plains'
+	end;
+}
+
+cutscene {
 	nam = 'photo_call';
 	title = "звонок";
 	enter = function(s)
@@ -1854,7 +1883,11 @@ room {
 				p [[Не стоит беспокоить бедного Хуана.]];
 			else
 				snd_play 'sfx_phone_call_loop'
-				walk 'bomb_call'
+				if know_bomb then
+					walk 'bomb_call'
+				else
+					walk 'bomb_call2'
+				end
 			end
 		elseif w == '17' or w == '8703627531' or w == '9236123121' or w == '7691' then
 			snd_play 'sfx_phone_call_loop'
@@ -2211,6 +2244,7 @@ em|Русский}^^Для помощи введите: {$fmt b|помощь}.]]
 взорвалась позже, уже после входа корабля в гиперпространство, за одну
 секунду его мир был разрушен... Он убийца, без оправданий. Он, словно
 мёртвый, шёл по улице не разбирая пути...]];
+			know_bomb = true
 			end
 		else
 			if tonumber(w) then

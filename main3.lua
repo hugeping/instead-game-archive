@@ -2495,6 +2495,12 @@ VerbExtendWord {
 }
 
 VerbExtendWord {
+	'#GetOff';
+	"сойти";
+	"с {noun}/рд,scene: GetOff";
+}
+
+VerbExtendWord {
 	"#Touch",
 	"[|по]чесать/,[|по]чеши/";
 }

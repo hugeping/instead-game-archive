@@ -1855,7 +1855,10 @@ room {
 	title = "Смотровая комната";
 	nam = "top";
 	before_Walk = function(s, to)
-		if to ^ '@d_to' then
+		if to ^ '@u_to' then
+			p [[Рельс заканчивается здесь.]]
+			return
+		elseif to ^ '@d_to' then
 			if not pl:inside'platform' then
 				move(pl, 'platform')
 			end
@@ -2056,7 +2059,10 @@ room {
 	end;
 	before_Listen  = [[Ты слышишь едва уловимое гудение.]];
 	before_Walk = function(s, to)
-		if to ^ '@u_to' then
+		if to ^ '@d_to' then
+			p [[Рельс заканчивается здесь.]]
+			return
+		elseif to ^ '@u_to' then
 			if not pl:inside'platform' then
 				move(pl, 'platform')
 			end

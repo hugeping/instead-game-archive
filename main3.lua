@@ -1409,9 +1409,10 @@ room {
 			door_to = 'tree';
 		}:attr 'scenery,open';
 		obj {
-			-"море";
+			-"море|вода";
 			description = [[Бескрайний простор. Волны,
 накатываясь одна на другую, пенятся и разбиваются о берег.]];
+			before_Drink = [[Пить морскую воду?]];
 		}:attr 'scenery';
 		obj {
 			-"волны";
@@ -1492,6 +1493,7 @@ room {
 	title = "У скалистого обрыва";
 	before_Listen = [[Ты слышишь свист ветра в скалах.]];
 	yes = 0;
+	before_Jump = [[Решил решить все проблемы разом?]];
 	last = [[-- Поэтому я должен спросить тебя, готов ли ты
 стать одним из нас?]];
 	['before_Yes,No'] = function(s)
@@ -1553,7 +1555,13 @@ room {
 шпиль. На севере от
 	тебя находится странное дерево.]];
 	n_to = '#tree';
-	out_to = '#tree';
+	out_to = function(s)
+		if mp.words[1]:find "прыг" then
+			mp:xaction ("Jump")
+			return
+		end
+		return '#tree';
+	end;
 	compass_look = function(s, t)
 		if t == 'd_to' then
 			mp:xaction("Exam", _'#view')

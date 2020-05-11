@@ -458,7 +458,7 @@ cutscene {
 {$fmt em|Пётр Косых / Май 2020}^
 {$fmt em|Музыка, звук: Александр Соборов}^
 {$fmt em|Jump Memories / Keys of Moon}^
-{$fmt em|Тестироване: Khaelenmore Thaal, Oleg Bosh}^^
+{$fmt em|Тестирование: Khaelenmore Thaal, Oleg Bosh}^^
 Спасибо вам за прохождение этой небольшой игры!^
 Если вам понравилось, вы можете найти похожие игры на:^^
 {$link|http://instead-games.ru}^
@@ -1196,7 +1196,7 @@ obj {
 			description = [[Ты видишь как колосья
 	колышутся под несильным ветром.]];
 			["before_Eat,Tear,Take,Pull"] = function(s)
-				p [[Ты сорвал несколько колосоков и
+				p [[Ты сорвал несколько колосков и
 	растёр их в ладонях, собрав зёрна.]];
 				take 'wheat'
 			end;

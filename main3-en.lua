@@ -264,7 +264,7 @@ obj {
 	nam = 'photo';
 	init_dsc = [[The photo is attached to the corner of one of the windows.]];
 	description = [[This is a photo of your daughter Lisa when she was only 9 years old.
-	Now she is quite an adult.]];
+	She is adult now.]];
 	found_in = { 'ship1', 'burnout' };
 };
 

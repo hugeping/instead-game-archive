@@ -270,7 +270,7 @@ obj {
 
 Careful {
 	nam = 'panel';
-	"dashboard,panel|controls,devices/plural";
+	"dashboard,panel|controls,devices/plural|equipment";
 	till = 27;
 	stop = false;
 	daemon = function(s)
@@ -284,28 +284,25 @@ Careful {
 			p [[All ship systems are functional. You may push the thrust lever.]];
 		elseif here() ^ 'burnout' then
 			if _'burnout'.planet then
-				p [[Анализ атмосферы показывает, что
-	воздух пригоден для дыхания.]]
+				p [[Analysis of the atmosphere shows that the air is breathable.]]
 			end
 			if _'engine'.flame then
-				p [[Пожар в машинном отсеке!]];
+				p [[Fire in the engine room!]];
 			end
 			if s.till > 20 then
-				p [[Неполадки во 2-м
-	двигателе.]];
+				p [[Problems in the 2nd engine.]];
 			elseif s.till > 15 then
 				p [[1-й и 2-й двигатель отказали. Сбой системы стабилизации.]];
 			else
-				p [[Все двигатели вышли из
-	строя.]]
+				p [[All engines are out of order.]]
 				s.stop = true
 			end
 			if _'engine'.flame then
-				p [[Это очень опасно!]]
+				p [[It is very dangerous!]]
 			end
 			if s.till and not _'burnout'.planet then
-				p ([[^^До конца перехода ]], s.till,
-	[[ сек.]])
+				p ([[^^Until the end of the transition ]], s.till,
+	[[ second(s) left.]])
 			end
 			_'throttle':description()
 		end
@@ -313,32 +310,28 @@ Careful {
 	found_in = { 'ship1', 'burnout' };
 	obj = {
 		obj {
-			-"рычаг|тяга|рычаг тяги";
+			-"lever|thrust";
 			nam = 'throttle';
 			ff = false;
-			['before_SwitchOn,SwitchOff'] = [[Рычаг тяги можно
-	тянуть или толкать.]];
+			['before_SwitchOn,SwitchOff'] = [[The thrust lever can be pulled or pushed.]];
 			description = function(s)
 				if here() ^ 'ship1' or bomb_cancel then
-					p [[Массивный
-рычаг тяги стоит на нейтральной позиции.]];
+					p [[The heavy thrust lever is in neutral position.]];
 				elseif here() ^ 'burnout' then
 					if s.ff then
-						pr [[Тяга включена]];
+						pr [[Thrust is on]];
 						if _'panel'.stop then
-							pr [[, только
-	двигатели больше не работают]]
+							pr [[, but the engines are no longer running.]]
 						end
 						pr '.'
 					else
-						p [[Тяга выключена.]]
+						p [[Thrust is off.]]
 					end
 				end
 			end;
 			before_Push = function(s)
 				if not radio_ack then
-					p [[Ты совсем
-забыл связаться с диспетчерской. Для этого нужно включить радио.]];
+					p [[You completely forgot to contact the traffic control room. To do this you need to switch on the radio.]];
 				elseif here() ^ 'ship1' then
 					s.ff = true
 					walk 'transfer'

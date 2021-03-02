@@ -270,7 +270,7 @@ obj {
 
 Careful {
 	nam = 'panel';
-	-"приборы|панель";
+	"dashboard,panel|controls,devices/plural";
 	till = 27;
 	stop = false;
 	daemon = function(s)
@@ -281,8 +281,7 @@ Careful {
 	end;
 	description = function(s)
 		if here() ^ 'ship1' or bomb_cancel then
-			p [[Все системы корабля в
-норме. Можно толкнуть рычаг тяги.]];
+			p [[All ship systems are functional. You may push the thrust lever.]];
 		elseif here() ^ 'burnout' then
 			if _'burnout'.planet then
 				p [[Анализ атмосферы показывает, что
@@ -506,31 +505,27 @@ Your six-month contract for Dimidia is over, it's time to get home.]];
 		};
 		obj {
 			"rays/plural";
-			description = [[Это лучи местного
-солнца. Они скользят по приборной панели.]];
+			description = [[These are the rays of the local sun. They move across the dashboard.]];
 		}:attr'scenery';
 		Distance {
 			"gates/plural|transition";
 			description = function(s)
 				if s:once() then
-					p [[Ворота -- так называется вход
-в гиперпространство. Выглядят ворота как 40-метровое кольцо, медленно
-вращающееся в пустоте. Ворота в системе 51 Peg открыли в 2220-м. Они
-стали 12-ми воротами, построенными за 125 летнюю историю экспансии
-		человечества в дальний космос.]];
+					p [[The gates -- this is the entrance to hyperspace. 
+					The gates looks like a 40-meter ring slowly rotating in the void.
+					The 51 Peg gates were opened in 2020. 
+					They became the 12th gates built over the 125-year history of mankind's expansion into deep space.]];
 				else
-					p [[Сквозь ворота ты видишь
-всполохи гиперпространства.]];
+					p [[You see flashes of hyperspace through the gates.]];
 				end
 			end;
 			obj = {
 				Distance {
-					-"гиперпространство|всполохи";
+					-"hyperspace|flashes/plural";
 					description =
-						[[Гиперпространство
-было открыто в 2095-м, во время экспериментов
-на БСР. Ещё 4 года понадобилось на то, чтобы найти способ
-синхронизировать континуум между выходами из гиперпространства.]]
+						[[Hyperspace was discovered in 2095 during experiments on the BSR.
+						It took another 4 years to find a way to synchronize the continuum
+						between exit points from hyperspace.]]
 				}:attr 'scenery';
 			}
 		};

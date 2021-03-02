@@ -292,7 +292,7 @@ Careful {
 			if s.till > 20 then
 				p [[Problems in the 2nd engine.]];
 			elseif s.till > 15 then
-				p [[1-й и 2-й двигатель отказали. Сбой системы стабилизации.]];
+				p [[1st and 2nd engines failed. Failure of the stabilization system.]];
 			else
 				p [[All engines are out of order.]]
 				s.stop = true
@@ -338,18 +338,17 @@ Careful {
 				elseif here() ^ 'burnout' then
 					if bomb_cancel then
 						if _'outdoor':has'open' then
-							p [[Может, сначала стоит задраить шлюз?]]
+							p [[Maybe it's better to batten down the airlock first?]]
 							return
 						end
 						walk 'happyend'
 						return
 					end
 					if not s.ff then
-						p [[Ты передвинул рычаг вперёд.]]
+						p [[You moved the lever forward.]]
 					end
 					s.ff = true
-					p [[Рычаг установлен в позиции
-	максимальной тяги.]];
+					p [[The lever is set to the maximum thrust.]];
 				end
 			end;
 			before_Transfer = function(s, w)
@@ -364,22 +363,20 @@ Careful {
 				elseif here() ^ 'burnout' then
 					if s.ff and not bomb_cancel then
 						if not _'panel'.stop then
-							p
-	[[Выход из гиперпространства возможен только при достижении кораблём определённой скорости.
-Остановка двигателей будет означать прерванный переход. И тогда -- пути назад уже не будет!]];
+							p [[Exit from hyperspace is possible only when the ship reaches a certain speed.
+Stopping the engines will lead to an interrupted transition. And then -- there will no way to return!]];
 							return
 						end
-						p [[Ты тянешь рычаг на себя.]]
+						p [[You pull the lever.]]
 					end
 					s.ff = false
-					p [[Рычаг тяги на нейтральной позиции.]]
+					p [[The thrust lever is in neutral position.]]
 				end
 			end;
 		}:attr'static';
 		obj {
-				-"радио";
-			description = [[Радио встроено
-в панель управления.]];
+				"radio";
+			description = [[The radio is built into the dashboard.]];
 			before_SwitchOn = function(s)
 				if s:once() then
 					--mus_stop()
@@ -2268,6 +2265,10 @@ Verb ({"вых/од,выйти,встать", "ExitComp" }, _'computer')
 Verb ({"скан/ировать", "Scan" }, _'computer')
 Verb ({"поиск,иск/ать", "* :Search" }, _'computer')
 Verb ({"осм/отреть", "Look" }, _'computer')
+Verb {
+	"push,move,press,shift",
+	"{noun} forward: Push",
+}
 
 room {
 	-"комната";

@@ -233,27 +233,23 @@ global 'know_bomb' (false)
 
 Careful {
 	nam = 'windows';
-	-"окна|иллюминаторы";
+	-"windows|portholes";
 	description = function(s)
 		if here().planet then
 			if rain then
-				p [[Всё что ты видишь из рубки, это поле
-	пшеничного цвета и дождливое небо.]]
+				p [[All you see from the cabin is a wheat-colored field and a rainy sky.]]
 			elseif bomb_cancel then
-				p [[Как странно, в окнах ты не видишь пейзаж планеты!]];
+				p [[How strange, you do not see the planet landscape!]];
 			else
-				p [[Всё что ты видишь из рубки, это поле
-	пшеничного цвета и бирюзовое небо.]]
+				p [[All you see from the cabin is a wheat-colored field and a cyan sky]]
 			end
 		elseif here() ^ 'burnout' then
-			p [[Сквозь толстые окна ты видишь
-	сияние гиперпространства.]];
+			p [[Through the thick windows you see the glow of hyperspace.]];
 			if not _'engine'.flame then
 				_'hyper2':description()
 			end
 		elseif here() ^ 'ship1' then
-			p [[Сквозь толстые окна ты видишь
-фиолетовую планету. Это -- Димидий.]];
+			p [[Through thick windows you see a purple planet. This is Dimidius.]];
 		end
 	end;
 	found_in = { 'ship1', 'burnout' };
@@ -382,21 +378,18 @@ Stopping the engines will lead to an interrupted transition. And then -- there w
 					--mus_stop()
 					snd_play 'sfx_radio'
 					p [[-- PEG51,
-борт FL510, запрашиваю разрешение на вылет.^
--- ...FL510, вылет разрешаю. Ворота свободны. Счастливого пути!^
--- Принято.]];
+board FL510, request for transition.^
+-- ...FL510, you are cleared to enter the gates. Good luck!^
+-- Confirmed.]];
 					radio_ack = true;
 				elseif here() ^ 'burnout' then
 					if _'burnout'.planet then
-						p [[Одни помехи. Ты
-	выключаешь радио.]]
+						p [[You're getting radio interference. You turn off the radio.]]
 					else
-						p [[Радио в
-	гиперпространстве не работает.]]
+						p [[Radio cannot work in hyperspace.]]
 					end
 				else
-					p [[Ты уже
-получил разрешение на вылет.]]
+					p [[You have already received your departure clearance.]]
 				end
 			end;
 		}:attr 'switchable,static';

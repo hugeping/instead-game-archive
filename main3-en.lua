@@ -387,20 +387,21 @@ cutscene {
 	enter = function(s)
 		set_pic 'hyper'
 		if have 'photo' then
-			pn [[Ты достаёшь фотографию дочери и закрепляешь её в углу окна. Затем, кладёшь руку на рычаг тяги.]];
+			pn [[You take out a photo of your daughter and clip it to the corner of the window.
+			Then, put your hand on the thrust lever.]];
 		else
-			pn [[Ты кладёшь руку на рычаг тяги.]]
+			pn [[You put your hand on the thrust lever.]]
 		end
 	end;
 	text = function(s, n)
 		local t = {
-		[[Двигаешь ручку от себя до упора.]];
-		[[Всполохи гиперпространства за окном оживают...^
-На приборной панели начинается (продолжается?) обратный отсчет.]];
+		[[You push the lever away to maximum position.]];
+		[[Flashes of hyperspace outside the window come to life...^
+The countdown begins (or continues?) on the dashboard.]];
 		[[25, 24, 23...]],
 		[[10, 9, 8, 7...]],
 		[[3, 2, 1...]];
-		[[Я СКОРО БУДУ!]];
+		[[I'll be back soon!]];
 		};
 --		if n == 6 then
 --			snd_play 'sfx_explosion_3'

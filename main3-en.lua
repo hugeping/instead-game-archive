@@ -210,18 +210,17 @@ Prop = Class {
 }:attr 'scenery'
 
 Distance {
-	-"звёзды/мн,но,жр";
+	"stars/plural";
 	nam = 'stars';
-	description = [[Звёзды смотрят на тебя.]];
+	description = [[The stars are watching you.]];
 }
 
 obj {
-	-"космос|пустота";
+	-"space,void";
 	nam = 'space';
-	description = [[Выход человечества в гиперпространство не сильно
-приблизил звёзды. Ведь прежде чем построить ворота у новой звёздной системы,
-нужно добраться до неё. Полёт до неисследованной звезды по
-прежнему занимает годы или даже десятки лет.]];
+	description = [[Humanity's reaching hyperspace did not bring the stars much closer.
+	After all, before you can build a gate at a new star system, you need to get to it.
+	The flight to an unexplored star system still takes years or even decades.]];
 	obj = {
 		'stars';
 	}

@@ -505,24 +505,20 @@ Your six-month contract for Dimidia is over, it's time to get home.]];
 
 cutscene {
 	nam = "transfer";
-	title = "Переход";
+	title = "Transition";
 	enter = function()
 		set_pic "hyper"
 	end;
 	text = function(s, i)
 		local txt = {
-		[[Перед тем как положить руку на массивный рычаг,
-	ты бросил взгляд на фото своей дочери.^
--- С Богом...^^
-		Ты плавно передвигаешь массивную ручку вперёд и
-	наблюдаешь за приближением ворот. За свою 20-летнюю карьеру
-	ты делал это не раз. Корабль вздрагивает, гигантская сила
-	втягивает его и вот, ты уже наблюдаешь причудливое
-	переплетение огней. Ещё несколько секунд и... ]];
-		[[БАМ!!! Корабль сотрясает вибрация. Что-то не так?]];
-		[[Вибрация
-	нарастает. Удар. Ещё удар. Приборная панель расцветает
-	россыпью огней.]];
+		[[Before placing your hand on the massive lever, you looked at your daughter's photo.^
+-- Well, with God's help...^^
+		You carefully move the massive lever forward and watch the gates approach.
+		You have done this many times in your 20-year career.
+		The ship shudders, a gigantic force pulls it in and, behold, you are observing the bizarre intertwining of lights.
+		There are only a few seconds and... ]];
+		[[BOOM!!! Vibration shakes the ship. Something is wrong?]];
+		[[The vibration is increasing. Bang!. Another blow. The dashboard blooms with a scattering of lights.]];
 		};
 		if i == 2 then
 			mus_stop()

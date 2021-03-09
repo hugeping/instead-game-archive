@@ -161,7 +161,7 @@ Path = Class {
 			p(s.desc)
 			return
 		end
-		p ([[Ты можешь пойти в ]], std.ref(s.walk_to):noun('вн'), '.');
+		p ([[You can go to ]], std.ref(s.walk_to):the_noun(), '.');
 	end;
 	default_Event = 'Walk';
 }:attr'scenery,enterable';

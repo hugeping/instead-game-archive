@@ -184,7 +184,7 @@ Careful = Class {
 	ev == 'Listen' or ev == 'Smell' then
 			return false
 		end
-		p ("Лучше оставить ", s:noun 'вн', " в покое.")
+		p ("Better to be careful with ", s:the_noun(), ".")
 	end;
 }:attr 'scenery'
 

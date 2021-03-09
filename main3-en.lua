@@ -549,8 +549,8 @@ function start_ill()
 	]]--
 end
 room {
-	-"рубка,кабина|Резвый|корабль";
-	title = "рубка";
+	"cabin|cockpit|Frisky|ship|spaceship";
+	title = "cockpit";
 	nam = 'burnout';
 	planet = false;
 	transfer = 0;

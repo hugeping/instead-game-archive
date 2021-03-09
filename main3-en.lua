@@ -129,21 +129,9 @@ end
 game.dsc = [[{$fmt b|THE ARCHIVE}^^An interactive novel for
 execution on computers.^^For help, type "help" and press "enter".]];
 
--- чтоб можно было писать "на кухню" вместо "идти на кухню"
-game:dict {
-	["Димидий/мр,C,но,ед"] = {
-		"Димидий/им",
-		"Димидий/вн",
-		"Димидия/рд",
-		"Димидию/дт",
-		"Димидием/тв",
-		"Димидии/пр",
-	}
-}
-
 function game:before_Any(ev, w)
 	if ev == "Ask" or ev == "Say" or ev == "Tell" or ev == "AskFor" or ev == "AskTo" then
-		p [[Попробуйте просто поговорить.]];
+		p [[Just try to talk.]];
 		return
 	end
 	return false
@@ -154,9 +142,9 @@ function mp:pre_input(str)
 	if #a <= 1 or #a > 3 then
 		return str
 	end
-	if a[1] == 'в' or a[1] == 'на' or a[1] == 'во' or
-		a[1] == "к" or a[1] == 'ко' then
-		return "идти "..str
+	if a[1] == 'to' or a[1] == 'in' or a[1] == 'into' or
+		a[1] == "on" then
+		return "walk "..str
 	end
 	return str
 end

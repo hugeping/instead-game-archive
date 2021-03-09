@@ -205,7 +205,7 @@ Furniture = Class {
 
 Prop = Class {
 	before_Default = function(s, ev)
-		p ("Тебе нет дела до ", s:noun 'рд', ".")
+		p ("You don't care about ", s:the_noun(), ".")
 	end;
 }:attr 'scenery'
 

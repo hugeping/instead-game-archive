@@ -815,58 +815,56 @@ room {
 	};
 }
 room {
-	-"коридор";
-	title = 'коридор';
+	"corridor";
+	title = 'corridor';
 	nam = 'room';
-	dsc = [[Отсюда ты можешь попасть в рубку и к двигателям.]];
+	dsc = [[From here you can get to the cabin and to the engines]];
 	d_to = "#trapdoor";
-	before_Sleep = [[Не время спать.]];
+	before_Sleep = [[It's not time to sleep.]];
 	before_Smell = function(s)
 		if _'engine'.flame then
-			p [[Пахнет гарью.]];
+			p [[It smells like burning.]];
 		else
 			return false
 		end
 	end;
 	obj = {
 		Furniture {
-			-"кровать";
-			description = [[Стандартная кровать. Такая
-стоит почти во всех небольших судах, типа "Резвого".]];
+			"bed";
+			description = [[Standard bed.
+			This is found in almost all small vessels, such as "Frisky".]];
 		}:attr 'enterable,supporter';
 		door {
-			-"люк";
+			"trapdoor,hatch";
 			nam = "#trapdoor";
 			description = function(s)
-				p [[Люк ведёт вниз.]]
+				p [[The trapdoor leads down.]]
 			end;
 			door_to = 'storage';
 		}:attr 'static,openable';
-		Prop { -"стена|стены/мн,но,жр" };
+		Prop { -"wall|walls/plural" };
 		obj {
-			-"огнетушитель,баллон";
+			"fire extinguisher,extinguisher,balloon";
 			full = true;
-			init_dsc = [[На стене закреплён огнетушитель.]];
+			init_dsc = [[A fire extinguisher is attached to the wall.]];
 			nam = "огнетушитель";
 			description = function(s)
-				p [[Баллон ярко-красного
-цвета. Разработан специально для использования на космическом
-флоте.]];
+				p [[Looks like bright red balloon.
+				Designed specifically for use in the space fleet.]];
 				if not s.full then
-					p
-					[[Огнетушитель пуст.]]
+					p [[The fire extinguisher is empty.]]
 				end
 			end;
 		};
 		Path {
-			-"рубка";
+			"cabin,cockpit";
 			walk_to = 'burnout';
-			desc = [[Ты можешь пойти в рубку.]];
+			desc = [[You can go to the cabin.]];
 		};
 		Path {
-			-"двигатели|машинный отсек";
+			-"engines/plural|engine|engine room";
 			walk_to = 'engine';
-			desc = [[Ты можешь пойти к двигателям.]];
+			desc = [[You can go to the engines.]];
 		};
 	}
 }

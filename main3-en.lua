@@ -572,7 +572,8 @@ room {
 		end
 		if bomb_cancel then
 			if s:once 'wow' then
-				p [[Войдя в рубку ты заметил странное. Сквозь окна вместо пейзажа ты видишь гиперпространство!]];
+				p [[Entering the cockpit, you noticed something strange.
+				Instead of a landscape, you see hyperspace through the windows!]];
 				_'panel'.stop = false
 				place 'hyper2'
 				remove 'sky2'
@@ -584,9 +585,9 @@ room {
 			return
 		end
 		local txt = {
-			"В кабину проникает свет от огней.";
-			"Кабина заполняется белым светом.";
-			"Кабину заполнил ослепительно-белый свет.";
+			"The lights illuminate the cockpit.";
+			"White light fills the cockpit.";
+			"A dazzling white light filled the cockpit.";
 		};
 		s.transfer = s.transfer + 1
 		pn(fmt.em(txt[s.transfer]))
@@ -597,7 +598,7 @@ room {
 	end;
 	Listen = function(s)
 		if _'engine'.flame then
-			p [[Рубка заполнена сигналом тревоги.]]
+			p [[The sound of alarm fills the cockpit.]]
 		else
 			return false
 		end
@@ -605,58 +606,55 @@ room {
 	dsc = function(s)
 		if s.planet then
 			if rain then
-				p [[В рубке "Резвого" светло. Приборная панель
-бледно отражается в покрытых дождевыми каплями окнах.]];
+				p [[It's light in the cabin of "Frisky".
+				The dashboard reflects faintly in the rain-covered window.]];
 			else
 				if bomb_cancel then
-					p [[В рубке "Резвого" тесно. Сквозь окна ты
-	видишь сияние гиперпространства.]]
-					p [[Показатели приборов -- в норме.]]
+					p [[The cabin of "Frisky" is cramped.
+					Through the windows you see the glow of hyperspace.]]
+					p [[All ship systems are functional.]]
 				else
-					p [[В рубке "Резвого" светло. Сквозь
-окна видно золотисто-жёлтое поле под ясным небом.]];
+					p [[В рубке "Резвого" светло.
+					Through the windows you can see a golden yellow field under a clear sky.]];
 				end
 			end
 		elseif _'engine'.flame then
-			p [[Рубка "Резвого" заполнена сигналом
-	тревоги. Нужно осмотреть приборы, чтобы выяснить что
-	происходит.]];
+			p [[The cockpit is filled with the sound of alarm.
+			You need to examine the dashboard to find out what is happening.]];
 		else
-			p [[В рубке "Резвого" тесно. Сквозь окна ты
-	видишь сияние гиперпространства. Приборная панель неярко
-помигивает в тусклом свете.]]
+			p [[The cabin of "Frisky" is cramped.
+			Through the windows you see the glow of hyperspace
+			The dashboard blink in the dim light.]]
 			if not _'engine'.flame and _'panel'.stop and
 			not isDaemon('burnout') then
-				p [[^^{$fmt em|За окнами ты замечаешь нечто странное...}]]
+				p [[^^{$fmt em|You notice something strange outside the windows...}]]
 			end
 		end
-		p [[^^Ты можешь выйти из рубки.]]
+		p [[^^You can exit the cabin.]]
 	end;
 	out_to = 'room';
 	obj = {
 		Distance {
 			nam = 'hyper2';
-			-"гиперпространство,странн*|огни/мн,мр|сияние";
+			-"hyperspace,someth*,strang*|lights/plural|radiance";
 			description = function(s)
 				if not _'engine'.flame and _'panel'.stop then
-					p [[Ты видишь три сверкающих огня,
-которые танцуя приближаются к твоему кораблю. Или это ты
-движешься к ним?]]
+					p [[You see three sparkling lights dancing approaching your ship.
+					Or are you moving towards them?]]
 					enable '#trinity'
 					DaemonStart("burnout");
 					set_pic 'trinity'
 					snd_play ('sfx_blinding_lights', true)
 				else
-					p [[Переход ещё не завершён. Эта мысль
-мешает тебе наслаждаться великолепным сиянием.]];
+					p [[The transition is not yet completed.
+					This thought prevents you from enjoying the magnificent view.]];
 				end
 			end;
 			obj = {
 				Distance {
 					nam = '#trinity';
 						-"свет";
-					description = [[Ослепительно белый свет
-заполняет кабину.]];
+					description = [[A dazzling white light fills the cockpit.]];
 				}:disable();
 			};
 		};

@@ -186,9 +186,8 @@ Distance = Class {
 }:attr 'scenery'
 
 Furniture = Class {
-	['before_Push,Pull,Transfer,Take'] = [[Пусть лучше
-	{#if_hint/#first,plural,стоят,стоит} там, где
-	{#if_hint/#first,plural,стоят,стоит}.]];
+	['before_Push,Pull,Transfer,Take'] = [[Better to stand where
+	{#if_hint/#first,plural,they are,it is}.]];
 }:attr 'static'
 
 Prop = Class {
@@ -662,31 +661,32 @@ room {
 		'windows';
 	};
 }
+_'@u_to'.word = "up,above,upstairs" -- add upstairs
 
 room {
-	-"трюм";
-	title = 'трюм';
+	"cargo hold,hold";
+	title = 'cargo hold';
 	nam = 'storage';
 	u_to = function(s)
 		if ill > 0 then
-			p [[У тебя нет сил, чтобы подняться наверх.]]
+			p [[You don't have the strength to go upstairs.]]
 			return
 		end
 		return  'room';
 	end;
-	dsc = [[Отсюда ты можешь подняться наверх или выйти в шлюз.]];
+	dsc = [[You can go upstairs or go out to the airlock.]];
 	out_to = 'gate';
 	obj = {
 		Path {
-			-"шлюз";
+			"airlock";
 			walk_to = 'gate';
-			desc = [[Ты можешь выйти в шлюз.]];
+			desc = [[You can go out to the airlock.]];
 		};
 		Furniture {
-			-"контейнеры,ящики,оборудован*";
-			description = [[Это контейнеры с оборудованием.]];
-			before_Open = [[Контейнеры опечатаны. Не стоит
-их открывать.]];
+			-"containers,boxes/plural|cargo|equipment";
+			description = [[These are containers with equipment.]];
+			before_Open = [[The containers are sealed.
+			You shouldn't open them.]];
 		}:attr'openable';
 	};
 }

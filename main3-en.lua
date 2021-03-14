@@ -613,7 +613,7 @@ room {
 					Through the windows you see the glow of hyperspace.]]
 					p [[All ship systems are functional.]]
 				else
-					p [[В рубке "Резвого" светло.
+					p [[It's light in the cabin of "Frisky".
 					Through the windows you can see a golden yellow field under a clear sky.]];
 				end
 			end
@@ -835,7 +835,7 @@ room {
 			This is found in almost all small vessels, such as "Frisky".]];
 		}:attr 'enterable,supporter';
 		door {
-			"trapdoor,hatch";
+			"trapdoor,hatch,door";
 			nam = "#trapdoor";
 			description = function(s)
 				p [[The trapdoor leads down.]]
@@ -870,13 +870,13 @@ room {
 }
 
 room {
-	-"машинный отсек,отсек";
-	title = "Машинный отсек";
+	"engine room,room";
+	title = "engine room";
 	nam = 'engine';
 	flame = true;
 	before_Smell = function(s)
 		if s.flame then
-			p [[Пахнет гарью.]];
+			p [[Smells like burning.]];
 		else
 			return false
 		end

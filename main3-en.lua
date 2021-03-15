@@ -912,6 +912,9 @@ room {
 		obj {
 			nam = '#flame';
 			"fire,flame|flames/plural|smoke";
+			["before_Attack,Take"] = function(s)
+				mp:xaction("Exting")
+			end;
 			before_Exting = function()
 				return false
 			end;
@@ -2444,8 +2447,8 @@ VerbExtendWord {
 }
 
 VerbExtendWord {
-	"#Exit",
-	"return"
+	"#Walk",
+	"return to"
 }
 
 Verb {
@@ -2455,7 +2458,7 @@ Verb {
 
 function mp:before_Exting(w)
 	if not have 'огнетушитель' then
-		p [[Тебе нечем тушить.]]
+		p [[You have nothing to extinguish.]]
 		return
 	end
 	return false
@@ -2463,9 +2466,9 @@ end
 
 function mp:after_Exting(w)
 	if not w then
-		p [[Тут нечего тушить.]]
+		p [[There is nothing to extinguish.]]
 	else
-		p ([[Тушить ]], w:noun 'вн', "?")
+		p ([[Extinguish ]], w:the_noun(), "?")
 	end
 end
 function tel_number(w)
@@ -2511,9 +2514,9 @@ function mp:after_Ring(w)
 end
 
 Verb {
-	"туши/ть,[по|за]туши/ть";
+	"extinguish,put out";
 	": Exting";
-	"{noun}/вн,scene: Exting";
+	"{noun}/scene: Exting";
 }
 
 Verb {

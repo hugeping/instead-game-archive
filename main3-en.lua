@@ -815,7 +815,7 @@ room {
 	};
 }
 room {
-	"corridor";
+	"corridor,hallway";
 	title = 'corridor';
 	nam = 'room';
 	dsc = [[From here you can get to the cabin and to the engines]];
@@ -883,34 +883,34 @@ room {
 	end;
 	onenter = function(s)
 		if s.flame and _'suit':hasnt 'worn' then
-			p [[В машинном отсеке пожар! Ты не можешь
-находиться там из-за едкого дыма.]]
+			p [[There's a fire in the engine room!
+			You cannot be there because of the acrid smoke.]]
 			return false
 		end
 	end;
 	dsc = function(s)
 		if s.flame then
-			p [[В машинном отсеке пылает огонь! Всё в дыму!]];
+			p [[A fire is burning in the engine room! Smoke is everywhere!]];
 		elseif bomb_cancel then
-			p [[Ты находишься в машинном
-отсеке. Контрольный блок мерцает индикаторами.]]
+			p [[You are in the engine room.
+			The control unit blinks with indicators.]]
 		else
-			p [[Ты находишься в машинном
-отсеке. Обгоревший контрольный блок полностью разрушен.]]
+			p [[You are in the engine room.
+			The burned-out control unit is completely destroyed.]]
 		end
-		p [[^^Ты можешь выйти из машинного отсека.]]
+		p [[^^You can exit the engine room.]]
 	end;
 	out_to = 'room';
 	after_Exting = function(s, w)
 		if not s.flame then
-			p [[Пожар уже потушен.]]
+			p [[The fire has already been extinguished.]]
 			return
 		end
 		if not w or w ^ '#flame' or w == s or w ^ '#control' then
 			_'огнетушитель'.full = false
 			s.flame = false
-			p [[Ты яростно борешься с пламенем. Наконец,
-пожар потушен!]]
+			p [[You fight the flames fiercely.
+			Finally, the fire is extinguished!]]
 			remove '#flame'
 			mus_stop()
 			snd_stop 'sfx_siren_dampened_loop'
@@ -921,47 +921,43 @@ room {
 	obj = {
 		obj {
 			nam = '#flame';
-			-"огонь,пожар|пламя|дым";
+			"fire,flame|flames/plural|smoke";
 			before_Exting = function()
 				return false
 			end;
-			before_Default = [[Пожар в машинном
-отсеке!]];
+			before_Default = [[Fire in the engine room!]];
 		}:attr 'scenery';
 		obj {
 			nam="#control";
-			-"контрольный блок,блок,индикатор*";
+			"control unit,unit,indicator*";
 			description = function(s)
 				if here().flame then
-					p [[Контрольный блок скрыт в
-пламени!]];
+					p [[The control unit is in flames!]];
 				elseif bomb_cancel then
-					p [[Контрольный блок
-функционирует!]]
+					p [[The control unit is functional!]]
 				else
-					p [[Контрольный блок -- система
-управления двигателями корабля. Он сильно обгорел, но не это
-привлекает твоё внимание. В центре блока зияет дыра!]];
+					p [[The control unit is the ship's engine control system.
+					It's burned-out, but that's not what gets your attention.
+					There's a hole in the center of the unit!]];
 					enable '#дыра'
 					if _'осколки':has 'concealed' then
 						_'осколки':attr
 						'~concealed';
-						p [[^^Ты замечаешь осколки.]]
+						p [[^^You notice the shards.]]
 					end
 				end
 			end;
 			obj = {
 				obj {
 					nam = '#дыра';
-					-"дыра|отверстие";
+					"hole";
 					description = function()
-						p [[Похоже,
-здесь произошёл взрыв...]];
+						p [[It looks like there was an explosion...]];
 						return false;
 					end;
 					before_LetIn = function(s, w)
 						if w == pl then
-							p [[Слишком узко для тебя.]]
+							p [[Too narrow for you. Too narrow for you.]]
 							return
 						end
 						return false
@@ -971,22 +967,22 @@ room {
 		}:attr 'static,concealed';
 		obj {
 			nam = 'осколки';
-			-"осколки/но|куски/но|кусочки/но";
-			after_Smell = [[Странный запах...]];
-			after_Touch = [[Края оплавлены. Не похоже на дюраль.]];
+			"shards,debris/plural";
+			after_Smell = [[It smells strange.]];
+			after_Touch = [[The edges are fused. Doesn't look like duralumin.]];
 			description = function(s)
 				if have(s) then
-					p [[Оплавленные
-осколки. Тяжёлые. Странно, не похоже на дюраль... ]];
+					p [[Fused shards. They are heavy. 
+					Strange, it doesn't look like duralumin...]];
 				else
-					p [[Небольшие чёрные кусочки металла.]]
+					p [[Small black pieces of metal.]]
 				end
 			end;
 		}:attr 'concealed';
 		Path {
-			-"коридор";
+			"corridor,hallway";
 			walk_to = 'room';
-			desc = [[Ты можешь выйти в коридор.]];
+			desc = [[You can go out into the corridor.]];
 		};
 	}
 }

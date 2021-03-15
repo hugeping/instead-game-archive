@@ -1,6 +1,6 @@
---$Name: Архив$
+--$Name: The Archive$
 --$Version: 0.9$
---$Author:Пётр Косых$
+--$Author:Peter Kosyh$
 
 require "fmt"
 require "link"
@@ -421,19 +421,19 @@ cutscene {
 		set_pic 'crash'
 		mus_play 'jump-memories'
 	end;
-	dsc = fmt.c[[{$fmt b|АРХИВ}^
-{$fmt em|Пётр Косых / Май 2020}^
-{$fmt em|Музыка, звук: Александр Соборов}^
+	dsc = fmt.c[[{$fmt b|THE ARCHIVE}^
+{$fmt em|Peter Kosyh / May 2020}^
+{$fmt em|Music, sound: Alexander Soborov}^
 {$fmt em|Jump Memories / Keys of Moon}^
-{$fmt em|Тестирование: Khaelenmore Thaal, Oleg Bosh}^^
-Спасибо вам за прохождение этой небольшой игры!^
-Если вам понравилось, вы можете найти похожие игры на:^^
+{$fmt em|Testing: Khaelenmore Thaal, Oleg Bosh}^^
+Thank you for playing this little game!^
+If you liked it, you can find similar games at:^^
 {$link|http://instead-games.ru}^
-{$link|https://metaparser.syscall.ru}^
+{$link|https:/parser.hugeping.ru}^
 {$link|https://instead.itch.io}^^
-А если хотите написать свою историю,^добро пожаловать на:^
-{$link|https://instead3.syscall.ru}^^
-{$fmt b|КОНЕЦ}
+And if you want to write your own story,^welcome to:^
+{$link|https://instead.hugeping.ru}^^
+{$fmt b|THE END}
 ]];
 }
 

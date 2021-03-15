@@ -471,7 +471,7 @@ And 5 years later, the richest deposits of uranium were discovered on the planet
 The old world suffered from a lack of resources, but money and power were concentrated in it.
 Therefore, Dimidius was not destined to become New Earth.
 It became a colony..^^
-Your six-month contract for Dimidia is over, it's time to get home.]];
+Your six-month contract for Dimidius is over, it's time to get home.]];
 		};
 		obj {
 			"rays/plural";
@@ -692,10 +692,9 @@ room {
 }
 
 door {
-	-"дверь,шлюзовая дверь";
+	-"door,airlock door,gateway door";
 	nam = 'outdoor';
-	['before_Close,Open,Lock,Unlock'] = [[Дверь
-открывается и закрывается с помощью рычага.]];
+	['before_Close,Open,Lock,Unlock'] = [[The door is opened and closed with a lever.]];
 	door_to = function(s)
 		if here() ^ 'gate' then
 			return 'planet'
@@ -704,27 +703,23 @@ door {
 		end
 	end;
 	description = function()
-		p [[Массивная шлюзовая
-дверь.]];
+		p [[Massive airlock door.]];
 		return false
 	end;
 	obj = {
 		obj {
-			-"красный рычаг,рычаг/но";
+			"red lever,lever";
 			nam = '#lever';
-			description = [[Ярко-красный массивный
-рычаг.]];
-			dsc = [[Справа от двери -- красный рычаг.]];
+			description = [[A bright red massive lever.]];
+			dsc = [[To the right of the door is a red lever.]];
 			before_Pull = function(s)
 				if not _'burnout'.planet then
-					p [[Открыть шлюзовую дверь во
-время перехода? Это самоубийство!]]
+					p [[Open the airlock door during the transition? This is suicide!]]
 					return
 				end
 				if _'outdoor':has'open' then
 					_'outdoor':attr'~open'
-					p
-					[[С шипящим звуком шлюзовая дверь закрылась.]]
+					p [[With a hissing sound, the airlock closed.]]
 					if not onair then
 						snd_stop 'sfx_rain_loop'
 					end
@@ -734,9 +729,7 @@ door {
 					end
 				else
 					_'outdoor':attr'open'
-					p
-					[[С шипящим звуком шлюзовая
-дверь открылась.]]
+					p [[With a hissing sound, the airlock opened.]]
 					if rain then
 						snd_play ('sfx_rain_loop', true)
 					end
@@ -749,11 +742,11 @@ door {
 }:attr 'locked,openable,static,transparent';
 global 'onair' (false)
 room {
-	-"шлюз";
+	"airlock,gateway";
 	nam = 'gate';
-	title = "шлюз";
-	dsc = [[Ты находишься в шлюзовом отсеке.^^Ты можешь вернуться в
-трюм или выйти наружу.]];
+	title = "airlock";
+	dsc = [[You are in the airlock.^^
+		You can return to the cargo hold or go outside.]];
 	in_to = "storage";
 	out_to = "outdoor";
 	enter = function(s, from)
@@ -769,31 +762,28 @@ room {
 	end;
 	obj = {
 		obj {
-			-"шкаф";
+			"closet,cabinet,wardrobe";
 			locked = true;
 			description = function(s)
-				p [[Это шкаф для хранения скафандра.]]
+				p [[This is a spacesuit closet.]]
 				return false
 			end;
 			obj = {
 				obj {
-					-"скафандр";
+					"spacesuit,suit,space suit";
 					nam = "suit";
-					description = [[Скафандр
-выглядит массивным, но на самом деле он довольно лёгкий.]];
+					description = [[The suit looks massive, but it's actually quite light.]];
 					before_Disrobe = function(s)
 						if here().flame then
-							p [[И
-задохнуться от пожара?]]
+							p [[And suffocate from the fire?]]
 							return
 						end
 						return false
 					end;
 					after_Disrobe = function(s)
 						if onair and s:once 'skaf' then
-							p [[Не без
-опасения ты снимаешь скафандр. Вдыхаешь воздух полной
-грудью. Кажется, всё в порядке!]];
+							p [[Not without fear you take off your spacesuit.
+							You take a deep breath. All seems to be alright!]];
 							start_ill()
 						elseif here() ^ 'gate'
 							and _'outdoor':has 'open' then
@@ -808,9 +798,9 @@ room {
 		}:attr 'static,openable,container';
 		'outdoor',
 		Path {
-			-"трюм";
+			"cargo hold,hold";
 			walk_to = 'storage';
-			desc = [[Ты можешь вернуться в трюм.]];
+			desc = [[You can return to the cargo hold.]];
 		};
 	};
 }
@@ -2423,58 +2413,44 @@ function game:Touch()
 end
 
 obj {
-	-"борода,щетина";
+	"beard";
 	nam = "beard";
-	description = [[Тебе просто лень бриться. Ты совсем не следишь
-за своим внешним видом.]];
-	after_Touch = [[Ты не без удовольствия почесал бороду.]];
+	description = [[You're just too lazy to shave. You don't care about your appearance at all]];
+	after_Touch = [[You scratched your beard, not without pleasure.]];
 }:attr 'static';
 
 pl.description = function(s)
 	if ill > 0 then
-		p [[Ты смотришь на свои руки и видишь странное. Они
-	становятся прозрачными. Пропускают свет. Ты... Исчезаешь?]];
+		p [[You look at your hands and you see something strange.
+		They become transparent. Let the light through. Are you... Disappearing?]];
 		return
 	end
-	p [[Ты -- геолог-разведчик объектов дальнего
-космоса. Пробивающаяся седина в бороде, усталый взгляд и морщины на
-лице выдают в тебе мужчину средних лет.]]
+	p [[You are a deep space exploration geologist.
+	The gray hair in the beard, the tired look and the wrinkles on the face proclaimed you a middle-aged man.]]
 	if _'suit':has'worn' then
-		p [[Сейчас ты в скафандре.]]
+		p [[You're in a spacesuit now.]]
 	end
 	if here() ^ 'ship1' then
-		p [[
-Полгода ты работал по контракту на
-"Димидии", занимаясь разведкой месторождений урана. Но теперь контракт
-завершён.]]
+		p [[Your six-month contract for Dimidius is over, it's time to get home.
+		For six months you worked under a contract at Dimidius, exploring uranium deposits. 
+        But now the contract is over.]]
 	end;
 end
 pl.scope = std.list { 'beard' }
 
 VerbExtendWord {
-	"#Climb",
-	"подняться,поднимись";
-}
-
-VerbExtendWord {
-	'#GetOff';
-	"сойти";
-	"с {noun}/рд,scene: GetOff";
-}
-
-VerbExtendWord {
 	"#Touch",
-	"[|по]чесать/,[|по]чеши/";
+	"scratch";
 }
 
 VerbExtendWord {
 	"#Exit",
-	"вернуться"
+	"return"
 }
 
 Verb {
-	"покин/уть",
-	"{noun}/вн,scene : Exit",
+	"leave",
+	"{noun} : Exit",
 }
 
 function mp:before_Exting(w)

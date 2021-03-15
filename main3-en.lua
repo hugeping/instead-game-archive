@@ -203,7 +203,7 @@ Distance {
 }
 
 obj {
-	-"space,void";
+	"space,void";
 	nam = 'space';
 	description = [[Humanity's reaching hyperspace did not bring the stars much closer.
 	After all, before you can build a gate at a new star system, you need to get to it.
@@ -2357,16 +2357,16 @@ room {
 }
 
 function game:after_Taste()
-	p [[Что за странные идеи?]]
+	p [[What are strange ideas?]]
 end
 
 function game:after_Smell()
-	p [[Ничего интересного.]]
+	p [[Nothing interesting.]]
 end
 
 game['before_Taste,Eat,Talk'] = function()
 	if _'suit':has'worn' then
-		p [[В скафандре это невозможно.]]
+		p [[It's impossible in a spacesuit.]]
 	else
 		return false
 	end
@@ -2374,7 +2374,7 @@ end
 
 function game:before_Listen()
 	if _'suit':has'worn' then
-		p [[В скафандре ты плохо слышишь внешний мир.]]
+		p [[In a spacesuit, you can't hear the outside world well.]]
 	else
 		return false
 	end
@@ -2382,23 +2382,23 @@ end
 
 function game:before_Shout()
 	if _'suit':has'worn' then
-		p [[В скафандре ты так оглохнешь.]]
+		p [[In a spacesuit you will go deaf.]]
 	else
 		return false
 	end
 end
 
 function game:after_Sing()
-	p [[Ты напеваешь какую-то мелодию себе под нос.]]
+	p [[You hum a melody to yourself.]]
 end
 
 function game:after_Shout()
-	p [[Ты решил выпустить пар, немного прооравшись.]]
+	p [[You decided to chill out by screaming a little.]]
 end
 
 function game:before_Smell()
 	if _'suit':has'worn' then
-		p [[В скафандре ты не чувствуешь запаха.]]
+		p [[You don't smell in a spacesuit.]]
 	else
 		return false
 	end
@@ -2406,7 +2406,7 @@ end
 
 function game:Touch()
 	if _'suit':has'worn' then
-		p [[В скафандре это делать неудобно.]]
+		p [[It is inconvenient to do this in a spacesuit.]]
 	else
 		return false
 	end
@@ -2517,7 +2517,7 @@ Verb {
 }
 
 Verb {
-	"[|за|по]кричать,крикн/уть,[|за]орать";
+	"shout,cry";
 	": Shout";
 }
 

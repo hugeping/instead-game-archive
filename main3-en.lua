@@ -834,7 +834,7 @@ room {
 		}:attr 'static,openable';
 		Prop { -"wall|walls/plural" };
 		obj {
-			"fire extinguisher,extinguisher,balloon";
+			"fire extinguisher,extinguisher,balloon,fire bottle";
 			full = true;
 			init_dsc = [[A fire extinguisher is attached to the wall.]];
 			nam = "огнетушитель";
@@ -1018,7 +1018,7 @@ Distance {
 	"planet|landscape|field,wheat|horizon";
 	description = function()
 		if rain then
-			p [[The edges of a wheat-golden field disappear in a rainy haze.]];
+			p [[The edges of a wheat-golden field hide in a rainy haze.]];
 		else
 			p [[The golden wheat field stretches to the horizon..]];
 		end
@@ -1088,22 +1088,21 @@ obj {
 
 obj {
 	nam = 'wheat';
-	-"зёрна/мн|зерно";
-	description = [[Жёлтые крупные зёрна, похожие на
-	пшеничные. Кажется, что в них сосредоточена энергия.]];
+	"grains/plural|grain";
+	description = [[Large yellow grains, similar to wheat.
+	You feel like energy is concentrated in them.]];
 	['after_Smell'] = function(s)
 		if rain then
-			p [[Тебе нравится запах мокрого зерна.]];
+			p [[You like the smell of wet grain.]];
 		else
-			p [[Тебе нравится запах зерна.]];
+			p [[You like the smell of grain.]];
 		end
 	end;
 	after_Eat = function(s)
 		if ill > 0 then
 			DaemonStop 'planet'
 			if ill > 1 then
-				p [[Ты съедаешь зёрна. Через некоторое время
-	ты чувствуешь, как странная слабость отступает.]]
+				p [[You eat the grains. After a while, you feel a strange weakness recede.]]
 				ill = 0
 				return
 			end
@@ -1115,34 +1114,30 @@ obj {
 
 obj {
 	nam = 'field';
-	title = "В поле";
-	-"поле";
+	title = "In the field";
+	"field";
 	description = function(s)
 		if rain then
-			p [[Края поля золотисто-пшеничного цвета
-	скрываются в дождливой дымке.]]
+			p [[The edges of the field, a golden wheat color, hide in a rainy haze.]]
 		else
-			p [[Поле выглядит бескрайним.]]
+			p [[The field looks endless.]]
 		end
-		p [[Ты видишь как колосья, похожие
-	на пшеницу, колышутся под несильным ветром.]];
+		p [[You see how the wheat-like ears sway in the gentle wind.]];
 		return false
 	end;
 	obj = {
 		obj {
-			-"колосья,колоски/мр,мн|пшеница";
-			description = [[Ты видишь как колосья
-	колышутся под несильным ветром.]];
+			-"ears,spiklets/plural|wheat";
+			description = [[You see how the ears sway in the gentle wind.]];
 			["before_Eat,Tear,Take,Pull"] = function(s)
-				p [[Ты сорвал несколько колосков и
-	растёр их в ладонях, собрав зёрна.]];
+				p [[You plucked a few spikelets and rubbed them in your palms, collecting the grains.]];
 				take 'wheat'
 			end;
 		}:attr 'concealed';
 	};
 	before_LetIn = function(s, w)
 		if w == pl and here() ^ 'planet' then
-			p "Ты зашел в заросли желтых колосьев."
+			p "You entered a thicket of yellow ears."
 			move(pl, s)
 			return
 		end
@@ -1150,7 +1145,7 @@ obj {
 	end;
 --	scope = { 'ship' };
 	after_LetIn = function(s, w)
-		p ([[Ты бросаешь ]], w:noun 'вн', [[ в поле.]])
+		p ([[You drop ]], w:the_noun(), [[ in the field.]])
 	end;
 }:attr 'scenery,enterable,container,open'
 

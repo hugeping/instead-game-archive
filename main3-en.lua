@@ -798,7 +798,7 @@ room {
 		}:attr 'static,openable,container';
 		'outdoor',
 		Path {
-			"cargo hold,hold";
+			"cargo hold,hold,cargo";
 			walk_to = 'storage';
 			desc = [[You can return to the cargo hold.]];
 		};
@@ -982,60 +982,56 @@ room {
 
 Distance {
 	nam = "sky2";
-	-"небо|дождь|дымка";
+	"sky,turquoise|rain|haze";
 	description = function(s)
 		if rain then
-			p [[Небо затянуто дождливой
-	дымкой.]]
+			p [[The sky is covered with rainy haze.]]
 		else
-			p [[Небо ясное, залито голубой бирюзой.]]
+			p [[The sky is clear, filled with blue turquoise.]]
 		end
-		p [[Время от времени, небо озаряется всполохами.]];
+		p [[From time to time, the sky lights up with flashes.]];
 	end;
 	before_Listen = function(s)
 		if rain then
-			p [[Ты слышишь шум дождя.]];
+			p [[You hear the sound of the rain.]];
 			return
 		elseif s:multi_alias() == 2 then
-			p [[Но дождь закончился!]]
+			p [[But the rain is over!]]
 			return
 		end
-		p [[Ты не слышишь ничего необычного.]]
+		p [[You do not hear anything unusual.]]
 	end;
 	obj = {
 		Distance {
-			-"всполохи|гиперпространство";
-			description = [[Планета в гиперпространстве? Невероятно!]];
+			"hyperspace|flashes/plural";
+			description = [[A planet in hyperspace? Incredible!]];
 		};
 		obj {
-			-"солнце";
-			before_Default = [[Странно, но ты не видишь
-	солнца, хотя сейчас день.]];
+			"sun,star";
+			before_Default = [[Strange, but you do not see the sun, although it is day.]];
 		}:attr 'scenery';
 	}
 };
 
 Distance {
 	nam = 'planet_scene';
-	-"планета|ландшафт|поле|дымка|горизонт";
+	"planet|landscape|field,wheat|horizon";
 	description = function()
 		if rain then
-			p [[Края поля золотисто-пшеничного цвета
-	скрываются в дождливой дымке.]];
+			p [[The edges of a wheat-golden field disappear in a rainy haze.]];
 		else
-			p [[Золотисто-пшеничное поле простирается до горизонта.]];
+			p [[The golden wheat field stretches to the horizon..]];
 		end
 	end;
 	obj = {
 		'sky2';
 		obj {
-			-"капли";
+			"drops,droplets/plural";
 			description = function(s)
 				if rain then
-					p [[Некоторое время ты отрешённо
-	следишь за каплями, скатывающимися по стеклу.]];
+					p [[For a while, you watch the droplets rolling down the glass.]];
 				else
-					p [[Но сейчас не идёт дождь.]]
+					p [[But it's not raining now.]]
 				end
 			end;
 		}:attr'scenery';
@@ -1052,19 +1048,19 @@ cutscene {
 		set_pic 'flash'
 	end;
 	text = {
-		[[Ослепительный свет заполнил всё вокруг. Ты потерялся
-	в нём, растворился -- словно тебя никогда и не было... Корабль
-	содрогается от удара. Это конец?]];
-		[[Тишина...]];
-		[[Капли на стекле. Крупные. Медленно стекают по косым
-	окнам, заливают обшивку корабля. Шум дождя -- почему ты его не
-	слышишь?]];
+		[[A blinding light filled everything around.
+		You were lost in it, dissolved -- as if you never existed ... 
+		The ship shudders on impact. This is the end?]];
+		[[Silence...]];
+		[[Drops of water on the glass. Big drops.
+		They slowly flow down the slanting windows, fill the ship's skin.
+		The noise of the rain -- why can't you hear it?]];
 	};
 	exit = function(s)
 		_'burnout'.planet = true
 		remove 'hyper2'
-		p [[Ты медленно приходишь в себя. Ну конечно, ты внутри "Резвого" и его
-	обшивка не пропустит такой слабый звук, как удар капель. Как жаль...]];
+		p [[You slowly come to your senses.
+		Well, of course, you are inside "Frisky" and its casing will not miss such a faint sound as the impact of drops. What a pity...]];
 		move('planet_scene', 'burnout')
 		set_pic 'crash'
 		mus_play 'bgm_plains'

@@ -1069,20 +1069,19 @@ cutscene {
 
 obj {
 	nam = 'ship';
-	-"корабль,Резвый,резв*";
+	"ship,Frisky,frisk*";
 	description =  function(s)
-		p [[Не очень мягкая посадка, если судить по борозде,
-	которую он оставил позади себя в земле. Но корабль
-	цел.]]
+		p [[Not a very soft landing, judging by the furrow the ship left behind in the ground.
+		But the ship survived!]]
 	end;
 	before_Enter = function(s)
 		mp:xaction("Enter", _'outdoor')
 	end;
 	obj = {
 		obj {
-			-"борозда";
-			description = [[Не очень глубокая. Каким-то
-	образом, корабль выбросило прямо на поле...]];
+			"furrow,track";
+			description = [[Not very deep.
+			Somehow, the ship was thrown right into the field...]];
 		}:attr'scenery';
 	}
 }:attr 'scenery,enterable';

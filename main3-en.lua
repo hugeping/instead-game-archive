@@ -1398,41 +1398,35 @@ With these words the old man got up and walked slowly towards the tree.^^
 }
 
 room {
-	-"скала,вид*,край*,обрыв*";
+	-"cliff,rock,edge*";
 	nam = 'rock';
-	title = "У скалистого обрыва";
-	before_Listen = [[Ты слышишь свист ветра в скалах.]];
+	title = "By the rocky cliff";
+	before_Listen = [[You hear the whistle of the wind in the rocks.]];
 	yes = 0;
-	before_Jump = [[Решил решить все проблемы разом?]];
-	last = [[-- Поэтому я должен спросить тебя, готов ли ты
-стать одним из нас?]];
+	before_Jump = [[Decided to solve all the problems at once?]];
+	last = [[-- So I have to ask you, are you ready to become one of us?]];
 	['before_Yes,No'] = function(s)
 		if not visited 'oldman_talk' or not seen 'oldman' then
 			return false
 		end
 		local txt = {
-			{ "-- Ты уверен?", "Yes" };
-			{ [[-- В таком случае, ты не сможешь вернуться в
-привычный мир. Ты точно хочешь этого?]], "Yes" };
-			{ [[-- Ты хорошо подумал?]], "Yes" };
-			{ [[-- Ты хочешь узнать тайну?]], "Yes" };
-			{ [[-- Ты считаешь, что готов познать реальность?]], "Yes" };
-			{ [[-- Ты думаешь, что это твоё призвание?]],
+			{ "-- Are you sure?", "Yes" };
+			{ [[-- In this case, you will not be able to return to the world are you used to. Do you really want this?]], "Yes" };
+			{ [[-- Did you think well?]], "Yes" };
+			{ [[-- Do you want to know the secret?]], "Yes" };
+			{ [[-- Do you think you are ready to experience reality?]], "Yes" };
+			{ [[-- Do you think this is your calling?]],
 				"Yes" };
-			{ [[-- Не боишься пожалеть о своём выборе?]],
+			{ [[-- Are you not afraid to regret your choice?]],
 				"Yes" };
-			{ [[-- Ты думаешь, что это просто паршивая
-приключенческая игра?]], "No" };
-			{ [[-- А вот сейчас было обидно. И ты всё-равно
-настаиваешь?]], "Yes" };
-			{ [[-- Ты упорный, да?]], "Yes" };
-			{ [[-- Ты понимаешь, что не сможешь никому
-передать то, что откроется тебе?]], "Yes" };
-			{ [[-- Может, передумаешь?]], "Yes" };
-			{ [[-- Так и будем разговаривать вечно?]],
+			{ [[-- Do you think this is just a lousy adventure game?]], "No" };
+			{ [[-- But now it was insulting. And you still insist?]], "Yes" };
+			{ [[-- You're stubborn, right?]], "Yes" };
+			{ [[-- Do you understand that you cannot convey to anyone what will be revealed to you?]], "Yes" };
+			{ [[-- Maybe you will change your mind?]], "Yes" };
+			{ [[-- Are we going to talk forever?]],
 				"No" };
-			{ [[-- Ладно, я повторю всё с самого
-начала.]],
+			{ [[-- Okay, I'll repeat everything from the beginning.]],
 				"Yes" };
 		}
 		local i = (s.yes % #txt) + 1
@@ -1454,16 +1448,15 @@ room {
 	end;
 	before_WaveHands = function(s)
 		if seen 'oldman' then
-			p [[Старик многозначительно хмыкнул и помахал
-тебе в ответ.]]
+			p [[The old man chuckled meaningfully and waved back at you.]]
 			return
 		end
 		return false
 	end;
-	dsc = [[Ты стоишь на вершине скалы. Перед тобой
-внизу открывается величественный вид. Далеко-далеко, за горизонтом виднеется чёрный
-шпиль. На севере от
-	тебя находится странное дерево.]];
+	dsc = [[You are standing on top of a cliff.
+	A majestic view opens before you below.
+	Far, far away, a black spire looms over the horizon.
+	There is a strange tree to the north of you.]];
 	n_to = '#tree';
 	out_to = function(s)
 		if mp.words[1]:find "прыг" then
@@ -1480,26 +1473,23 @@ room {
 		return false
 	end;
 	d_to = function(s)
-		p [[Ты не можешь спуститься со скалистого обрыва.]];
+		p [[You cannot go down the rocky cliff.]];
 	end;
 	obj = {
 		door {
 			nam = '#tree';
-			-"дерево,ветв*";
-			description = [[Одинокое дерево кажется здесь совсем
-	лишним.]];
+			"tree,branch*";
+			description = [[A lonely tree seems completely redundant here.]];
 			door_to = 'tree';
 		}:attr 'scenery,open';
 		Distance {
-			-"вид|скалы,обломк*";
+			"view|rocks,debris/plural";
 			nam = "#view";
-			description = [[Внизу ты видишь долину
-усеянную обломками скал.]];
+			description = [[Below you see a valley strewn with debris.]];
 		};
 		Distance {
-			-"шпиль|башня";
-			description = [[Высокий тонкий шпиль едва
-заметен отсюда.]];
+			"spire|tower";
+			description = [[The tall, thin spire is barely visible from here.]];
 		};
 		'sky2';
 		'oldman';

@@ -1300,16 +1300,15 @@ room {
 }
 
 room {
-	-"берег";
+	"seashore,shore";
 	nam = 'sea';
-	title = "У моря";
+	title = "By the sea";
 	old_pic = false;
-	before_Listen = [[Шум моря ласкает твой слух.]];
-	before_Smell = [[От запаха соли и водорослей кружится
-голова.]];
-	before_Swim = [[Не лучшее время для этого.]];
-	dsc = [[Ты стоишь на берегу моря. На юге от тебя, прямо на берегу
-	растет странное дерево.]];
+	before_Listen = [[The sound of the sea caresses your ears.]];
+	before_Smell = [[The smell of salt and algae makes you dizzy.]];
+	before_Swim = [[This is not the best time for this.]];
+	dsc = [[You are standing on the seashore.
+	To the south of you, right on the shore, a strange tree grows.]];
 	s_to = '#tree';
 	out_to = '#tree';
 	exit = function(s)
@@ -1327,21 +1326,19 @@ room {
 	obj = {
 		door {
 			nam = '#tree';
-			-"дерево,ветв*";
-			description = [[Одинокое дерево кажется здесь совсем
-	лишним.]];
+			"tree,branch*";
+			description = [[A lonely tree seems completely redundant here.]];
 			door_to = 'tree';
 		}:attr 'scenery,open';
 		obj {
-			-"море|вода";
-			description = [[Бескрайний простор. Волны,
-накатываясь одна на другую, пенятся и разбиваются о берег.]];
-			before_Drink = [[Пить морскую воду?]];
+			"sea|water,seawater";
+			description = [[Endless space.
+			Waves, rolling over one another, foam and break on the shore.]];
+			before_Drink = [[Drink seawater?]];
 		}:attr 'scenery';
 		obj {
-			-"волны";
-			description = [[Ты можешь вечно смотреть на
-то, как волны разбиваются о берег.]];
+			"waves/plural";
+			description = [[You can watch the waves crash on the shore forever.]];
 		}:attr 'scenery';
 		'sky2';
 	};

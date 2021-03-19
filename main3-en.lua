@@ -1345,31 +1345,26 @@ room {
 }
 
 obj {
-	-"старик,человек";
+	"old man,man,human";
 	nam = 'oldman';
 	init_dsc = function(s)
 		if visited 'oldman_talk' then
-			p [[Старик ждёт от тебя ответа: {$fmt em|да}
-или {$fmt em|нет}?]];
+			p [[The old man is waiting for an answer from you: {$fmt em|yes}
+or {$fmt em|no}?]];
 		else
-			p [[Ты видишь старика, который стоит у самого края и
-смотрит вдаль.]];
+			p [[You see an old man standing at the very edge and looking into the distance.]];
 		end
 	end;
-	description = [[Морщинистое лицо старика скрывает седая, почти
-полностью белая борода. Он одет в длинный чёрный плащ с капюшоном,
-который сейчас не покрывает его голову и седые волосы свободно треплет
-ветер.]];
+	description = [[The old man's wrinkled face is hidden by almost completely white beard.
+	He is wearing a long black hooded cloak, which now does not cover his head and his gray hair flutters freely in the wind.]];
 	before_Talk = function(s)
 		walk 'oldman_talk';
 	end;
 	['before_Attack,Push'] = function(s)
 		if visited 'oldman_talk' then
-			p [[Не стоит этого делать, друг мой! -- старик
-предостерегающе поднял руку.]]
+			p [[Don't do this, my friend! -- the old man raised his hand warningly.]]
 		else
-			p [[Старик
-предостерегающе поднял руку и укоризненно покачал головой.]]
+			p [[The old man raised his hand in warning and shook his head reproachfully.]]
 		end
 	end;
 }
@@ -1377,18 +1372,16 @@ cutscene {
 	title = false;
 	nam = 'oldman_talk';
 	text = {
-		[[-- Здравствуйте! Я не знаю, понимаете ли вы меня или
-нет, но ... гм... Вы кто?^]];
-		[[Старик повернул голову в твою сторону и
-улыбнулся.^Тебе ничего не оставалось, кроме как улыбнуться в
-ответ. Некоторое время вы стояли так.]];
-		[[-- Я -- человек с Земли как и ты. И я -- один из
-хранителей Архива.]];
-		[[-- Что такое Архив?]];
-		[[-- Мой друг, если я отвечу на этот вопрос, ты
-останешься здесь навсегда. Как только ты познаешь суть происходящего,
-путь назад будет для тебя закрыт. Поэтому я должен спросить тебя, готов ли ты
-стать одним из нас? {$fmt em|Да} или {$fmt em|нет}?]];
+		[[-- Hello! I don't know if you understand me or not, but ... um ... who are you?^]];
+		[[The old man turned his head in your direction and smiled.^
+		You had no choice but to smile back.
+		You stood like that for a while.]];
+		[[-- I am a person from Earth like you.
+		And I am one of the keepers of the Archive.]];
+		[[-- What is the Archive?]];
+		[[-- My friend, if I answer this question, you will stay here forever.
+		Once you know the essence of what is happening, the way back will be closed for you.
+		So I have to ask you, are you ready to become one of us? {$fmt em|Yes} or {$fmt em|no}?]];
 	}
 }
 
@@ -1396,15 +1389,11 @@ cutscene {
 	title = false;
 	nam = 'oldman_talk2';
 	text = {
-		[[-- Я так и думал.^^
-С этими словами старик встал и медленно направился к дереву.^^
---  Ну что же, несмотря на то, что ты
-не способен  проникнуть в реальность Архива, всё-таки, твоё сознание
-пытается передать её через привычные образы, и поэтому, ты можешь
-	многое изменить, пока находишься здесь...]];
-		[[-- Пока нахожусь здесь?]];
-		[[Но старик не ответил. Он уже скрылся за стволом
-	странного дерева.]];
+		[[-- I thiught so.^^
+With these words the old man got up and walked slowly towards the tree.^^
+--  Well, despite the fact that you are not able to penetrate into the reality of the Archive, nevertheless, your consciousness is trying to convey it through familiar images, and therefore, you can change a lot while you are here ...]];
+		[[-- While I'm here?]];
+		[[But the old man did not answer. He has already disappeared behind the trunk of a strange tree.]];
 	}
 }
 

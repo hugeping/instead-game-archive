@@ -1153,22 +1153,21 @@ global 'ill' (0)
 
 room {
 	nam = 'planet';
-	title = "У корабля";
+	title = "By the ship";
 	in_to = 'outdoor';
 	after_Listen = function(s)
 		if rain then
-			p [[Ты слышишь как капли барабанят по обшивке
-	корабля.]]
+			p [[You can hear the drops drumming on the hull of the ship.]]
 			return
 		end
 		return false
 	end;
 	daemon = function(s)
 		local txt = {
-			"Внезапно, ты чувствуешь слабость.";
-			"Ты чувствуешь слабость во всем теле.";
-			"Странная слабость усиливается.";
-			"Ты чувствуешь страшную усталость.";
+			"Suddenly, you feel weak.";
+			"You feel weak all over your body.";
+			"A strange weakness intensifies.";
+			"You feel terribly tired.";
 		};
 		ill = ill + 1
 		local i = ill - 1
@@ -1182,8 +1181,7 @@ room {
 		start_ill()
 	end;
 	dsc = function(s)
-		p [[Ты стоишь у "Резвого", уткнувшегося носом в землю
-	посреди золотисто-жёлтого поля.]]
+		p [[Ты стоишь у "Резвого", уткнувшегося носом в землю посреди золотисто-жёлтого поля.]]
 		if rain then
 			p [[Идёт дождь.]];
 		end

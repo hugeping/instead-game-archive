@@ -1181,13 +1181,12 @@ room {
 		start_ill()
 	end;
 	dsc = function(s)
-		p [[Ты стоишь у "Резвого", уткнувшегося носом в землю посреди золотисто-жёлтого поля.]]
+		p [[You are standing by the "Frisky", with his nose buried in the ground in the middle of a golden-yellow field.]]
 		if rain then
-			p [[Идёт дождь.]];
+			p [[It's raining.]];
 		end
-		p [[Неподалёку на востоке ты видишь дерево.]];
-		p [[На севере ты
-	замечаешь высокий шпиль, устремлённый в небо.]];
+		p [[Nearby in the east you see a tree.]];
+		p [[In the north, you notice a tall spire directed up into the sky.]];
 	end;
 	n_to = 'tower';
 	e_to = '#tree';
@@ -1199,58 +1198,54 @@ room {
 		'tower';
 		door {
 			nam = '#tree';
-			-"дерево,ветв*";
-			description = [[Одинокое дерево кажется здесь совсем
-	лишним.]];
+			"tree,branch*";
+			description = [[A lonely tree seems completely redundant here.]];
 			door_to = 'tree';
 		}:attr 'scenery,open';
 	}
 }
 
 Distance {
-	-"шпиль/мр,ед,С|башня,вершина";
+	"spire|tower,top";
 	nam = 'tower';
 	["before_Enter,Walk"] = function()
 		if ill > 0 then
-			p [[Ты не дойдешь в таком состоянии.]]
+			p [[You don’t have the strength to walk in this state.]]
 			return
 		end
 		walk 'шпиль';
 	end;
 	description = function(s)
 		if rain then
-			p [[Вершина шпиля теряется в дымке дождя.]]
+			p [[The top of the spire is lost in the haze of rain.]]
 		else
-			p [[Шпиль очень высокий. Словно тонкая чёрная игла он
-	пронзает небо.]];
+			p [[The spire is very high. Like a thin black needle, it pierces the sky.]];
 		end
 	end;
 };
 
 room {
 	nam = "шпиль";
-	-"равнина";
-	title = "у шпиля";
-	before_Listen = [[Ты слышишь, как поёт ветер.]];
-	before_Shout = [[Ты кричишь, но ничего не происходит.]];
+	"green plain,plain";
+	title = "By the spire";
+	before_Listen = [[You listen the wind song.]];
+	before_Shout = [[You scream, but nothing happens.]];
 	dsc = function(s)
-		p [[Ты находишься у подножия высокой башни. Её
-чёрный шпиль устремлен в небо. Вокруг простирается зелёная равнина. На
-	западе от башни растёт одинокое дерево.]];
+		p [[You are at the foot of a tall tower.
+		Its black spire is directed to the sky.
+		A green plain stretches all around.
+		A lone tree grows to the west of the tower.]];
 		if not disabled 'human' then
-			p (fmt.em [[Ты видишь рядом с деревом
-	человеческую фигурку в плаще!]])
+			p (fmt.em [[You see a human figure in a black cloak next to a tree!]])
 		end
-		p [[^^Ты можешь вернуться на юг.]];
+		p [[^^You can go back south..]];
 	end;
 	exit = function(s, t)
 		if t ^ 'planet' then
-			p [[Ты покинул странную башню и отправился на
-юг, к своему кораблю.]];
+			p [[You left the strange tower and headed south to your ship.]];
 			set_pic 'crash'
 			if rain then
-				p [[Пока ты шёл, небо очистилось и дождь
-закончился.]];
+				p [[As you walked, the sky cleared and the rain ended.]];
 				rain = false
 				snd_stop 'sfx_rain_loop'
 			end
@@ -1260,11 +1255,10 @@ room {
 	end;
 	enter = function(s, f)
 		if f ^ 'planet' then
-			p [[Ты направился на север. Прошло по меньшей мере
-полчаса, прежде, чем ты оказался у подножия странного сооружения.]];
+			p [[You headed north.
+			It took at least half an hour before you found yourself at the foot of the strange structure.]];
 			if rain then
-				p [[Пока ты шёл, небо очистилось и дождь
-закончился.]];
+				p [[As you walked, the sky cleared and the rain ended.]];
 				rain = false
 				snd_stop 'sfx_rain_loop'
 			end
@@ -1278,28 +1272,27 @@ room {
 		'sky2';
 		Distance {
 			nam = 'human';
-			-"человек|фигурка,фигура",
-			description = [[Отсюда не разглядеть. Кажется,
-	это человек! Он не обращает на тебя внимания.]];
+			"man,human/live,male|figure",
+			description = [[You can't see it from here but
+			it seems to be a man! He pays no attention to you.]];
 		};
 		obj {
 			nam = '#tower';
-			-"башня|шпиль|подножие";
-			description = [[Поверхность башни матовая,
-	чёрного цвета, без единого шва. Похоже, что это металл.]];
-			before_Touch = [[Ты чувствуешь вибрацию.]];
-			before_Attack = [[Силы слишком неравные.]];
+			"tower|spire|foot";
+			description = [[The surface of the tower is matt, black, without a single seam.
+			It looks like it's metal.]];
+			before_Touch = [[You feel the vibration.]];
+			before_Attack = [[The forces are too unequal.]];
 			before_Enter = function(s)
-				p [[Ты обошёл подножие башни, но так
-	и не заметил никакого входа.]]
+				p [[You walked around the foot of the tower, but you never noticed any entrance.]]
 			end;
 		}:attr 'scenery,enterable';
 		door {
 			nam = '#tree';
-			-"дерево,ветки*,листья*";
+			"tree,branch*,leave*";
 			description = function()
-				p [[Дерево выглядит старым. Его
-	огромные узловатые ветви почти лишены листьев.]];
+				p [[The tree looks old.
+				Its huge gnarled branches are almost devoid of leaves.]];
 			end;
 			door_to = 'tree';
 		}:attr 'scenery,open';
@@ -2508,7 +2501,7 @@ Verb {
 }
 
 Verb {
-	"shout,cry";
+	"shout,cry,scream";
 	": Shout";
 }
 

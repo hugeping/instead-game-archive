@@ -1,6 +1,8 @@
---$Name: Архив$
+--$Name: The Arhcive$
+--$Name(ru): Архив$
 --$Version: 0.9$
---$Author:Пётр Косых$
+--$Author:Peter Kosyh$
+--$Author(ru):Пётр Косых$
 
 require "fmt"
 require "link"

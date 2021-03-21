@@ -1438,9 +1438,9 @@ room {
 		else
 			pn (s.last)
 			if mp.event == "Yes" then
-				pn [[-- Да!]];
+				pn [[-- Yes!]];
 			else
-				pn [[-- Нет!]];
+				pn [[-- No!]];
 			end
 			walk 'oldman_talk2'
 			remove 'oldman'

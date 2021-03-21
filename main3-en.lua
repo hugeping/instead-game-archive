@@ -2383,20 +2383,20 @@ end
 
 function mp:before_Ring(w)
 	if not here() ^ 'top' then
-		p [[Тут нет телефона.]]
+		p [[There is no telephone.]]
 		return
 	end
 	if _'suit':has'worn' then
-		p [[В скафандре?]]
+		p [[In a spacesuit?]]
 		return
 	end
 	if w and not tel_number(w) then
-		p ([[Неправильный номер: ]]..w, ".")
+		p ([[Wrong number: ]]..w, ".")
 		return
 	end
 	if not w then
-		p [[Попробуй {$fmt em|набрать <номер>}. Например,
-	{$fmt em|набрать 12345}.]];
+		p [[Try to {$fmt em|dial the <number>}. For example,
+	{$fmt em|dial 12345}.]];
 		return
 	end
 	return false
@@ -2405,17 +2405,17 @@ end
 function game:before_Attack(w)
 	if w == pl then
 		if _'suit':has'worn' then
-			p [[Скафандр защищает тебя.]]
+			p [[The spacesuit protects you.]]
 			return
 		end
-		p [[Сдаешься? Так просто?]]
+		p [[Are you giving up?]]
 		return
 	end
 	return false
 end
 
 function mp:after_Ring(w)
-	p [[Не отвечает...]]
+	p [[No answer...]]
 end
 
 Verb {
@@ -2430,7 +2430,7 @@ Verb {
 }
 
 Verb {
-	"набрать,[|по]звон/ить";
+	"dial,call";
 	"* : Ring";
 };
 

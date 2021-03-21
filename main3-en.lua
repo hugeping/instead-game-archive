@@ -235,7 +235,7 @@ Careful {
 				_'hyper2':description()
 			end
 		elseif here() ^ 'ship1' then
-			p [[Through thick windows you see a purple planet. This is Dimidius.]];
+			p [[Through the thick windows you see a purple planet. This is Dimidius.]];
 		end
 	end;
 	found_in = { 'ship1', 'burnout' };
@@ -320,7 +320,7 @@ Careful {
 				elseif here() ^ 'burnout' then
 					if bomb_cancel then
 						if _'outdoor':has'open' then
-							p [[Maybe it's better to batten down the airlock first?]]
+							p [[Shouldn't we seal the airlock first?]]
 							return
 						end
 						walk 'happyend'
@@ -345,8 +345,8 @@ Careful {
 				elseif here() ^ 'burnout' then
 					if s.ff and not bomb_cancel then
 						if not _'panel'.stop then
-							p [[Exit from hyperspace is possible only when the ship reaches a certain speed.
-Stopping the engines will lead to an interrupted transition. And then -- there will no way to return!]];
+							p [[Exiting hyperspace is only possible when the ship reaches a certain speed.
+							Stopping the engines would mean an aborted transition. And then -- there's no going back!]];
 							return
 						end
 						p [[You pull the lever.]]
@@ -364,8 +364,8 @@ Stopping the engines will lead to an interrupted transition. And then -- there w
 					--mus_stop()
 					snd_play 'sfx_radio'
 					p [[-- PEG51,
-board FL510, request for transition.^
--- ...FL510, you are cleared to enter the gates. Good luck!^
+board FL510, requesting permission to depart.^
+-- ...FL510, I authorize the departure. The gate is clear. Bon voyage!^
 -- Confirmed.]];
 					radio_ack = true;
 				elseif here() ^ 'burnout' then
@@ -386,8 +386,8 @@ cutscene {
 	enter = function(s)
 		set_pic 'hyper'
 		if have 'photo' then
-			pn [[You take out a photo of your daughter and clip it to the corner of the window.
-			Then, put your hand on the thrust lever.]];
+			pn [[You pull out a picture of your daughter and mount it in the
+			 corner of the window. Then, you put your hand on the thrust lever.]];
 		else
 			pn [[You put your hand on the thrust lever.]]
 		end
@@ -395,7 +395,7 @@ cutscene {
 	text = function(s, n)
 		local t = {
 		[[You push the lever away to maximum position.]];
-		[[Flashes of hyperspace outside the window come to life...^
+		[[The flashes of hyperspace outside the window come to life...^
 The countdown begins (or continues?) on the dashboard.]];
 		[[25, 24, 23...]],
 		[[10, 9, 8, 7...]],
@@ -444,20 +444,19 @@ room {
 	dsc = [[The cabin of "Frisky" is cramped. The oblique rays of the 51 Peg star
 	penetrate through the narrow windows into the cockpit, illuminating the dashboard.
 	Directly on the course -- transition gates, floating over Dimidius.^^
-	Everything is ready to start the transition. But anyway, you want to take 
+	Everything is ready to start the transition. Anyways, you might want to take 
 	another look at the dashboard.]];
 	out_to = function(s)
-		p [[This is not the time for walking on the ship. You are going to make the transition. And
-		all controls are located in the cockpit.]]
+		p [[This is not the time for walking on the ship. You are going to make the transition. All the instruments are in the control room.]]
 	end;
 	obj = {
 		'space',
 		'panel',
 		Distance {
 			"star|sun|Peg";
-			description = [[It was known for a long time that an exoplanet
+			description = [[It has been known for a long time that an exoplanet
 			similar to the Earth orbits around 51 Peg.
-			And only in 2220 hyperspace gates were opened here.
+			It was only in 2220, that the hyperspace gates were opened here.
 			To the Earth -- 50 light years or 4 transition jumps.
 			120 years of human expansion into deep space...]];
 		};
@@ -482,9 +481,9 @@ Your six-month contract for Dimidius is over, it's time to get home.]];
 			description = function(s)
 				if s:once() then
 					p [[The gates -- this is the entrance to hyperspace. 
-					The gates looks like a 40-meter ring slowly rotating in the void.
-					The 51 Peg gates were opened in 2020. 
-					They became the 12th gates built over the 125-year history of mankind's expansion into deep space.]];
+					The gates looks like a 40-meter ring slowly spinning in the void.
+					The 51 Peg gates were opened in 2220. 
+					They became the 12th gates built over the 125-year history -- of humanity's expansion into deep space.]];
 				else
 					p [[You see flashes of hyperspace through the gates.]];
 				end

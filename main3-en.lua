@@ -1238,7 +1238,7 @@ room {
 		if not disabled 'human' then
 			p (fmt.em [[You see a human figure in a black cloak next to a tree!]])
 		end
-		p [[^^You can go back south..]];
+		p [[^^You can go back to the south.]];
 	end;
 	exit = function(s, t)
 		if t ^ 'planet' then

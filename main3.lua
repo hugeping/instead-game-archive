@@ -1,4 +1,4 @@
---$Name: The Arhcive$
+--$Name: The Archive$
 --$Name(ru): Архив$
 --$Version: 0.9$
 --$Author:Peter Kosyh$

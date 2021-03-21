@@ -1289,7 +1289,7 @@ room {
 		}:attr 'scenery,enterable';
 		door {
 			nam = '#tree';
-			"tree,branch*,leave*";
+			"tree,branch*,leaves*,leaf*";
 			description = function()
 				p [[The tree looks old.
 				Its huge gnarled branches are almost devoid of leaves.]];
@@ -1497,21 +1497,18 @@ room {
 }:attr 'supporter';
 
 room {
-	title = "Дерево";
+	title = "tree";
 	nam = 'tree';
 	trans = false;
 	ff = false;
 	exit = function(s)
 		if s.trans then
-			p ([[Ты выбираешь направление на ]],s.trans:noun(),
+			p ([[You choose the direction to the ]],s.trans:noun(),
 				".")
-			p [[Сделав всего несколько шагов ты вдруг
-	замечаешь, что оказался совсем в другом месте...]];
+			p [[After taking just a few steps, you suddenly found yourself in a completely different place...]];
 			if s:once 'trans' then
-				p [[Твой
-	вестибулярный аппарат сходит с ума, ты спотыкаешься и
-	падаешь. Наконец, головокружение проходит и ты с удивлением
-	осматриваешься вокруг.]]
+				p [[Your are dizzy. You stumble and fall.
+				Finally, the dizziness goes away and you look around in surprise.]]
 			end
 		end
 	end;
@@ -1519,10 +1516,9 @@ room {
 		s.ff = f;
 		s.trans = false
 		if f ^ 'шпиль' and s:once'visit' then
-			p [[Ты поспешил к дереву. Тем временем фигурка
-	человека, которого ты заметил, скрылась за стволом. Когда ты,
-	немного уставший, оказался у дерева, ты никого здесь не
-	обнаружил...]]
+			p [[You hurried to the tree.
+			Meanwhile, the figure of the person you noticed disappeared behind the tree trunk.
+			When you, a little tired, found yourself at the tree, you did not find anyone here...]]
 			disable 'human'
 		end
 	end;
@@ -1548,7 +1544,7 @@ room {
 		return false
 	end;
 	d_to = function(s)
-		p [[Зарыться в землю?]];
+		p [[Bury yourself in the ground?]];
 	end;
 	cant_go = function(s, t)
 		s.trans = _('@'..t)
@@ -1587,53 +1583,49 @@ room {
 		return false
 	end;
 	dsc = function(s)
-		p [[Ты стоишь у старого дерева. Его сухие узловатые ветви
-	почти лишены листьев.]]
+		p [[You are standing by an old tree.
+		Its dry, gnarled branches are almost devoid of leaves.]]
 		if s.ff ^ 'шпиль' then
-			p [[^^Шпиль башни находится на востоке.]];
+			p [[^^The spire of the tower is to the east.]];
 		elseif s.ff ^ 'planet' then
-			p [[^^Твой корабль находится на западе.]];
+			p [[^^Your ship is in the west.]];
 		elseif s.ff ^ 'sea' then
-			p [[^^Море находится на севере.]];
+			p [[^^The sea is in the north.]];
 		elseif s.ff ^ 'rock' then
-			p [[^^Обрыв находится на юге.]];
+			p [[^^The cliff is in the south.]];
 		end
-		p [[В остальных направлениях - равнина.]];
+		p [[In the rest of the directions there is a green plain.]];
 	end;
 	u_to = '#tree';
 	obj = {
 		obj {
 			nam = '#tree';
-			-"дерево,лист*,ветв*,ветк*";
-			before_Touch = [[Кора дерева шершавая. Словно морщины.]];
-			description = [[На дереве почти нет листвы, но
-	оно живо.]];
-			['before_Climb,Enter'] = [[Ты не горишь
-	желанием сломать себе шею.]];
+			"tree,trunk,leaves*,leaf*,brunch*";
+			before_Touch = [[The bark of the tree is rough. Like wrinkles.]];
+			description = [[The tree has almost no leaves, but it is alive.]];
+			['before_Climb,Enter'] = [[You are not eager to break your neck.]];
 		}:attr 'scenery,enterable,supporter';
 		obj {
-			-"равнина";
-			description = [[Ты не видишь ничего
-	примечательного, кроме пустынной равнины.]];
+			"green plane,plane";
+			description = [[You see nothing remarkable except a desolate plain.]];
 		}:attr 'scenery';
 	};
 }
 
 Distance {
 	nam = "clouds";
-	-"облака";
-	description = [[Ты видишь, как внизу проплывают белоснежные облака.]];
+	"clouds,cloud*/plural";
+	description = [[You see snow-white clouds floating below.]];
 }
 
 Distance {
 	nam = "sky3";
-	-"небо";
-	description = [[Бирюзовое небо озаряется переливающимися всем спектром всполохами.]];
+	"sky";
+	description = [[The turquoise sky is illuminated with flashes of iridescent all the spectrum.]];
 	obj = {
 		Distance {
-			-"всполохи|гиперпространство";
-			description = [[Тебя захватывает красота
-	сияния гиперпространства.]];
+			"flashes/plural|hyperspace,radiance";
+			description = [[You are impressed by the beauty of the radiance of hyperspace.]];
 		};
 	}
 }

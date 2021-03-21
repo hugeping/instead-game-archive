@@ -219,7 +219,7 @@ global 'know_bomb' (false)
 
 Careful {
 	nam = 'windows';
-	-"windows|portholes";
+	"windows,portholes/plural";
 	description = function(s)
 		if here().planet then
 			if rain then
@@ -292,7 +292,7 @@ Careful {
 	found_in = { 'ship1', 'burnout' };
 	obj = {
 		obj {
-			-"lever|thrust";
+			"lever,thrust";
 			nam = 'throttle';
 			ff = false;
 			['before_SwitchOn,SwitchOff'] = [[The thrust lever can be pulled or pushed.]];
@@ -491,7 +491,7 @@ Your six-month contract for Dimidius is over, it's time to get home.]];
 			end;
 			obj = {
 				Distance {
-					-"hyperspace|flashes/plural";
+					"hyperspace|flashes/plural";
 					description =
 						[[Hyperspace was discovered in 2095 during experiments on the BSR.
 						It took another 4 years to find a way to synchronize the continuum
@@ -635,7 +635,7 @@ room {
 	obj = {
 		Distance {
 			nam = 'hyper2';
-			-"hyperspace,someth*,strang*|lights/plural|radiance";
+			"hyperspace,someth*,strang*|lights/plural|radiance";
 			description = function(s)
 				if not _'engine'.flame and _'panel'.stop then
 					p [[You see three sparkling lights dancing approaching your ship.
@@ -652,7 +652,7 @@ room {
 			obj = {
 				Distance {
 					nam = '#trinity';
-						-"свет";
+						"light";
 					description = [[A dazzling white light fills the cockpit.]];
 				}:disable();
 			};
@@ -683,7 +683,7 @@ room {
 			desc = [[You can go out to the airlock.]];
 		};
 		Furniture {
-			-"containers,boxes/plural|cargo|equipment";
+			"containers,boxes/plural|cargo|equipment";
 			description = [[These are containers with equipment.]];
 			before_Open = [[The containers are sealed.
 			You shouldn't open them.]];
@@ -692,7 +692,7 @@ room {
 }
 
 door {
-	-"door,airlock door,gateway door";
+	"door,airlock door,gateway door";
 	nam = 'outdoor';
 	['before_Close,Open,Lock,Unlock'] = [[The door is opened and closed with a lever.]];
 	door_to = function(s)
@@ -832,7 +832,7 @@ room {
 			end;
 			door_to = 'storage';
 		}:attr 'static,openable';
-		Prop { -"wall|walls/plural" };
+		Prop { "wall|walls/plural" };
 		obj {
 			"fire extinguisher,extinguisher,balloon,fire bottle";
 			full = true;
@@ -852,7 +852,7 @@ room {
 			desc = [[You can go to the cabin.]];
 		};
 		Path {
-			-"engines/plural|engine|engine room";
+			"engines/plural|engine|engine room";
 			walk_to = 'engine';
 			desc = [[You can go to the engines.]];
 		};
@@ -1127,7 +1127,7 @@ obj {
 	end;
 	obj = {
 		obj {
-			-"ears,spiklets/plural|wheat";
+			"ears,spiklets/plural|wheat";
 			description = [[You see how the ears sway in the gentle wind.]];
 			["before_Eat,Tear,Take,Pull"] = function(s)
 				p [[You plucked a few spikelets and rubbed them in your palms, collecting the grains.]];
@@ -1398,7 +1398,7 @@ With these words the old man got up and walked slowly towards the tree.^^
 }
 
 room {
-	-"cliff,rock,edge*";
+	"cliff,rock,edge*";
 	nam = 'rock';
 	title = "By the rocky cliff";
 	before_Listen = [[You hear the whistle of the wind in the rocks.]];
@@ -2256,7 +2256,7 @@ Minutes pass, the platform slows down and now -- you find yourself at the top of
 			end;
 		}:attr 'scenery,container,open,enterable';
 		obj {
-			-"рельс/мр";
+			"rail";
 			nam = '#rail';
 			description = [[A toothed rail leads up from the shaft.
 			You lift your head and see an endless series of bulkheads.]];

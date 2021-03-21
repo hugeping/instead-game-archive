@@ -960,7 +960,7 @@ room {
 		}:attr 'static,concealed';
 		obj {
 			nam = 'осколки';
-			"shards,debris/plural";
+			"shards,fragments,debris/plural";
 			after_Smell = [[It smells strange.]];
 			after_Touch = [[The edges are fused. Doesn't look like duralumin.]];
 			description = function(s)
@@ -1632,38 +1632,32 @@ Distance {
 global 'bomb_cancel' (false)
 cutscene {
 	nam = 'bomb_call';
-	title = "звонок";
+	title = "the phone call";
 	enter = function(s)
 		mus_stop()
 	end;
 	text = function(s, n)
 		local t = {
-		[[Где-то в закоулках подсознания у тебя возникла
-	идея. Боясь спугнуть странную, но захватывающую мысль, ты
-	схватил трубку и набрал номер.]];
-		[[-- Они не должны были так делать! Они не должны были
-	так со мной поступать! -- резкий, незнакомый голос в трубке напугал тебя.]];
-		[[-- Хуан? Это ты?]];
-		[[-- Черт! Кто это? Это ваши шуточки? Убирайся из
-	моей башки!]];
-		[[-- Хуан, слушай меня внимательно! Слушай меня,
-	дружище!]];
-		[[-- Кто ты, чёрт тебя подери?]];
-		[[-- Хуан, ты уже полетел на Димидий?]];
-		[[-- Нет! Откуда ты знаешь, что я туда собрался? Кто
-	ты?]];
-		[[-- Не перебивай! Слушай внимательно! На Димидии ты
-	устроишься на работу техником и попытаешься совершить теракт,
-	подложив бомбу на "Резвый". Теракт... не удастся. Не делай этого, Хуан! Это
-	раздавит тебя. Ты убъёшь пилота корабля зря, но ты ведь не убийца!]];
-		[[-- Откуда ты это знаешь? Кто ты?]];
-		[[-- Считай меня своим внутренним голосом. Я буду
-	присматривать за тобой.]];
-		[[-- Пошел к чёрту! Я сошёл с ума?]];
-		[[-- Если всё-таки не послушаешь меня. В кабине пилота
-	ты увидишь фотографию девочки. Это Лиза -- дочь пилота. Ты
-	понял? Не забывай.]];
-		[[-- Вон! Вон из моей башки!]];
+		[[Somewhere in the back streets of your subconscious, you have an idea.
+		Afraid to scare off a strange but exciting thought, you grabbed the phone and dialed.]];
+		[[-- They shouldn't have done that! They shouldn't have done this to me!  -- a harsh voice in the receiver frightened you.]];
+		[[-- Juan? Is that you?]];
+		[[-- Heck! Who is it? Are these your jokes? Get out of my head!]];
+		[[-- Juan, listen to me carefully! Listen to me, buddy!]];
+		[[-- Who the hell are you?]];
+		[[-- Juan, have you already flown to Dimidius?]];
+		[[-- Not! How do you know I'm going there? Who are you?]];
+		[[-- Do not interrupt! Listen carefully!
+		On Dimidius, you get a job as a technician and try to commit a terrorist attack by planting a bomb on "Frisky".
+		The attack ... will fail. Don't do this, Juan! It will crush you.
+		You will kill the pilot of the ship in vain, but you are not a killer!]];
+		[[-- How do you know? Who are you?]];
+		[[-- Consider me your inner voice. I will look after you.]];
+		[[-- Go to hell! I've gone mad?]];
+		[[-- If you still don’t listen to me.
+		In the cockpit you will see a photograph of a girl.
+		This is Lisa, the pilot's daughter. Do you understand? Don't forget.]];
+		[[-- Get out of my head!]];
 		};
 		if n == 2 then
 			snd_stop()
@@ -1672,14 +1666,11 @@ cutscene {
 		return t[n]
 	end;
 	exit = function(s)
-		p [[Ты кладёшь трубку. Интересно, послушается ли тебя
-	Хуан?^^Что же хранит в себе башня? Записанные события давно
-	минувших дней, которые можно проигрывать словно старые пластинки? А может
-	быть, башня -- приёмник и всё действительно происходит в
-	реальности, только в другом времени?]];
+		p [[You hang up. Are you wondering if Juan will obey you?^^
+		What is stored in the tower? Recorded events of bygone days that can be played like old records?
+		Or maybe the tower is a receiver and everything really happens in reality, only in a different time?]];
 		if have 'осколки' then
-			p [[^^Вдруг, ты почувствовал, что у тебя с собой
-	больше нет осколков бомбы!]];
+			p [[^^Suddenly, you felt that you no longer have the shards of the bomb with you!]];
 		end
 		remove 'осколки'
 		_"огнетушитель".full = true
@@ -1690,19 +1681,18 @@ cutscene {
 
 cutscene {
 	nam = 'bomb_call2';
-	title = "звонок";
+	title = "the phone call";
 	enter = function(s)
 		mus_stop()
 	end;
 	text = function(s, n)
 		local t = {
-		[[Точно не понимая что именно происходит, ты набираешь номер...]];
-		[[-- Они не должны были так делать! Они не должны были
-	так со мной поступать! -- резкий, незнакомый голос в трубке напугал тебя.]];
-		[[-- Алло...]];
-		[[-- Черт! Этого ещё не хватало! Кто это?]];
-		[[-- Я...]];
-		[[-- Пошёл вон из моей головы, убирайся! Слышишь?]];
+		[[Not understanding exactly what is happening, you dial the number...]];
+		[[-- They shouldn't have done that! They shouldn't have done this to me!  -- a harsh unfimiliar voice in the receiver frightened you.]];
+		[[-- Hello...]];
+		[[-- Heck! Only this was not enough for me. Who is it?]];
+		[[-- I...]];
+		[[-- Get out of my head, get out! Do you hear?]];
 		};
 		if n == 2 then
 			snd_stop()
@@ -1711,32 +1701,32 @@ cutscene {
 		return t[n]
 	end;
 	exit = function(s)
-		p [[Ты поспешно кладёшь трубку.]];
+		p [[You hang up hastily.]];
 		mus_play 'bgm_plains'
 	end;
 }
 
 cutscene {
 	nam = 'photo_call';
-	title = "звонок";
+	title = "the phone call";
 	enter = function(s)
 		mus_stop()
 	end;
 	text = function(s, n)
 		local t = {
-		[[Ты взял трубку и набрал номер. Отчаяние и надежда на
-	чудо сменяли друг друга, пока...]];
-		[[-- Пап, это ты?]];
-		[[-- Да, это я! Лиза? Ты... Где ты?]];
-		[[-- Дома, конечно же. А я
-	разговариваю с тобой в воображении?]];
-		[[-- Наверное, я ... не знаю точно. Лиза... Послушай, сколько
-	тебе лет?]];
-		[[-- Почти десять! Ты что, забыл? Ты когда вернёшься?]];
-		[[-- Скоро... Передай маме, что я вас люблю.]];
-                [[-- Ты уже звонил нам по обычной связи, но я
-	передам. Ну всё, мы идём гулять. Пока!]];
-                [[-- Да, до встречи!]];
+		[[You picked up the phone and dialed the number.
+		Despair and hope for a miracle replaced each other until...]];
+		[[-- Dad, is that you?]];
+		[[-- Yes it's me! Lisa? Are you ... Where are you?]];
+		[[-- At home, of course.
+		Am I talking to you in my imagination?]];
+		[[-- I guess I ... don't know for sure.
+		Lisa ... Listen, how old are you?]];
+		[[-- Almost ten! Have you forgotten? When are you coming back?]];
+		[[-- Soon... Tell your mom that I love you both.]];
+        [[-- You've already called us on the regular line, but I'll tell you.
+        Ok, we're going for a walk.]];
+        [[-- Yes, see you!]];
 		};
 		if n == 2 then
 			snd_stop()
@@ -1745,7 +1735,7 @@ cutscene {
 		return t[n]
 	end;
 	exit = function(s)
-		p [[Взволнованный, ты кладёшь трубку. Это была Лиза! 10 лет назад!]];
+		p [[Excited, you hang up. It was Lisa! 10 years ago!]];
 		mus_play 'bgm_plains'
 	end;
 }

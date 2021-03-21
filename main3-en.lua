@@ -1741,19 +1741,18 @@ cutscene {
 }
 
 room {
-	-"комната";
-	title = "Смотровая комната";
+	"room";
+	title = "observation room";
 	nam = "top";
 	before_Walk = function(s, to)
 		if to ^ '@u_to' then
-			p [[Рельс заканчивается здесь.]]
+			p [[The rail ends here.]]
 			return
 		elseif to ^ '@d_to' then
 			if not pl:inside'platform' then
 				move(pl, 'platform')
 			end
-			p [[Ты нажимаешь на кнопку и платформа,
-с неожиданно высоким ускорением, начинает свой спуск.]]
+			p [[You press a button and the platform, with unexpectedly high acceleration, begins its descent.]]
 			snd_play 'sfx_platform'
 			move('platform', 'intower')
 			return
@@ -1765,15 +1764,15 @@ room {
 
 		if w == '7220342721' then --photo
 			if visited 'photo_call' then
-				p [[У тебя не хватает духу ещё раз
-	звонить дочери в прошлое. У неё всё хорошо, и это главное.]];
+				p [[ou don’t have the heart to call your daughter back in the past.
+				She is doing well, and this is all you need to know.]];
 			else
 				snd_play 'sfx_phone_call_loop'
 				walk 'photo_call'
 			end
 		elseif w == '9333451239' then -- осколки
 			if visited 'bomb_call' then
-				p [[Не стоит беспокоить бедного Хуана.]];
+				p [[Poor Juan is not to be disturbed.]];
 			else
 				snd_play 'sfx_phone_call_loop'
 				if know_bomb then
@@ -1787,54 +1786,51 @@ room {
 			return false
 		else
 			snd_play 'sfx_phone_wrong_number'
-			p [[В трубке раздался женский голос: "Объект с таким идентификатором не найден в картотеке."]]
+			p [[A woman's voice came over the phone: "An object with this identifier was not found in the file cabinet."]]
 			return
 		end
 	end;
 	out_to = 'balk';
-	dsc = [[Ты находишься в небольшой круглой комнате, залитой
-	дневным светом. Вдоль всего периметра стен расположены
-	окна. На стене закреплён старинный телефон.^^Ты можешь выйти на смотровую площадку.]];
+	dsc = [[You are in a small circular room filled with daylight.
+	Windows are located along the entire perimeter of the walls.
+	An old telephone is attached to the wall.^^You can go to the observation deck.]];
 	obj = {
 		obj {
-			-"телефон,трубк*";
-			description = [[Антиквариат. Стационарный
-	телефон. В древности такие стояли в телефонных будках. Ты
-	можешь попробовать {$fmt em|набрать <номер>}.]]
+			"telephone,phone,receiver";
+			description = [[Antiques. Landline phone.
+			In ancient times, these were in telephone booths.
+			You can try {$fmt em|dial the <number>}.]]
 		}:attr 'static,concealed';
-		Prop { -"стена" };
+		Prop { "wall,wall*" };
 		Careful {
-			-"окна";
-			description = [[За окнами ты видишь смотровую площадку.]];
+			"window/plural";
+			description = [[Outside the windows you see an observation deck.]];
 		};
 		Path {
-			-"площадка,смотровая площадка,смотровая";
+			"deck,observation deck,observation";
 			walk_to = 'balk';
-			desc = [[Ты можешь выйти на смотровую площадку.]];
+			desc = [[You can go to the observation deck.]];
 		};
 		obj {
-			-"платформа";
+			"platform";
 			nam = 'platform';
-			inside_dsc = "Ты стоишь на платформе. Внутри платформы ты видишь кнопки.";
-			description = [[Платформа перемещается по
-рельсу, уходящему вертикально вверх и вниз.]];
+			inside_dsc = "You are standing on the platform. On the platform, you see buttons.";
+			description = [[The platform moves along a rail leading vertically up and down.]];
 			after_LetIn = function(s, w)
 				if w == pl then
-					p [[Ты заходишь на
-платформу и осматриваешься. Управление предельно простое, здесь всего
-две кнопки. Теперь ты можешь {$fmt em|ехать вверх или вниз}.]]
+					p [[You go on the platform and look around.
+					The controls are extremely simple, there are only two buttons.
+					Now you can {$fmt em|go up or down}.]]
 					return
 				end
 				return false
 			end;
 			obj = {
 				obj {
-					-"кнопки";
-					description = [[Ты можешь
-{$fmt em|ехать вверх или вниз}.]];
+					"buttons/plural|button";
+					description = [[You can {$fmt em|go up or down}.]];
 					['before_Push,Touch'] =
-						[[Просто {$fmt em|вверх}
-или {$fmt em|вниз}?]];
+						[[Just {$fmt em|up} or {$fmt em|down}?]];
 				}:attr 'static,concealed';
 			};
 		}:attr 'supporter,open,enterable,static';
@@ -1842,28 +1838,24 @@ room {
 }
 room {
 	nam = "balk";
-	title = "Смотровая площадка";
+	title = "observation deck";
 	out_to = 'top';
 	in_to = 'top';
-	before_Listen = [[Ветер завывает в решетчатой конструкции
-	смотровой площадки.]];
-	dsc = [[Всё вокруг заполняет глубокое бирюзовое небо, освещаемое
-	спектральными всполохами. Под ногами -- белоснежные облака,
-	проплывающие над лоскутным одеялом полей. А на горизонте ты видишь шпили
-	других башен!^^Ты можешь уйти со смотровой площадки.]];
+	before_Listen = [[The wind howls in the lattice structure of the observation deck.]];
+	dsc = [[Everything around fills the deep turquoise sky, illuminated by spectral flashes.
+	Underfoot are snow-white clouds floating above the patchwork quilt of the fields.
+	On the horizon you see the spiers of other towers!^^You can leave the observation deck.]];
 	obj = {
 		'clouds';
 		'sky3';
 		Distance {
-			-"горизонт|шпили|башни";
-			description = [[Ты видишь тонкие шпили башен,
-	пронзающие белоснежные облака. Ты обошел смотровую площадку и
-	насчитал 5 таких шпилей. Но сколько их всего?]]
+			"horizon|spiers,towers/plural";
+			description = [[You see the thin spiers of the towers piercing the snow-white clouds.
+			You walked around the observation deck and counted 5 such spiers. But how many more can there be?]]
 		};
 		Distance {
-			-"планета,земля|поля";
-			description = [[Как же далеко башня
-	возвышается над поверхностью?]];
+			"ground,surface,planet,patchwork*,quilt*|fields/plural";
+			description = [[How far does the tower rise above the surface?]];
 		};
 	};
 }:attr'supporter';
@@ -1885,8 +1877,8 @@ obj {
 	end;
 }
 room {
-	-"комната";
-	title = "Компьютерная комната";
+	"room";
+	title = "computer room";
 	enter = function(s, f)
 		if f ^ 'intower' then
 			snd_play ('sfx_computer_ambience_loop', true)
@@ -1894,8 +1886,7 @@ room {
 			set_pic 'comp'
 		end
 		if not disabled 'crash' then
-			p [[{$char|^^}{$fmt em|Спустившись в комнату, ты с ужасом обнаружил,
-что странный компьютер снова стоит на проклятом столе!}]];
+			p [[{$char|^^}{$fmt em|Going down to the room, you were horrified to find that a strange computer is again on the damn table!}]];
 			disable 'crash'
 			enable '#chair'
 			enable 'table'
@@ -1908,23 +1899,22 @@ room {
 		end
 	end;
 	dsc = function()
-		p [[Ты находишься в полутёмной комнате.]]
+		p [[You are in a dim room.]]
 		if disabled 'crash' then
-			p [[Единственный
-источник света здесь -- включённый компьютер. Компьютер стоит на
-столе. Рядом со столом стоит кресло.]];
+			p [[The only light source here is the turned on computer.
+			The computer is on the table. There is a armchair next to the table.]];
 		else
-			p [[В комнате валяются обломки мебели и компьютера.]]
+			p [[There are fragments of furniture and computer scattered in the room.]]
 		end
 	end;
 	nam = "under";
 	before_Attack = function(s, w)
 		if pl:inside '#chair' then
-			p [[Может, сначала хотя бы с кресла встать?]];
+			p [[Maybe at least get up from the chair first?]];
 			return
 		end
 		if not disabled 'crash' then
-			p [[Ты уже сделал это.]]
+			p [[You've already done it.]]
 			return
 		end
 		local list = {}
@@ -1936,21 +1926,19 @@ room {
 		for _, v in ipairs(list) do
 			move(v, here())
 		end
-		p [[В порыве внезапной ярости ты начинаешь крушить всё
-вокруг.]]
+		p [[In a fit of sudden rage, you begin to destroy everything around you.]]
 		if have 'огнетушитель' then
-			p [[Тут очень пригодился огнетушитель, который
-ты зачем-то таскал всё это время с собой.]]
+			p [[Here the fire extinguisher, which for some reason you carried with you all this time, came in handy.]]
 		end
-		p [[Через минуту -- всё было кончено.]]
+		p [[In a minute, it was all over.]]
 		disable '#chair'
 		disable 'table'
 		enable 'crash'
 	end;
-	before_Listen  = [[Ты слышишь едва уловимое гудение.]];
+	before_Listen  = [[You hear a subtle hum.]];
 	before_Walk = function(s, to)
 		if to ^ '@d_to' then
-			p [[Рельс заканчивается здесь.]]
+			p [[The rail ends here.]]
 			return
 		elseif to ^ '@u_to' then
 			if not pl:inside'platform' then
@@ -1964,18 +1952,17 @@ room {
 	end;
 	obj = {
 		Furniture {
-			-"кресло";
+			"chair,armchair";
 			nam = "#chair";
-			title = "в кресле";
+			title = "in the armchair";
 			description = function()
-				p [[Кресло выглядит
-старым. Сделано из дерева.]];
+				p [[The chair looks old. Made from wood.]];
 				return false
 			end;
-			inside_dsc = [[Ты сидишь в кресле.]];
+			inside_dsc = [[You are sitting in a chair.]];
 			after_LetIn = function(s, w)
 				if w == pl then
-					p [[Ты садишься в кресло.]]
+					p [[You sit down in a chair.]]
 					return
 				end
 				return false
@@ -1983,48 +1970,44 @@ room {
 		}:attr 'concealed,supporter,enterable';
 		Furniture {
 			nam = "table";
-			-"стол,поверхност*";
+			"table,desk,surface*";
 			description = function(s)
-				p [[Матовая поверхность стола отражает
-свечение монитора.]];
+				p [[The matte surface of the desk reflects the glow of the monitor.]];
 				return false
 			end;
 			obj = {
 				Furniture {
 					nam = "comp";
-					-"компьютер";
-					description = [[Это какая-то
-рухлядь. Пузатый монитор мерцает в темноте зелёным. Большая клавиатура
-является частью компьютера.]];
+					"computer";
+					description = [[This is some kind of ancient junk.
+					The pot-bellied monitor flickers green in the dark.
+					The big keyboard is part of the computer.]];
 					["before_Search,LookAt"] =
 						function(s)
 							return check_sit()
 						end;
-					before_SwitchOff = [[Ты не
-видишь никакого выключателя. Да и проводов не видно...]];
+					before_SwitchOff = [[You don't see any switch.
+					And no wires here...]];
 					obj = {
 					Furniture {
 						nam = '#keyboard';
-						-"клавиатура|клавиши/мн,жр";
+						"keyboard|keys,keycaps/plural";
 						description =
-							[[На
-клавиатуре высокие квадратные клавиши.]];
+							[[The keyboard has tall square keys.]];
 						['before_Push,Touch,Take'] =
 							function(s)
 								check_sit
-									[[В
-кресле будет удобнее.]]
+									[[Doing this in the chair will be more comfortable.]]
 							end
 						};
 						Furniture {
-							-"монитор";
+							"monitor,screen";
 							before_SwitchOff
 								=
-								[[Ты не замечаешь никакой кнопки.]];
+								[[You don't notice any switch button.]];
 							description =
 								function()
-									check_sit [[Наверное,
-он вреден для глаз.]];
+									check_sit [[Probably bad for the eyes.]];
 									end
 						}:attr'switchable,on';
 					};
@@ -2033,7 +2016,7 @@ room {
 		}:attr 'concealed,supporter';
 		Prop {
 			nam = "crash";
-			-"обломки|хлам";
+			"fragments,chunks,pieces/plural";
 		}:disable();
 	};
 }
@@ -2046,13 +2029,11 @@ local ids = {
 	['wheat'] = 7691;
 }
 function search_stat(total, n)
-	p (fmt.b([[Всего ]] .. tostring(total)..[[ совпадений.]]))
+	p (fmt.b([[Всего ]] .. tostring(total)..[[ match(es).]]))
 	if n == 1 then
-		pn (fmt.b([[Показано ]] .. tostring(n) ..[[
- важное.]]))
+		pn (fmt.b([[One important message shown.]]))
 	else
-		pn (fmt.b([[Показано ]] .. tostring(n) ..[[
-важных.]]))
+		pn (fmt.b(tostring(n) ..[[ important messages shown.]]))
 	end
 	pn()
 end
@@ -2060,94 +2041,89 @@ room {
 	title = false;
 	nam = "computer";
 	OnError = function(s)
-		p [[Синтаксическая ошибка. Для помощи введите: {$fmt b|помощь}.]];
+		p [[Syntax error. For help, enter: {$fmt b|help}.]];
 	end;
 	out_to = "under";
-	default_Verb = "осмотреть";
+	default_Verb = "examine";
 	total = 32174;
 	dsc = function(s)
-		p [[ДОБРО ПОЖАЛОВАТЬ В "АРХИВ"^^]];
-		pn ([[Всего карточек: ]], s.total, "* E23")
+		p [[WELCOME TO THE "ARCHIVE"^^]];
+		pn ([[Total cards: ]], s.total, "* E23")
 		s.total = s.total + rnd(15);
-		p [[Выбран язык: {$fmt
-em|Русский}^^Для помощи введите: {$fmt b|помощь}.]];
+		p [[Language selected: {$fmt
+em|English}^^For help, enter: {$fmt b|help}.]];
 	end;
 	Look = function()
 		pl:need_scene(true)
 	end;
 	Help = [[^^
-{$fmt c|СИСТЕМА "АРХИВ" v1.1}^^
-{$fmt b|выход} {$fmt tab,50%}-- выйти^
-{$fmt b|искать <идентификатор>} {$fmt tab,50%}-- поиск по картотеке^
-{$fmt b|скан} {$fmt tab,50%}-- начать сканирование артефакта.]];
+{$fmt c|THE "ARCHIVE" SYSTEM v1.1}^^
+{$fmt b|exit} {$fmt tab,50%}-- exit^
+{$fmt b|search <id>} {$fmt tab,50%}-- file search^
+{$fmt b|scan} {$fmt tab,50%}-- scan artifact.]];
 	Scan = function(s)
 		snd_play 'sfx_scan'
 		if not instead.tiny then
 			fading.set { 'null', delay = 30, max = 60, now = true }
 		end
-		pn [[{$fmt b|Предметы на столе:}]]
+		pn [[{$fmt b|Items on the table:}]]
 		for k, v in ipairs(objs 'table') do
 			pn (v:noun(), '{$fmt tab,30%|}',' -- ',
-			   ids[v.nam] or [[неизвестный идентификатор]])
+			   ids[v.nam] or [[unknown id]])
 		end
 	end;
 	Search = function(s, w)
 		if w == '17' then -- comp
 			search_stat(1, 1)
-			p ([[...Хранитель архива поставил компьютер на стол
-и включил его...]])
+			p ([[...The Archivist put the computer on the table and turned it on...]])
 		elseif w == '8703627531' then -- огнетушитель
 			search_stat(213, 1)
-			p [[...Ты яростно борешься с пламенем. Наконец, пожар потушен!...]]
+			p [[...You fight the flames fiercely. Finally, the fire is extinguished!...]]
 		elseif w == '7691' then -- wheat
 			search_stat(5, 1)
-			p [[...Ты сорвал несколько колосков и
-	растёр их в ладонях, собрав зёрна...]];
+			p [[...You plucked a few spikelets and rubbed them in your palms, collecting the grains...]];
 		elseif w == '9236123121' then -- suit
 			search_stat(507, 1)
-			p [[..Не без
-опасения ты снимаешь скафандр. Вдыхаешь воздух полной
-грудью. Кажется, всё в порядке!..]]
+			p [[...Not without fear you take off your spacesuit. You take a deep breath. All seems to be alright...]]
 		elseif w == '7220342721' then
 			search_stat(173, 1)
-			p [[... -- Пап, а ты когда вернёшься? -- Лиза
-крутилась в кресле пилота, разглядывая приборы.^
--- Через месяц буду дома. А пока меня нет, слушайся маму. Хорошо?^
--- Я всегда слушаюсь маму!^
--- Я знаю, но все-таки...^
--- О, а это моя фотография! Зачем она тут?^
--- Ну, просто я тебя очень люблю...]]
+			p [[... -- Dad, when are you coming back? -- Lisa is spinning in the pilot's chair, looking the dashboard.^
+-- I'll be home in a month. Until that, listen to your mom. Okay?^
+-- I always listen to my mother!^
+-- I know, but anyway...^
+-- Oh, and this is my photo! Why is it here?^
+-- Eh, well, I just love you very much...]]
 		elseif w == '9333451239' then
 			search_stat(12, 2)
 			if bomb_cancel then
-			p [[... Хуан вскрыл крышку контрольного блока и
-заложил бомбу глубоко внутрь. Потом аккуратно закрепил крышку на
-месте. ^^Ему очень не нравилось то, что он был вынужден делать. Особенно, после того
-как побывал в рубке и увидел фото. В тот момент, уже забытые воспоминания о странном голосе
-в голове нахлынули на него с новой силой.]];
-			p [[^^... Царапая руки и чертыхаясь Хуан вытаскивал
-бомбу обратно из контрольного блока. Наконец, бомба была извлечена и Хуан положил её в сумку с инструментом.^^Хуан -- не
-убийца!]];
+			p [[... Juan opened the cover of the control unit and planted the bomb deep inside.
+			Then he carefully secured the cover in place.^^
+			He really didn't like what he was forced to do.
+			Especially after he visited the cockpit and saw the photo.
+			At that moment, the already forgotten memories of the strange voice in his head flooded over him with renewed vigor.]];
+			p [[^^...Scratching his hands and cursing, Juan pulled the bomb back out of the control block.
+			Finally, the bomb was retrieved and Juan put it in the tool bag.
+			^^Juan is not a killer!]];
 			else
-			p [[... Хуан вскрыл крышку контрольного блока и
-заложил бомбу глубоко внутрь. Потом аккуратно закрепил крышку на
-месте. ^^Ему не очень нравилось то, что он был вынужден делать. Особенно, после того
-как побывал в рубке и увидел фото. Но он старался гнать
-подобные мысли.^^Когда ворота будут взорваны, начало борьбы против
-угнетателей будет положено! Димидий должен стать свободным, новым, счастливым
-миром! Пусть ради новой жизни он станет убийцей, но на себя Хуану -- наплевать!...]];
-			p [[^^... Когда Хуан из новостей узнал что бомба
-взорвалась позже, уже после входа корабля в гиперпространство, за одну
-секунду его мир был разрушен... Он убийца, без оправданий. Он, словно
-мёртвый, шёл по улице не разбирая пути...]];
+			p [[...Juan opened the cover of the control unit and planted the bomb deep inside.
+			Then he carefully secured the cover in place.^^
+			He didn't like what he was forced to do.
+			Especially after he visited the cockpit and saw the photo.
+			But he tried to get such thoughts out of his head.^^
+			When the gates are blown up, the fight against the oppressors will begin!
+			Dimidius must become a free, new, happy world!
+			Let him become a murderer for the sake of a new life, but Juan doesn't give a damn about himself!]];
+
+			p [[^^...When Juan learned from the news that the bomb exploded later, after the ship entered hyperspace, in one second his world was destroyed...
+			He's a killer, no excuses. 
+			He, as if dead, walked along the street without making out the way...]];
 			know_bomb = true
 			end
 		else
 			if tonumber(w) then
-				p [[Информация в картотеке для данного
-объекта отсутствует.]]
+				p [[There is no information in the card index for this object.]]
 			else
-				p [[Неверный идентификатор.]];
+				p [[Wrong id.]];
 			end
 		end
 	end;
@@ -2161,19 +2137,19 @@ em|Русский}^^Для помощи введите: {$fmt b|помощь}.]]
 	end;
 }
 
-Verb ({"пом/ощь", "Help" }, _'computer')
-Verb ({"вых/од,выйти,встать", "ExitComp" }, _'computer')
-Verb ({"скан/ировать", "Scan" }, _'computer')
-Verb ({"поиск,иск/ать", "* :Search" }, _'computer')
-Verb ({"осм/отреть", "Look" }, _'computer')
+Verb ({"help", "Help" }, _'computer')
+Verb ({"exit,quit", "ExitComp" }, _'computer')
+Verb ({"scan", "Scan" }, _'computer')
+Verb ({"search,find,lookup", "* :Search" }, _'computer')
+Verb ({"examine,x", "Look" }, _'computer')
 Verb {
 	"push,move,press,shift",
 	"{noun} forward: Push",
 }
 
 room {
-	-"комната";
-	title = "В башне";
+	"room";
+	title = "in the tower";
 	nam = "intower";
 	out_to = "#pass";
 	old_pic = false;
@@ -2188,10 +2164,9 @@ room {
 		--	set_pic(s.old_pic)
 		end
 	end;
-	dsc = [[Ты находишься внутри просторной комнаты цилиндрической
-формы. В полу комнаты ты видишь круглую огороженную шахту, сквозь центр которой
-проходит рельс. В стене есть проход, сквозь который ты видишь зелёное
-поле и одинокое дерево на нём.]];
+	dsc = [[You are inside a spacious cylindrical room.
+	In the floor of the room, you see a round fenced shaft with a rail running through the center.
+	There is a passage in the wall through which you see a green field and a lonely tree on it.]];
 	compass_look = function(s, t)
 		if t == 'd_to' then
 			mp:xaction("Exam", _'#hole')
@@ -2212,32 +2187,26 @@ room {
 			move(pl, 'platform')
 		end
 		if to ^ '@u_to' then
-			p [[Ты нажимаешь на кнопку и платформа,
-с неожиданно высоким ускорением, начинает свой подъём.]]
+			p [[You press a button and the platform, with an unexpectedly high acceleration, begins its ascent.]]
 			set_pic 'tower'
 			if s:once 'up' then
-				p [[^^
-Перед твоими глазами мелькают этажи: 10, 50, 100.. Сколько их всего? Ты пытаешься
-рассмотреть хоть что-то и, кажется, видишь полки с
-книгами.^^
-Книги, бесконечная череда книжных полок! Потом скорость
-возрастает настолько, что ты перестаешь что-либо различать... Проходят
-минуты, платформа замедляет свой ход и вот -- ты оказываешься на вершине
-башни.]];
+				p [[^^Floors flash before your eyes: 10, 50, 100...
+				How many are there in total? You try to see at least something and you seem to see shelves of books.^^
+Books, an endless row of bookshelves!
+Then the speed increases so much that you cease to distinguish anything...
+Minutes pass, the platform slows down and now -- you find yourself at the top of the tower.]];
 			end
 			snd_play 'sfx_platform'
 			move('platform', 'top')
 			return
 		elseif to ^ '@d_to' then
-			p [[Ты нажимаешь на кнопку и платформа,
-с неожиданно высоким ускорением, начинает свой спуск.]]
+			p [[You press the button and the platform, with unexpectedly high acceleration, begins its descent.]]
 
 			if s:once 'down' then
-				p [[^^В шахте темно, и ты не видишь
-что находится на этажах, которые ты пролетаешь так быстро. Ты видишь
-лишь тысячи разноцветных огоньков. Словно светлячки, они проносятся
-мимо тебя. Наконец, платформа замедляет свой ход и ты оказываешься в
-полутёмной комнате.]]
+				p [[^^It's dark in the shaft, and you can't see what is on the floors that you fly so quickly.
+				You only see thousands of colored lights.
+				Like fireflies, they rush past you.
+				Finally, the platform slows down and you find yourself in a dim room.]]
 			end
 			move('platform', 'under')
 			snd_play 'sfx_platform'
@@ -2248,52 +2217,49 @@ room {
 	obj = {
 		door {
 			nam = '#pass';
-			-"проход,дерев*,поле*";
+			"passage,tree*,field*";
 			door_to = 'шпиль';
-			description = [[Ты понимаешь, что оказался
-внутри башни.]];
+			description = [[You realize that you are inside the tower.]];
 		}:attr 'scenery,open';
 		obj {
-			-"рычаг";
-			description = [[Рычаг установлен рядом с
-шахтой.]];
+			"lever";
+			description = [[The lever is installed next to the shaft.]];
 			before_Push = function(s)
-				p [[Ничего не происходит.]]
+				p [[Nothing happens.]]
 			end;
 			before_Pull = function(s)
 				if not seen 'platform' then
-					p [[Ты дёргаешь за рычаг и
-сразу же слышишь нарастающий шум откуда-то сверху. Через
-несколько минут в комнату по рельсу спускается платформа.]]
+					p [[You pull the lever and immediately hear a growing noise from somewhere above.
+					A few minutes later, a platform descends into the room along the rail.]]
 					snd_play 'sfx_platform'
 					move('platform', here())
 				else
-					p [[Ничего не происходит.]]
+					p [[Nothing happens.]]
 				end
 			end;
 		}:attr'static';
 		obj {
-			-"шахта,дыра,загражд*|отверстие";
+			"shaft,hole,fence,barrier,bulkhead*";
 			nam = '#hole';
-			description = [[Шахта огорожена невысоким заграждением. Ты подходишь к краю и
-смотришь вниз, но видишь только бесконечную череду перегородок.]];
+			description = [[The shaft is fenced off with a low barrier.
+			You come to the edge and look down, but all you see is an endless series of bulkheads.]];
 			before_LetIn = function(s, w)
 				if w == pl then
-					p [[Шахта глубокая!]]
+					p [[The shaft is deep!]]
 					return
 				end
 				return false
 			end;
 			after_LetIn = function(s, w)
-				p ([[Ты выбрасываешь ]], w:noun(), " в шахту.")
+				p ([[You throw ]], w:the_noun(), " into the shaft.")
 				move(w, 'under')
 			end;
 		}:attr 'scenery,container,open,enterable';
 		obj {
 			-"рельс/мр";
 			nam = '#rail';
-			description = [[Зубчатый рельс ведёт
-из шахты наверх. Ты задираешь голову и видишь бесконечную череду переборок.]];
+			description = [[A toothed rail leads up from the shaft.
+			You lift your head and see an endless series of bulkheads.]];
 		}:attr'static,concealed';
 	};
 }

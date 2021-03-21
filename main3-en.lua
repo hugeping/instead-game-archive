@@ -438,8 +438,8 @@ And if you want to write your own story,^welcome to:^
 }
 
 room {
-	"cabin|cockpit|Frisky|ship|spaceship";
-	title = "cockpit";
+	"cabin|control room,room|cockpit|Frisky|ship|spaceship";
+	title = "control room";
 	nam = 'ship1';
 	dsc = [[The cabin of "Frisky" is cramped. The oblique rays of the 51 Peg star
 	penetrate through the narrow windows into the cockpit, illuminating the dashboard.
@@ -547,8 +547,8 @@ function start_ill()
 	]]--
 end
 room {
-	"cabin|cockpit|Frisky|ship|spaceship";
-	title = "cockpit";
+	"cabin|control room|room|cockpit|Frisky|ship|spaceship";
+	title = "control room";
 	nam = 'burnout';
 	planet = false;
 	transfer = 0;
@@ -846,7 +846,7 @@ room {
 			end;
 		};
 		Path {
-			"cabin,cockpit";
+			"cabin,cockpit,control room";
 			walk_to = 'burnout';
 			desc = [[You can go to the cabin.]];
 		};

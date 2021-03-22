@@ -1,5 +1,5 @@
 --$Name: Архив$
---$Version: 0.9$
+--$Version: 1.0$
 --$Author:Пётр Косых$
 
 require "fmt"
@@ -462,10 +462,10 @@ cutscene {
 Спасибо вам за прохождение этой небольшой игры!^
 Если вам понравилось, вы можете найти похожие игры на:^^
 {$link|http://instead-games.ru}^
-{$link|https://metaparser.syscall.ru}^
+{$link|https://parser.hugeping.ru}^
 {$link|https://instead.itch.io}^^
 А если хотите написать свою историю,^добро пожаловать на:^
-{$link|https://instead3.syscall.ru}^^
+{$link|https://instead.hugeping.ru}^^
 {$fmt b|КОНЕЦ}
 ]];
 }
@@ -1488,7 +1488,7 @@ cutscene {
 }
 
 room {
-	-"скала,вид*,край*,обрыв*";
+	-"скала,край*,обрыв*";
 	nam = 'rock';
 	title = "У скалистого обрыва";
 	before_Listen = [[Ты слышишь свист ветра в скалах.]];
@@ -1581,7 +1581,7 @@ room {
 			door_to = 'tree';
 		}:attr 'scenery,open';
 		Distance {
-			-"вид|скалы,обломк*";
+			-"вид|скалы,обломк*/мн";
 			nam = "#view";
 			description = [[Внизу ты видишь долину
 усеянную обломками скал.]];

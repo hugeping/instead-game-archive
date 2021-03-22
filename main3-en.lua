@@ -1,5 +1,5 @@
 --$Name: The Archive$
---$Version: 0.9$
+--$Version: 1.0$
 --$Author:Peter Kosyh$
 
 require "fmt"

@@ -1,0 +1,3 @@
+[submodule "metaparser"]
+	path = metaparser
+	url = https://github.com/instead-hub/metaparser.git

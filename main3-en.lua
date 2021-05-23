@@ -614,7 +614,7 @@ room {
 					Through the windows you see the glow of hyperspace.]]
 					p [[All ship systems are functional.]]
 				else
-					p [[IThe cabin of "Frisky" is well lit.
+					p [[The cabin of "Frisky" is well lit.
 					Through the windows you can see a golden yellow field under the clear sky.]];
 				end
 			end
@@ -681,7 +681,7 @@ room {
 		Path {
 			"airlock";
 			walk_to = 'gate';
-			desc = [[You can go out through the airlock.]]; -- более корректно с т.з. языка
+			desc = [[You can go out to the airlock.]];
 		};
 		Furniture {
 			"containers,boxes/plural|cargo|equipment";

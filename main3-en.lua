@@ -172,7 +172,7 @@ Careful = Class {
 	ev == 'Listen' or ev == 'Smell' then
 			return false
 		end
-		p ("Better to be careful with ", s:the_noun(), ".")
+		p ("It's better to be careful with ", s:the_noun(), ".") -- Более полное предложение, корректнее с т.з. языка
 	end;
 }:attr 'scenery'
 
@@ -186,8 +186,8 @@ Distance = Class {
 }:attr 'scenery'
 
 Furniture = Class {
-	['before_Push,Pull,Transfer,Take'] = [[Better to stand where
-	{#if_hint/#first,plural,they are,it is}.]];
+	['before_Push,Pull,Transfer,Take'] = [[It's better to leave {#if_hint/#first,plural,them,it} where
+	{#if_hint/#first,plural,they are,it is}.]]; -- Дословно "лучше оставить __ там где __ есть". Во-первых не все может stand. Во-вторых само построение фразы скорее означает, что вам(игроку) лучше стоять там, где объект. В теории можно заменить на "[The object] is better to stay where [it is]".
 }:attr 'static'
 
 Prop = Class {
@@ -205,9 +205,9 @@ Distance {
 obj {
 	"space,void";
 	nam = 'space';
-	description = [[Humanity's reaching hyperspace did not bring the stars much closer.
+	description = [[Reaching hyperspace did not bring the stars much closer to Humanity.
 	After all, before you can build a gate at a new star system, you need to get to it.
-	The flight to an unexplored star system still takes years or even decades.]];
+	The flight to an unexplored star still takes years or even decades.]]; -- Humanity's здесь не очень уместно, не уверен, как будет лучше, но перенес в конец предложения, получилось более "по-английски". Убрал system из последнегоь предложения, чтобы соответствовало оригиналу.
 	obj = {
 		'stars';
 	}
@@ -223,11 +223,11 @@ Careful {
 	description = function(s)
 		if here().planet then
 			if rain then
-				p [[All you see from the cabin is a wheat-colored field and a rainy sky.]]
+				p [[All you see from the cabin is a wheat-colored field and the rainy sky.]]
 			elseif bomb_cancel then
-				p [[How strange, you do not see the planet landscape!]];
+				p [[How strange, you do not see the planet's landscape!]]; --пейзаж планет_ы_, возможно есть смысл использовать surface вместо landscape? Я так понимаю имеется в виду, что не видно поверхности
 			else
-				p [[All you see from the cabin is a wheat-colored field and a cyan sky]]
+				p [[All you see from the cabin is a wheat-colored field and the turquoise sky. ]] -- более точный перевод слова "бирюзовый", так же в обоих предложениях(с дождем и без, заменил перед небом артикль на the, поскольку поле то там "какое-то", а небо оно одно, конкретное -- этой планеты.
 			end
 		elseif here() ^ 'burnout' then
 			p [[Through the thick windows you see the glow of hyperspace.]];
@@ -242,11 +242,12 @@ Careful {
 };
 
 obj {
-	"photo|photography";
+	"photo|photography|picture";
+	-- Синоним picture присутствует в другом месте в описании фото, пусть будет.
 	nam = 'photo';
 	init_dsc = [[The photo is attached to the corner of one of the windows.]];
-	description = [[This is a photo of your daughter Lisa when she was only 9 years old.
-	She is adult now.]];
+	description = [[This is a photo of your daughter Lisa when she was only 9.
+	She is an adult now.]]; -- years old можно убрать, более естественно звучит, а с ним наоборот более официально. Артикль нужен в данном случае.
 	found_in = { 'ship1', 'burnout' };
 };
 
@@ -266,15 +267,15 @@ Careful {
 			p [[All ship systems are functional. You may push the thrust lever.]];
 		elseif here() ^ 'burnout' then
 			if _'burnout'.planet then
-				p [[Analysis of the atmosphere shows that the air is breathable.]]
+				p [[Atmosphere analysis shows the air is breathable.]] -- Немного упростил предложение
 			end
 			if _'engine'.flame then
 				p [[Fire in the engine room!]];
 			end
 			if s.till > 20 then
-				p [[Problems in the 2nd engine.]];
+				p [[Malfunction in the 2nd engine.]]; -- Problem -- это "задача", например математическая, здесь лучше всего так.
 			elseif s.till > 15 then
-				p [[1st and 2nd engines failed. Failure of the stabilization system.]];
+				p [[1st and 2nd engines have failed. Stabilization system failure.]]; -- Present perfect в первом предложении, потому что двигатели сломались и сейчас сломаны. Второе предложение опять же упростил
 			else
 				p [[All engines are out of order.]]
 				s.stop = true
@@ -283,8 +284,8 @@ Careful {
 				p [[It is very dangerous!]]
 			end
 			if s.till and not _'burnout'.planet then
-				p ([[^^Until the end of the transition ]], s.till,
-	[[ second(s) left.]])
+				p ([[^^]], s.till,
+	[[ second(s) left until the transition is over.]]) -- Порядок слов, чуть упростил предложение.
 			end
 			_'throttle':description()
 		end
@@ -292,7 +293,8 @@ Careful {
 	found_in = { 'ship1', 'burnout' };
 	obj = {
 		obj {
-			"lever,thrust";
+			"thrust lever,lever,thrust";
+			-- Рычаг тяги отсутствовал как синоним
 			nam = 'throttle';
 			ff = false;
 			['before_SwitchOn,SwitchOff'] = [[The thrust lever can be pulled or pushed.]];
@@ -313,21 +315,21 @@ Careful {
 			end;
 			before_Push = function(s)
 				if not radio_ack then
-					p [[You completely forgot to contact the traffic control room. To do this you need to switch on the radio.]];
+					p [[You completely forgot to contact the traffic control. To do this you need to switch on the radio.]]; -- room тут ни к чему
 				elseif here() ^ 'ship1' then
 					s.ff = true
 					walk 'transfer'
 				elseif here() ^ 'burnout' then
 					if bomb_cancel then
 						if _'outdoor':has'open' then
-							p [[Shouldn't we seal the airlock first?]]
+							p [[Shouldn't you seal the airlock first?]] -- обращение к игроку на ты, здесь нет никаких "мы".
 							return
 						end
 						walk 'happyend'
 						return
 					end
 					if not s.ff then
-						p [[You moved the lever forward.]]
+						p [[You move the lever forward.]] -- настоящее время, как везде.
 					end
 					s.ff = true
 					p [[The lever is set to the maximum thrust.]];
@@ -394,13 +396,13 @@ cutscene {
 	end;
 	text = function(s, n)
 		local t = {
-		[[You push the lever away to maximum position.]];
+		[[You push the lever all the way. ]]; -- push away не надо, push -- уже толкать от себя подразумевает,
 		[[The flashes of hyperspace outside the window come to life...^
 The countdown begins (or continues?) on the dashboard.]];
 		[[25, 24, 23...]],
 		[[10, 9, 8, 7...]],
 		[[3, 2, 1...]];
-		[[I'll be back soon!]];
+		[[I'm coming!]]; -- Ближе к оригиналу по смыслу, опять же
 		};
 --		if n == 6 then
 --			snd_play 'sfx_explosion_3'
@@ -444,7 +446,7 @@ room {
 	dsc = [[The cabin of "Frisky" is cramped. The oblique rays of the 51 Peg star
 	penetrate through the narrow windows into the cockpit, illuminating the dashboard.
 	Directly on the course -- transition gates, floating over Dimidius.^^
-	Everything is ready to start the transition. Anyways, you might want to take 
+	Everything is ready to start the transition. Anyways, you might want to take
 	another look at the dashboard.]];
 	out_to = function(s)
 		p [[This is not the time for walking on the ship. You are going to make the transition. All the instruments are in the control room.]]
@@ -455,19 +457,19 @@ room {
 		Distance {
 			"star|sun|Peg";
 			description = [[It has been known for a long time that an exoplanet
-			similar to the Earth orbits around 51 Peg.
+			similar to the Earth orbits 51 Peg.
 			It was only in 2220, that the hyperspace gates were opened here.
-			To the Earth -- 50 light years or 4 transition jumps.
-			120 years of human expansion into deep space...]];
+			It's 50 light years or 4 transition jumps from the Earth.
+			120 years of human expansion into deep space...]]; -- orbit -- это уже движение по орбите, не надо еще дополнять around. Чуть подправил часть предложения, чтобы было более естественно
 		};
 		'windows';
 		Distance {
 			"planet|Dimidius";
 			description = [[
-Dimidius became the first reached planet with suitable living conditions. .^^
+Dimidius became the first reached planet with suitable living conditions. ^^
 As soon as the gates were installed here in 2220, pioneers rushed to Dimidius in search of a new life.
 And 5 years later, the richest deposits of uranium were discovered on the planet.
-The old world suffered from a lack of resources, but money and power were concentrated in it.
+The old world suffered from a lack of resources, but money and power were concentrated there.
 Therefore, Dimidius was not destined to become New Earth.
 It became a colony..^^
 Your six-month contract for Dimidius is over, it's time to get home.]];
@@ -480,10 +482,10 @@ Your six-month contract for Dimidius is over, it's time to get home.]];
 			"gates/plural|transition";
 			description = function(s)
 				if s:once() then
-					p [[The gates -- this is the entrance to hyperspace. 
+					p [[The gates -- this is the entrance to hyperspace.
 					The gates looks like a 40-meter ring slowly spinning in the void.
-					The 51 Peg gates were opened in 2220. 
-					They became the 12th gates built over the 125-year history -- of humanity's expansion into deep space.]];
+					The 51 Peg gates were opened in 2220.
+					They became the 12th gates built over the 125-year history of humanity's expansion into deep space.]]; -- А зачем здесь тире?
 				else
 					p [[You see flashes of hyperspace through the gates.]];
 				end
@@ -509,12 +511,12 @@ cutscene {
 	end;
 	text = function(s, i)
 		local txt = {
-		[[Before placing your hand on the massive lever, you looked at your daughter's photo.^
+		[[Before placing your hand on the massive lever, you look at your daughter's photo.^
 -- Well, with God's help...^^
 		You carefully move the massive lever forward and watch the gates approach.
 		You have done this many times in your 20-year career.
 		The ship shudders, a gigantic force pulls it in and, behold, you are observing the bizarre intertwining of lights.
-		There are only a few seconds and... ]];
+		A few seconds and... ]];
 		[[BOOM!!! Vibration shakes the ship. Something is wrong?]];
 		[[The vibration is increasing. Bang!. Another blow. The dashboard blooms with a scattering of lights.]];
 		};
@@ -570,7 +572,7 @@ room {
 		end
 		if bomb_cancel then
 			if s:once 'wow' then
-				p [[Entering the cockpit, you noticed something strange.
+				p [[Entering the cockpit, you notice something strange.
 				Instead of a landscape, you see hyperspace through the windows!]];
 				_'panel'.stop = false
 				place 'hyper2'
@@ -585,7 +587,7 @@ room {
 		local txt = {
 			"The lights illuminate the cockpit.";
 			"White light fills the cockpit.";
-			"A dazzling white light filled the cockpit.";
+			"A dazzling white light fills the cockpit.";
 		};
 		s.transfer = s.transfer + 1
 		pn(fmt.em(txt[s.transfer]))
@@ -604,7 +606,7 @@ room {
 	dsc = function(s)
 		if s.planet then
 			if rain then
-				p [[It's light in the cabin of "Frisky".
+				p [[The cabin of "Frisky" is well lit.
 				The dashboard reflects faintly in the rain-covered window.]];
 			else
 				if bomb_cancel then
@@ -612,8 +614,8 @@ room {
 					Through the windows you see the glow of hyperspace.]]
 					p [[All ship systems are functional.]]
 				else
-					p [[It's light in the cabin of "Frisky".
-					Through the windows you can see a golden yellow field under a clear sky.]];
+					p [[The cabin of "Frisky" is well lit.
+					Through the windows you can see a golden yellow field under the clear sky.]];
 				end
 			end
 		elseif _'engine'.flame then
@@ -622,7 +624,7 @@ room {
 		else
 			p [[The cabin of "Frisky" is cramped.
 			Through the windows you see the glow of hyperspace
-			The dashboard blink in the dim light.]]
+			The dashboard blinks in the dim light.]]
 			if not _'engine'.flame and _'panel'.stop and
 			not isDaemon('burnout') then
 				p [[^^{$fmt em|You notice something strange outside the windows...}]]
@@ -638,7 +640,7 @@ room {
 			description = function(s)
 				if not _'engine'.flame and _'panel'.stop then
 					p [[You see three sparkling lights dancing approaching your ship.
-					Or are you moving towards them?]]
+					Or is it you, who are moving towards them?]] -- немножко более по-английски
 					enable '#trinity'
 					DaemonStart("burnout");
 					set_pic 'trinity'
@@ -718,7 +720,7 @@ door {
 				end
 				if _'outdoor':has'open' then
 					_'outdoor':attr'~open'
-					p [[With a hissing sound, the airlock closed.]]
+					p [[With a hissing sound, the airlock closes.]]
 					if not onair then
 						snd_stop 'sfx_rain_loop'
 					end
@@ -728,7 +730,7 @@ door {
 					end
 				else
 					_'outdoor':attr'open'
-					p [[With a hissing sound, the airlock opened.]]
+					p [[With a hissing sound, the airlock opens.]]
 					if rain then
 						snd_play ('sfx_rain_loop', true)
 					end
@@ -782,7 +784,7 @@ room {
 					after_Disrobe = function(s)
 						if onair and s:once 'skaf' then
 							p [[Not without fear you take off your spacesuit.
-							You take a deep breath. All seems to be alright!]];
+							You take a deep breath. Everything seems to be alright!]];
 							start_ill()
 						elseif here() ^ 'gate'
 							and _'outdoor':has 'open' then
@@ -820,8 +822,8 @@ room {
 	obj = {
 		Furniture {
 			"bed";
-			description = [[Standard bed.
-			This is found in almost all small vessels, such as "Frisky".]];
+			description = [[A standard bed.
+			One of these can be found in almost all small vessels, such as "Frisky".]];
 		}:attr 'enterable,supporter';
 		door {
 			"trapdoor,hatch,door";
@@ -838,7 +840,7 @@ room {
 			init_dsc = [[A fire extinguisher is attached to the wall.]];
 			nam = "огнетушитель";
 			description = function(s)
-				p [[Looks like bright red balloon.
+				p [[A bright red gas cylinder.
 				Designed specifically for use in the space fleet.]];
 				if not s.full then
 					p [[The fire extinguisher is empty.]]
@@ -944,12 +946,12 @@ room {
 					nam = '#дыра';
 					"hole";
 					description = function()
-						p [[It looks like there was an explosion...]];
+						p [[It looks like there has been an explosion...]];
 						return false;
 					end;
 					before_LetIn = function(s, w)
 						if w == pl then
-							p [[Too narrow for you. Too narrow for you.]]
+							p [[Too narrow for you. ]]
 							return
 						end
 						return false
@@ -964,7 +966,7 @@ room {
 			after_Touch = [[The edges are fused. Doesn't look like duralumin.]];
 			description = function(s)
 				if have(s) then
-					p [[Fused shards. They are heavy. 
+					p [[Fused shards. They are heavy.
 					Strange, it doesn't look like duralumin...]];
 				else
 					p [[Small black pieces of metal.]]
@@ -1007,7 +1009,7 @@ Distance {
 		};
 		obj {
 			"sun,star";
-			before_Default = [[Strange, but you do not see the sun, although it is day.]];
+			before_Default = [[Strange, but you do not see the sun, although it is daytime.]];
 		}:attr 'scenery';
 	}
 };
@@ -1048,7 +1050,7 @@ cutscene {
 	end;
 	text = {
 		[[A blinding light filled everything around.
-		You were lost in it, dissolved -- as if you never existed ... 
+		You were lost in it, dissolved -- as if you never existed ...
 		The ship shudders on impact. This is the end?]];
 		[[Silence...]];
 		[[Drops of water on the glass. Big drops.
@@ -2114,7 +2116,7 @@ em|English}^^For help, enter: {$fmt b|help}.]];
 			Let him become a murderer for the sake of a new life, but Juan doesn't give a damn about himself!]];
 
 			p [[^^...When Juan learned from the news that the bomb exploded later, after the ship entered hyperspace, in one second his world was destroyed...
-			He's a killer, no excuses. 
+			He's a killer, no excuses.
 			He, as if dead, walked along the street without making out the way...]];
 			know_bomb = true
 			end
@@ -2339,7 +2341,7 @@ pl.description = function(s)
 	end
 	if here() ^ 'ship1' then
 		p [[Your six-month contract for Dimidius is over, it's time to get home.
-		For six months you worked under a contract at Dimidius, exploring uranium deposits. 
+		For six months you worked under a contract at Dimidius, exploring uranium deposits.
         But now the contract is over.]]
 	end;
 end

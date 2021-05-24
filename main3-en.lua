@@ -126,8 +126,8 @@ function get_pic(f)
 	return r
 end
 
-game.dsc = [[{$fmt b|THE ARCHIVE}^^An interactive novel for
-execution on computers.^^For help, type "help" and press "enter".]];
+game.dsc = [[{$fmt b|ARCHIVE}^^The interactive mini-novel to
+be run on electronic computing devices.^^For instructions type "help" and press "Enter".]];
 
 function game:before_Any(ev, w)
 	if ev == "Ask" or ev == "Say" or ev == "Tell" or ev == "AskFor" or ev == "AskTo" then
@@ -172,7 +172,7 @@ Careful = Class {
 	ev == 'Listen' or ev == 'Smell' then
 			return false
 		end
-		p ("Better to be careful with ", s:the_noun(), ".")
+		p ("Better be careful with ", s:the_noun(), ".")
 	end;
 }:attr 'scenery'
 
@@ -199,15 +199,15 @@ Prop = Class {
 Distance {
 	"stars/plural";
 	nam = 'stars';
-	description = [[The stars are watching you.]];
+	description = [[The stars are looking at you.]];
 }
 
 obj {
 	"space,void";
 	nam = 'space';
-	description = [[Humanity's reaching hyperspace did not bring the stars much closer.
-	After all, before you can build a gate at a new star system, you need to get to it.
-	The flight to an unexplored star system still takes years or even decades.]];
+	description = [[Humanity reaching hyperspace did not bring the stars much closer.
+	After all, before you build a gate near new star system, you have to get to it.
+	A flight to an unexplored star system still takes years or even decades.]];
 	obj = {
 		'stars';
 	}
@@ -223,19 +223,19 @@ Careful {
 	description = function(s)
 		if here().planet then
 			if rain then
-				p [[All you see from the cabin is a wheat-colored field and a rainy sky.]]
+				p [[All you see from the cabin is wheat-colored field and the rainy sky.]]
 			elseif bomb_cancel then
-				p [[How strange, you do not see the planet landscape!]];
+				p [[How strange, you see no planet landscape!]];
 			else
-				p [[All you see from the cabin is a wheat-colored field and a cyan sky]]
+				p [[All you see from the cabin is wheat-colored field and the cyan sky]]
 			end
 		elseif here() ^ 'burnout' then
-			p [[Through the thick windows you see the glow of hyperspace.]];
+			p [[Through thick windows you see the glow of hyperspace.]];
 			if not _'engine'.flame then
 				_'hyper2':description()
 			end
 		elseif here() ^ 'ship1' then
-			p [[Through the thick windows you see a purple planet. This is Dimidius.]];
+			p [[Through thick windows you see a purple planet. It is Dimidius.]];
 		end
 	end;
 	found_in = { 'ship1', 'burnout' };
@@ -244,9 +244,9 @@ Careful {
 obj {
 	"photo|photography";
 	nam = 'photo';
-	init_dsc = [[The photo is attached to the corner of one of the windows.]];
-	description = [[This is a photo of your daughter Lisa when she was only 9 years old.
-	She is adult now.]];
+	init_dsc = [[There is a photo attached to a window corner.]];
+	description = [[A photo of your daughter Lisa when she was only 9 years old.
+	She is all grown up now.]];
 	found_in = { 'ship1', 'burnout' };
 };
 
@@ -266,25 +266,25 @@ Careful {
 			p [[All ship systems are functional. You may push the thrust lever.]];
 		elseif here() ^ 'burnout' then
 			if _'burnout'.planet then
-				p [[Analysis of the atmosphere shows that the air is breathable.]]
+				p [[The atmosphere analysis shows the air is breathable.]]
 			end
 			if _'engine'.flame then
-				p [[Fire in the engine room!]];
+				p [[Fire in engine room!]];
 			end
 			if s.till > 20 then
-				p [[Problems in the 2nd engine.]];
+				p [[Problems in engine two.]];
 			elseif s.till > 15 then
-				p [[1st and 2nd engines failed. Failure of the stabilization system.]];
+				p [[Engine one and engine two failed. Failure of stabilization system.]];
 			else
 				p [[All engines are out of order.]]
 				s.stop = true
 			end
 			if _'engine'.flame then
-				p [[It is very dangerous!]]
+				p [[It's extremely dangerous!]]
 			end
 			if s.till and not _'burnout'.planet then
-				p ([[^^Until the end of the transition ]], s.till,
-	[[ second(s) left.]])
+				p ([[^^Time till complete transition is ]], s.till,
+	[[ second(s).]])
 			end
 			_'throttle':description()
 		end
@@ -313,14 +313,14 @@ Careful {
 			end;
 			before_Push = function(s)
 				if not radio_ack then
-					p [[You completely forgot to contact the traffic control room. To do this you need to switch on the radio.]];
+					p [[You completely forgot to contact the traffic control. To do it, the radio should be switched on.]];
 				elseif here() ^ 'ship1' then
 					s.ff = true
 					walk 'transfer'
 				elseif here() ^ 'burnout' then
 					if bomb_cancel then
 						if _'outdoor':has'open' then
-							p [[Shouldn't we seal the airlock first?]]
+							p [[Probably the airlock should be sealed first?]]
 							return
 						end
 						walk 'happyend'
@@ -345,8 +345,8 @@ Careful {
 				elseif here() ^ 'burnout' then
 					if s.ff and not bomb_cancel then
 						if not _'panel'.stop then
-							p [[Exiting hyperspace is only possible when the ship reaches a certain speed.
-							Stopping the engines would mean an aborted transition. And then -- there's no going back!]];
+							p [[It is possible to exit hyperspace only when the ship reaches a certain speed.
+							Stopping the engines would mean an aborted transition. And then -- there's no way out!]];
 							return
 						end
 						p [[You pull the lever.]]
@@ -363,10 +363,10 @@ Careful {
 				if s:once() then
 					--mus_stop()
 					snd_play 'sfx_radio'
-					p [[-- PEG51,
-board FL510, requesting permission to depart.^
--- ...FL510, I authorize the departure. The gate is clear. Bon voyage!^
--- Confirmed.]];
+					p [[-- Dimidius,
+board FL510, 51-Peg gate, ready for transition.^
+-- ...Board FL510, 51-Peg gate, cleared for transition.^
+-- Cleared for transition, 51-Peg gate, board FL510.]];
 					radio_ack = true;
 				elseif here() ^ 'burnout' then
 					if _'burnout'.planet then
@@ -375,7 +375,7 @@ board FL510, requesting permission to depart.^
 						p [[Radio cannot work in hyperspace.]]
 					end
 				else
-					p [[You have already received your departure clearance.]]
+					p [[You have already received the transition clearance.]]
 				end
 			end;
 		}:attr 'switchable,static';
@@ -386,15 +386,14 @@ cutscene {
 	enter = function(s)
 		set_pic 'hyper'
 		if have 'photo' then
-			pn [[You pull out a picture of your daughter and mount it in the
-			 corner of the window. Then, you put your hand on the thrust lever.]];
+			pn [[You take out your daughter's photo and mount it to a window corner. Then, you put your hand on the thrust lever.]];
 		else
 			pn [[You put your hand on the thrust lever.]]
 		end
 	end;
 	text = function(s, n)
 		local t = {
-		[[You push the lever away to maximum position.]];
+		[[You push the lever away to the maximum position.]];
 		[[The flashes of hyperspace outside the window come to life...^
 The countdown begins (or continues?) on the dashboard.]];
 		[[25, 24, 23...]],
@@ -421,7 +420,7 @@ cutscene {
 		set_pic 'crash'
 		mus_play 'jump-memories'
 	end;
-	dsc = fmt.c[[{$fmt b|THE ARCHIVE}^
+	dsc = fmt.c[[{$fmt b|ARCHIVE}^
 {$fmt em|Peter Kosyh / May 2020}^
 {$fmt em|Music, sound: Alexander Soborov}^
 {$fmt em|Jump Memories / Keys of Moon}^
@@ -431,7 +430,7 @@ If you liked it, you can find similar games at:^^
 {$link|http://instead-games.ru}^
 {$link|https:/parser.hugeping.ru}^
 {$link|https://instead.itch.io}^^
-And if you want to write your own story,^welcome to:^
+And if you would like to write your own story,^welcome to:^
 {$link|https://instead.hugeping.ru}^^
 {$fmt b|THE END}
 ]];
@@ -441,13 +440,13 @@ room {
 	"cabin|control room,room|cockpit|Frisky|ship|spaceship";
 	title = "control room";
 	nam = 'ship1';
-	dsc = [[The cabin of "Frisky" is cramped. The oblique rays of the 51 Peg star
-	penetrate through the narrow windows into the cockpit, illuminating the dashboard.
-	Directly on the course -- transition gates, floating over Dimidius.^^
-	Everything is ready to start the transition. Anyways, you might want to take 
+	dsc = [[The cabin of Frisky is cramped. Through the narrow windows, the oblique rays of star 51-Peg
+	penetrate into the cockpit illuminating the dashboard.
+	Straight ahead are transit gates floating over Dimidius.^^
+	Everything is set up to begin the transition. Nevertheless you wish to take 
 	another look at the dashboard.]];
 	out_to = function(s)
-		p [[This is not the time for walking on the ship. You are going to make the transition. All the instruments are in the control room.]]
+		p [[This is not the time for walking on the ship. You are getting ready to make the transition. All the instruments are in control room.]]
 	end;
 	obj = {
 		'space',
@@ -455,35 +454,35 @@ room {
 		Distance {
 			"star|sun|Peg";
 			description = [[It has been known for a long time that an exoplanet
-			similar to the Earth orbits around 51 Peg.
-			It was only in 2220, that the hyperspace gates were opened here.
-			To the Earth -- 50 light years or 4 transition jumps.
+			similar to the Earth orbits around 51-Peg.
+			But only in 2220 the hyperspace gates were opened here.
+			The Earth is 50 light years or 4 transition jumps away.
 			120 years of human expansion into deep space...]];
 		};
 		'windows';
 		Distance {
 			"planet|Dimidius";
 			description = [[
-Dimidius became the first reached planet with suitable living conditions. .^^
-As soon as the gates were installed here in 2220, pioneers rushed to Dimidius in search of a new life.
-And 5 years later, the richest deposits of uranium were discovered on the planet.
-The old world suffered from a lack of resources, but money and power were concentrated in it.
-Therefore, Dimidius was not destined to become New Earth.
-It became a colony..^^
-Your six-month contract for Dimidius is over, it's time to get home.]];
+Dimidius became the first planet reached with living conditions fit for humans.^^
+As soon as the gates have been installed here in 2220, pioneers rushed to Dimidius in search of a new life.
+And 5 years later the richest deposits of uranium were discovered on the planet.
+The old world suffered from the lack of resources, but money and power were concentrated there.
+Therefore, Dimidius was not destined to become the New Earth.
+It turned into a colony.^^
+Your six-month contract for Dimidius is over, it's time to return home.]];
 		};
 		obj {
 			"rays/plural";
-			description = [[These are the rays of the local sun. They move across the dashboard.]];
+			description = [[Rays of the local sun slide across the dashboard.]];
 		}:attr'scenery';
 		Distance {
 			"gates/plural|transition";
 			description = function(s)
 				if s:once() then
-					p [[The gates -- this is the entrance to hyperspace. 
-					The gates looks like a 40-meter ring slowly spinning in the void.
-					The 51 Peg gates were opened in 2220. 
-					They became the 12th gates built over the 125-year history -- of humanity's expansion into deep space.]];
+					p [["The gates" -- the entrance to hyperspace is called so. 
+					The gates look like a 40-meter ring slowly rotating in the void.
+					The 51-Peg gates were opened in 2220. 
+					They had become the 12th gates built during the 125-year history of humanity's expansion into deep space.]];
 				else
 					p [[You see flashes of hyperspace through the gates.]];
 				end
@@ -510,13 +509,13 @@ cutscene {
 	text = function(s, i)
 		local txt = {
 		[[Before placing your hand on the massive lever, you looked at your daughter's photo.^
--- Well, with God's help...^^
+-- Well, God help us...^^
 		You carefully move the massive lever forward and watch the gates approach.
-		You have done this many times in your 20-year career.
-		The ship shudders, a gigantic force pulls it in and, behold, you are observing the bizarre intertwining of lights.
-		There are only a few seconds and... ]];
-		[[BOOM!!! Vibration shakes the ship. Something is wrong?]];
-		[[The vibration is increasing. Bang!. Another blow. The dashboard blooms with a scattering of lights.]];
+		You have done it other times in your 20-year career.
+		The ship shudders, a gigantic force pulls it in and -- behold, you are observing the bizarre intertwining of lights.
+		Just a few seconds and... ]];
+		[[BAM!!! The vibration shakes the ship. Is something wrong?]];
+		[[The vibration increases. Bang! Another one! The dashboard blooms with a scattering of lights.]];
 		};
 		if i == 2 then
 			mus_stop()
@@ -570,8 +569,8 @@ room {
 		end
 		if bomb_cancel then
 			if s:once 'wow' then
-				p [[Entering the cockpit, you noticed something strange.
-				Instead of a landscape, you see hyperspace through the windows!]];
+				p [[Entering the control room, you noticed something strange.
+				Instead of landscape, you see hyperspace through the windows!]];
 				_'panel'.stop = false
 				place 'hyper2'
 				remove 'sky2'
@@ -583,9 +582,9 @@ room {
 			return
 		end
 		local txt = {
-			"The lights illuminate the cockpit.";
-			"White light fills the cockpit.";
-			"A dazzling white light filled the cockpit.";
+			"The lights illuminate the control room.";
+			"White light fills the control room.";
+			"A dazzling white light filled the control room.";
 		};
 		s.transfer = s.transfer + 1
 		pn(fmt.em(txt[s.transfer]))
@@ -596,7 +595,7 @@ room {
 	end;
 	Listen = function(s)
 		if _'engine'.flame then
-			p [[The sound of alarm fills the cockpit.]]
+			p [[The sound of alarm fills the control room.]]
 		else
 			return false
 		end
@@ -604,31 +603,31 @@ room {
 	dsc = function(s)
 		if s.planet then
 			if rain then
-				p [[It's light in the cabin of "Frisky".
-				The dashboard reflects faintly in the rain-covered window.]];
+				p [[It's light in the cabin of Frisky.
+				The dashboard is faintly reflected in the rain-covered window.]];
 			else
 				if bomb_cancel then
-					p [[The cabin of "Frisky" is cramped.
+					p [[The cabin of Frisky is cramped.
 					Through the windows you see the glow of hyperspace.]]
 					p [[All ship systems are functional.]]
 				else
-					p [[It's light in the cabin of "Frisky".
-					Through the windows you can see a golden yellow field under a clear sky.]];
+					p [[It's light in the cabin of Frisky.
+					Through the windows you can see golden yellow field under the clear sky.]];
 				end
 			end
 		elseif _'engine'.flame then
-			p [[The cockpit is filled with the sound of alarm.
-			You need to examine the dashboard to find out what is happening.]];
+			p [[Control room is filled with the sound of alarm.
+			You have to examine the dashboard to find out what happened.]];
 		else
-			p [[The cabin of "Frisky" is cramped.
-			Through the windows you see the glow of hyperspace
-			The dashboard blink in the dim light.]]
+			p [[The cabin of Frisky is cramped.
+			Through the windows you see the glow of hyperspace.
+			The dashboard blinks softly in the dim light.]]
 			if not _'engine'.flame and _'panel'.stop and
 			not isDaemon('burnout') then
 				p [[^^{$fmt em|You notice something strange outside the windows...}]]
 			end
 		end
-		p [[^^You can exit the cabin.]]
+		p [[^^You may exit the control room.]]
 	end;
 	out_to = 'room';
 	obj = {
@@ -637,22 +636,22 @@ room {
 			"hyperspace,someth*,strang*|lights/plural|radiance";
 			description = function(s)
 				if not _'engine'.flame and _'panel'.stop then
-					p [[You see three sparkling lights dancing approaching your ship.
+					p [[You see three sparkling dancing lights approaching your ship.
 					Or are you moving towards them?]]
 					enable '#trinity'
 					DaemonStart("burnout");
 					set_pic 'trinity'
 					snd_play ('sfx_blinding_lights', true)
 				else
-					p [[The transition is not yet completed.
-					This thought prevents you from enjoying the magnificent view.]];
+					p [[The transition is not yet complete.
+					The thought prevents you from enjoying the magnificent view.]];
 				end
 			end;
 			obj = {
 				Distance {
 					nam = '#trinity';
 						"light";
-					description = [[A dazzling white light fills the cockpit.]];
+					description = [[A dazzling white light fills the cabin.]];
 				}:disable();
 			};
 		};
@@ -673,17 +672,17 @@ room {
 		end
 		return  'room';
 	end;
-	dsc = [[You can go upstairs or go out to the airlock.]];
+	dsc = [[From here you can go upstairs or exit to the airlock.]];
 	out_to = 'gate';
 	obj = {
 		Path {
 			"airlock";
 			walk_to = 'gate';
-			desc = [[You can go out to the airlock.]];
+			desc = [[You can exit to the airlock.]];
 		};
 		Furniture {
 			"containers,boxes/plural|cargo|equipment";
-			description = [[These are containers with equipment.]];
+			description = [[There are containers with equipment.]];
 			before_Open = [[The containers are sealed.
 			You shouldn't open them.]];
 		}:attr'openable';
@@ -713,7 +712,7 @@ door {
 			dsc = [[To the right of the door is a red lever.]];
 			before_Pull = function(s)
 				if not _'burnout'.planet then
-					p [[Open the airlock door during the transition? This is suicide!]]
+					p [[To open the airlock door during the transition? It is suicide!]]
 					return
 				end
 				if _'outdoor':has'open' then
@@ -764,7 +763,7 @@ room {
 			"closet,cabinet,wardrobe";
 			locked = true;
 			description = function(s)
-				p [[This is a spacesuit closet.]]
+				p [[It is a spacesuit closet.]]
 				return false
 			end;
 			obj = {
@@ -774,7 +773,7 @@ room {
 					description = [[The suit looks massive, but it's actually quite light.]];
 					before_Disrobe = function(s)
 						if here().flame then
-							p [[And suffocate from the fire?]]
+							p [[And suffocate in fire?]]
 							return
 						end
 						return false
@@ -782,7 +781,7 @@ room {
 					after_Disrobe = function(s)
 						if onair and s:once 'skaf' then
 							p [[Not without fear you take off your spacesuit.
-							You take a deep breath. All seems to be alright!]];
+							You take a deep breath. Everything seems to be alright!]];
 							start_ill()
 						elseif here() ^ 'gate'
 							and _'outdoor':has 'open' then
@@ -807,9 +806,9 @@ room {
 	"corridor,hallway";
 	title = 'corridor';
 	nam = 'room';
-	dsc = [[From here you can get to the cabin and to the engines]];
+	dsc = [[From here you can get to the control room and to the engines]];
 	d_to = "#trapdoor";
-	before_Sleep = [[It's not time to sleep.]];
+	before_Sleep = [[It's not the time to sleep.]];
 	before_Smell = function(s)
 		if _'engine'.flame then
 			p [[It smells like burning.]];
@@ -821,7 +820,7 @@ room {
 		Furniture {
 			"bed";
 			description = [[Standard bed.
-			This is found in almost all small vessels, such as "Frisky".]];
+			You can find it in almost every small vessel, such as Frisky.]];
 		}:attr 'enterable,supporter';
 		door {
 			"trapdoor,hatch,door";
@@ -838,8 +837,8 @@ room {
 			init_dsc = [[A fire extinguisher is attached to the wall.]];
 			nam = "огнетушитель";
 			description = function(s)
-				p [[Looks like bright red balloon.
-				Designed specifically for use in the space fleet.]];
+				p [[A bright-red tank.
+				Designed specifically for space fleet usage.]];
 				if not s.full then
 					p [[The fire extinguisher is empty.]]
 				end
@@ -848,7 +847,7 @@ room {
 		Path {
 			"cabin,cockpit,control room";
 			walk_to = 'burnout';
-			desc = [[You can go to the cabin.]];
+			desc = [[You can go to the control room.]];
 		};
 		Path {
 			"engines/plural|engine|engine room";
@@ -872,14 +871,14 @@ room {
 	end;
 	onenter = function(s)
 		if s.flame and _'suit':hasnt 'worn' then
-			p [[There's a fire in the engine room!
-			You cannot be there because of the acrid smoke.]]
+			p [[There's fire in the engine room!
+			You cannot enter because of acrid smoke.]]
 			return false
 		end
 	end;
 	dsc = function(s)
 		if s.flame then
-			p [[A fire is burning in the engine room! Smoke is everywhere!]];
+			p [[Fire is burning in the engine room! Smoke is everywhere!]];
 		elseif bomb_cancel then
 			p [[You are in the engine room.
 			The control unit blinks with indicators.]]
@@ -929,7 +928,7 @@ room {
 					p [[The control unit is functional!]]
 				else
 					p [[The control unit is the ship's engine control system.
-					It's burned-out, but that's not what gets your attention.
+					It's burned-out, but not that gets your attention.
 					There's a hole in the center of the unit!]];
 					enable '#дыра'
 					if _'осколки':has 'concealed' then
@@ -949,7 +948,7 @@ room {
 					end;
 					before_LetIn = function(s, w)
 						if w == pl then
-							p [[Too narrow for you. Too narrow for you.]]
+							p [[Too narrow for you.]]
 							return
 						end
 						return false
@@ -960,11 +959,11 @@ room {
 		obj {
 			nam = 'осколки';
 			"shards,fragments,debris/plural";
-			after_Smell = [[It smells strange.]];
-			after_Touch = [[The edges are fused. Doesn't look like duralumin.]];
+			after_Smell = [[A strange smell...]];
+			after_Touch = [[The edges are melted. Doesn't look like duralumin.]];
 			description = function(s)
 				if have(s) then
-					p [[Fused shards. They are heavy. 
+					p [[Melted shards. They are heavy. 
 					Strange, it doesn't look like duralumin...]];
 				else
 					p [[Small black pieces of metal.]]
@@ -974,7 +973,7 @@ room {
 		Path {
 			"corridor,hallway";
 			walk_to = 'room';
-			desc = [[You can go out into the corridor.]];
+			desc = [[You can go out to the corridor.]];
 		};
 	}
 }
@@ -986,7 +985,7 @@ Distance {
 		if rain then
 			p [[The sky is covered with rainy haze.]]
 		else
-			p [[The sky is clear, filled with blue turquoise.]]
+			p [[The sky is clear, shines with blue turquoise.]]
 		end
 		p [[From time to time, the sky lights up with flashes.]];
 	end;
@@ -1007,7 +1006,7 @@ Distance {
 		};
 		obj {
 			"sun,star";
-			before_Default = [[Strange, but you do not see the sun, although it is day.]];
+			before_Default = [[Strange but you can't see the sun, although it is day.]];
 		}:attr 'scenery';
 	}
 };
@@ -1017,7 +1016,7 @@ Distance {
 	"planet|landscape|field,wheat|horizon";
 	description = function()
 		if rain then
-			p [[The edges of a wheat-golden field hide in a rainy haze.]];
+			p [[The edges of a wheat-golden field hide in the rainy haze.]];
 		else
 			p [[The golden wheat field stretches to the horizon..]];
 		end
@@ -1028,7 +1027,7 @@ Distance {
 			"drops,droplets/plural";
 			description = function(s)
 				if rain then
-					p [[For a while, you watch the droplets rolling down the glass.]];
+					p [[For a while, you absentmindedly watch the droplets rolling down the glass.]];
 				else
 					p [[But it's not raining now.]]
 				end
@@ -1047,19 +1046,19 @@ cutscene {
 		set_pic 'flash'
 	end;
 	text = {
-		[[A blinding light filled everything around.
-		You were lost in it, dissolved -- as if you never existed ... 
-		The ship shudders on impact. This is the end?]];
+		[[The blinding light filled everything around.
+		You are lost in it, dissolved -- as if you never existed ... 
+		The ship shudders from impact. Is it the end?]];
 		[[Silence...]];
 		[[Drops of water on the glass. Big drops.
-		They slowly flow down the slanting windows, fill the ship's skin.
+		They slowly flow down the slanted windows, cover the ship's shell.
 		The noise of the rain -- why can't you hear it?]];
 	};
 	exit = function(s)
 		_'burnout'.planet = true
 		remove 'hyper2'
 		p [[You slowly come to your senses.
-		Well, of course, you are inside "Frisky" and its casing will not miss such a faint sound as the impact of drops. What a pity...]];
+		Well, of course, you are still inside Frisky and its casing will not pass such a faint sound as raindrops falling. What a pity...]];
 		move('planet_scene', 'burnout')
 		set_pic 'crash'
 		mus_play 'bgm_plains'
@@ -1070,7 +1069,7 @@ obj {
 	nam = 'ship';
 	"ship,Frisky,frisk*";
 	description =  function(s)
-		p [[Not a very soft landing, judging by the furrow the ship left behind in the ground.
+		p [[Not too soft landing, judging by the furrow the ship left behind in the ground.
 		But the ship survived!]]
 	end;
 	before_Enter = function(s)
@@ -1089,7 +1088,7 @@ obj {
 	nam = 'wheat';
 	"grains/plural|grain";
 	description = [[Large yellow grains, similar to wheat.
-	You feel like energy is concentrated in them.]];
+	You feel energy concentrated in them.]];
 	['after_Smell'] = function(s)
 		if rain then
 			p [[You like the smell of wet grain.]];
@@ -1101,7 +1100,7 @@ obj {
 		if ill > 0 then
 			DaemonStop 'planet'
 			if ill > 1 then
-				p [[You eat the grains. After a while, you feel a strange weakness recede.]]
+				p [[You eat the grains. After a while, you feel the strange weakness recede.]]
 				ill = 0
 				return
 			end
@@ -1117,7 +1116,7 @@ obj {
 	"field";
 	description = function(s)
 		if rain then
-			p [[The edges of the field, a golden wheat color, hide in a rainy haze.]]
+			p [[The edges of the field having golden wheat color hide in a rainy haze.]]
 		else
 			p [[The field looks endless.]]
 		end

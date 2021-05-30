@@ -422,7 +422,7 @@ cutscene {
 	end;
 	dsc = fmt.c[[{$fmt b|ARCHIVE}^
 {$fmt em|Peter Kosyh / May 2020}^
-{$fmt em|Translation: canwolf, Khaelenmore Thaal}^
+{$fmt em|Translation: prirai, canwolf, Khaelenmore Thaal}^
 {$fmt em|Music, sound: Alexander Soborov}^
 {$fmt em|Jump Memories / Keys of Moon}^
 {$fmt em|Testing: Khaelenmore Thaal, Oleg Bosh}^

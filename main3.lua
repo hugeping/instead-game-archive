@@ -1,6 +1,6 @@
 --$Name: The Archive$
 --$Name(ru): Архив$
---$Version: 1.0$
+--$Version: 1.1$
 --$Author:Peter Kosyh$
 --$Author(ru):Пётр Косых$
 
@@ -23,5 +23,5 @@ room {
 		end
 	end;
 	decor = [[- {@lang ru|Русский}^
-	- {@lang en|English} (TODO)]];
+	- {@lang en|English}]];
 }

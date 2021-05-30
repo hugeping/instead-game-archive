@@ -422,9 +422,10 @@ cutscene {
 	end;
 	dsc = fmt.c[[{$fmt b|ARCHIVE}^
 {$fmt em|Peter Kosyh / May 2020}^
+{$fmt em|Translation: canwolf, Khaelenmore Thaal}^
 {$fmt em|Music, sound: Alexander Soborov}^
 {$fmt em|Jump Memories / Keys of Moon}^
-{$fmt em|Testing: Khaelenmore Thaal, Oleg Bosh}^^
+{$fmt em|Testing: Khaelenmore Thaal, Oleg Bosh}^
 Thank you for playing this little game!^
 If you liked it, you can find similar games at:^^
 {$link|http://instead-games.ru}^
@@ -443,7 +444,7 @@ room {
 	dsc = [[The cabin of Frisky is cramped. Through the narrow windows, the oblique rays of star 51-Peg
 	penetrate into the cockpit illuminating the dashboard.
 	Straight ahead are transit gates floating over Dimidius.^^
-	Everything is set up to begin the transition. Nevertheless you wish to take 
+	Everything is set up to begin the transition. Nevertheless you wish to take
 	another look at the dashboard.]];
 	out_to = function(s)
 		p [[It is not the time for walking on the ship. You are getting ready to make the transition. All the instruments are in control room.]]
@@ -479,9 +480,9 @@ Your six-month contract for Dimidius is over, it's time to return home.]];
 			"gates/plural|transition";
 			description = function(s)
 				if s:once() then
-					p [["The gates" -- the entrance to hyperspace is called so. 
+					p [["The gates" -- the entrance to hyperspace is called so.
 					The gates look like a 40-meter ring slowly rotating in the void.
-					The 51-Peg gates were opened in 2220. 
+					The 51-Peg gates were opened in 2220.
 					They had become the 12th gates built during the 125-year history of humanity's expansion into deep space.]];
 				else
 					p [[You see flashes of hyperspace through the gates.]];
@@ -963,7 +964,7 @@ room {
 			after_Touch = [[The edges are melted. Doesn't look like duralumin.]];
 			description = function(s)
 				if have(s) then
-					p [[Melted shards. They are heavy. 
+					p [[Melted shards. They are heavy.
 					Strange, it doesn't look like duralumin...]];
 				else
 					p [[Small black pieces of metal.]]
@@ -1047,7 +1048,7 @@ cutscene {
 	end;
 	text = {
 		[[The blinding light filled everything around.
-		You are lost in it, dissolved -- as if you never existed ... 
+		You are lost in it, dissolved -- as if you never existed ...
 		The ship shudders from impact. Is it the end?]];
 		[[Silence...]];
 		[[Drops of water on the glass. Big drops.
@@ -2073,7 +2074,7 @@ em|English}^^For instructions type "{$fmt b|help}".]];
 	Search = function(s, w)
 		if w == '17' then -- comp
 			search_stat(1, 1)
-			p ([[...The Archive worker put the computer on the table and turned it on...]])
+			p ([[...The Archivist put the computer on the table and turned it on...]])
 		elseif w == '8703627531' then -- огнетушитель
 			search_stat(213, 1)
 			p [[...You fight the flames fiercely.
@@ -2115,7 +2116,7 @@ em|English}^^For instructions type "{$fmt b|help}".]];
 			He will let himself become a murderer for the sake of the new life, Juan doesn't give a damn about himself!]];
 
 			p [[^^...When Juan learned from the news that the bomb exploded later, already after the ship entered hyperspace, in one second his world was destroyed...
-			He's a killer, no excuses. 
+			He's a killer, no excuses.
 			As a dead man, he walked along the street without seing his way...]];
 			know_bomb = true
 			end
@@ -2340,7 +2341,7 @@ pl.description = function(s)
 	end
 	if here() ^ 'ship1' then
 		p [[Your six-month contract for Dimidius is over, it's time to return home.
-		For six months you worked as a contractor at Dimidius, exploring uranium deposits. 
+		For six months you worked as a contractor at Dimidius, exploring uranium deposits.
         But now the contract is over.]]
 	end;
 end

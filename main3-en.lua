@@ -113,7 +113,7 @@ end
 end
 
 fmt.dash = true
-fmt.quotes = true
+fmt.quotes = false
 
 require 'parser/mp-en'
 

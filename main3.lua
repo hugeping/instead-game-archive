@@ -1,6 +1,6 @@
 --$Name: The Archive$
 --$Name(ru): Архив$
---$Version: 1.1$
+--$Version: 1.2$
 --$Author:Peter Kosyh$
 --$Author(ru):Пётр Косых$
 
